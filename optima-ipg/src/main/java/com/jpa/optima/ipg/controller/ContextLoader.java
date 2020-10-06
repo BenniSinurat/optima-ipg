@@ -36,6 +36,20 @@ public class ContextLoader {
 	private String PaymentPageURL;
 	@Value("${payment.va.notif.url}")
 	private String PaymentVANotifURL;
+	@Value("${linkaja.cid}")
+	private String LinkAjaCID;
+	@Value("${linkaja.secret.key}")
+	private String LinkAjaSecretKey;
+	@Value("${linkaja.merchant.id}")
+	private String LinkAjaMerchantID;
+	@Value("${linkaja.transfer.type.id}")
+	private Integer LinkAjaTransferTypeID;
+	@Value("${linkaja.host.url}")
+	private String LinkAjaHostURL;
+	@Value("${linkaja.member.username}")
+	private String LinkAjaUsername;
+	@Value("${ipg.username}")
+	private String IPGUsername;
 
 	public String getPaymentPageURL() {
 		return PaymentPageURL;
@@ -144,6 +158,62 @@ public class ContextLoader {
 
 	public void setPaymentPageURL(String paymentPageURL) {
 		PaymentPageURL = paymentPageURL;
+	}
+
+	public String getLinkAjaCID() {
+		return LinkAjaCID;
+	}
+
+	public void setLinkAjaCID(String linkAjaCID) {
+		LinkAjaCID = linkAjaCID;
+	}
+
+	public String getLinkAjaSecretKey() {
+		return LinkAjaSecretKey;
+	}
+
+	public void setLinkAjaSecretKey(String linkAjaSecretKey) {
+		LinkAjaSecretKey = linkAjaSecretKey;
+	}
+
+	public String getLinkAjaMerchantID() {
+		return LinkAjaMerchantID;
+	}
+
+	public void setLinkAjaMerchantID(String linkAjaMerchantID) {
+		LinkAjaMerchantID = linkAjaMerchantID;
+	}
+
+	public Integer getLinkAjaTransferTypeID() {
+		return LinkAjaTransferTypeID;
+	}
+
+	public void setLinkAjaTransferTypeID(Integer linkAjaTransferTypeID) {
+		LinkAjaTransferTypeID = linkAjaTransferTypeID;
+	}
+
+	public String getLinkAjaHostURL() {
+		return LinkAjaHostURL;
+	}
+
+	public void setLinkAjaHostURL(String linkAjaHostURL) {
+		LinkAjaHostURL = linkAjaHostURL;
+	}
+
+	public String getLinkAjaUsername() {
+		return LinkAjaUsername;
+	}
+
+	public void setLinkAjaUsername(String linkAjaUsername) {
+		LinkAjaUsername = linkAjaUsername;
+	}
+
+	public String getIPGUsername() {
+		return IPGUsername;
+	}
+
+	public void setIPGUsername(String iPGUsername) {
+		IPGUsername = iPGUsername;
 	}
 
 }

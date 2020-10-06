@@ -74,6 +74,22 @@
 										<extraarg>org.bellatrix.services.ws.payments</extraarg>
 									</extraargs>
 								</wsdlOption>
+								<wsdlOption>
+									<wsdl>http://149.129.215.223:8081/bellatrix/host/services/ws/transfertypes?wsdl
+									</wsdl>
+									<extraargs>
+										<extraarg>-p</extraarg>
+										<extraarg>org.bellatrix.services.ws.transfertypes</extraarg>
+									</extraargs>
+								</wsdlOption>
+								<wsdlOption>
+									<wsdl>http://149.129.215.223:8081/bellatrix/host/services/ws/billpayments?wsdl
+									</wsdl>
+									<extraargs>
+										<extraarg>-p</extraarg>
+										<extraarg>org.bellatrix.services.ws.billpayments</extraarg>
+									</extraargs>
+								</wsdlOption>
 							</wsdlOptions>
 						</configuration>
 						<goals>
@@ -285,6 +301,22 @@
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-maven-plugin</artifactId>
 			<version>9.4.12.v20180830</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>core</artifactId>
+			<version>3.3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>javase</artifactId>
+			<version>3.3.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpcore</artifactId>
+			<version>4.4.6</version>
 		</dependency>
 	</dependencies>
 

@@ -17,12 +17,15 @@
 <body onload="document.bankTransferRedirect.submit();">
 	<div>
 		<form id="bankTransferRedirect" name="bankTransferRedirect" role="form" class="form-horizontal" action="/payment/bankTransfer" method="POST" modelAttribute="transfer">								
-		<input type="hidden" name="name" id="name" value="${name}" class="form-control validate">
-		<input type="hidden" name="email" id="email" value="${email}" class="form-control validate">
-		<input type="hidden" name="msisdn" id="msisdn" value="${msisdn}" class="form-control validate">
-		<input type="hidden" name="ticketID" id="ticketID" value="${ticketID}" class="form-control validate">
-		<input type="hidden" name="description" id="description" value="${description}" class="form-control validate">
-		<input type="hidden" name="amount" id="amount" value="${amount}" class="form-control validate">
+			<input type="hidden" name="name" id="name" value="${name}" class="form-control validate">
+			<input type="hidden" name="email" id="email" value="${email}" class="form-control validate">
+			<input type="hidden" name="msisdn" id="msisdn" value="${msisdn}" class="form-control validate">
+			<input type="hidden" name="ticketID" id="ticketID" value="${ticketID}" class="form-control validate">
+			<input type="hidden" name="description" id="description" value="${description}" class="form-control validate">
+			<input type="hidden" name="amount" id="amount" value="${finalAmount}" class="form-control validate">
+			<input type="hidden" name="transactionAmount" id="transactionAmount" value="${transactionAmount}" class="form-control validate">
+			<input type="hidden" name="totalFee" id="totalFee" value="${totalFee}" class="form-control validate">
+			<input type="hidden" name="finalAmount" id="finalAmount" value="${finalAmount}" class="form-control validate">
 		</form>
 	</div>		    
 </body>

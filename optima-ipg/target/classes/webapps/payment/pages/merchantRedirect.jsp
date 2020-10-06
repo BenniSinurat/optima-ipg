@@ -32,6 +32,9 @@
 		<input type="hidden" name="description" value="${description}">
 		<input type="hidden" name="words" value="${words}">
 		<input type="hidden" name="status" value="${status}">
+		<input type="hidden" name="fee" value="${fee}">
+		<input type="hidden" name="city" value="${city}">
+		<input type="hidden" name="postalCode" value="${postalCode}">
 		<input type="submit" id="BTN-CONTINUE" value="Continue">
 		</form>				
 	</div>		    

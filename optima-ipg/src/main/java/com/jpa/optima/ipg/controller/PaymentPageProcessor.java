@@ -1,9 +1,17 @@
 package com.jpa.optima.ipg.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.io.BaseEncoding;
+import com.jpa.optima.ipg.model.CreditCardParam;
+import com.jpa.optima.ipg.model.QRCodeParam;
+import com.jpa.optima.ipg.model.QRCodeResponse;
+import com.jpa.optima.ipg.model.Ticket;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,35 +20,56 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Holder;
-
-import org.bellatrix.services.ws.members.MemberService;
-import org.bellatrix.services.ws.message.Message;
-import org.bellatrix.services.ws.message.MessageService;
-import org.bellatrix.services.ws.message.SendMessageRequest;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.time.DateUtils;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
 import org.bellatrix.services.ws.access.Access;
 import org.bellatrix.services.ws.access.AccessService;
 import org.bellatrix.services.ws.access.CredentialRequest;
 import org.bellatrix.services.ws.access.CredentialResponse;
 import org.bellatrix.services.ws.access.Exception_Exception;
+import org.bellatrix.services.ws.billpayments.BillPayment;
+import org.bellatrix.services.ws.billpayments.BillPaymentService;
+import org.bellatrix.services.ws.billpayments.LoadPaymentChannelByMemberIDRequest;
+import org.bellatrix.services.ws.billpayments.LoadPaymentChannelByMemberIDResponse;
 import org.bellatrix.services.ws.members.LoadMembersByUsernameRequest;
 import org.bellatrix.services.ws.members.LoadMembersResponse;
 import org.bellatrix.services.ws.members.Member;
+import org.bellatrix.services.ws.members.MemberService;
+import org.bellatrix.services.ws.members.Members;
+import org.bellatrix.services.ws.message.Message;
+import org.bellatrix.services.ws.message.MessageService;
+import org.bellatrix.services.ws.message.SendMessageRequest;
 import org.bellatrix.services.ws.payments.GeneratePaymentTicketRequest;
 import org.bellatrix.services.ws.payments.GeneratePaymentTicketResponse;
+import org.bellatrix.services.ws.payments.InquiryRequest;
+import org.bellatrix.services.ws.payments.InquiryResponse;
 import org.bellatrix.services.ws.payments.Payment;
 import org.bellatrix.services.ws.payments.PaymentRequest;
 import org.bellatrix.services.ws.payments.PaymentResponse;
 import org.bellatrix.services.ws.payments.PaymentService;
 import org.bellatrix.services.ws.payments.ValidatePaymentTicketRequest;
 import org.bellatrix.services.ws.payments.ValidatePaymentTicketResponse;
+import org.bellatrix.services.ws.transfertypes.LoadFeesByTransferTypeRequest;
+import org.bellatrix.services.ws.transfertypes.LoadFeesByTransferTypeResponse;
+import org.bellatrix.services.ws.transfertypes.TransferType;
+import org.bellatrix.services.ws.transfertypes.TransferTypeService;
 import org.bellatrix.services.ws.virtualaccount.BankVA;
 import org.bellatrix.services.ws.virtualaccount.LoadVAByIDRequest;
 import org.bellatrix.services.ws.virtualaccount.LoadVAByIDResponse;
@@ -48,35 +77,31 @@ import org.bellatrix.services.ws.virtualaccount.LoadVAEventRequest;
 import org.bellatrix.services.ws.virtualaccount.LoadVAEventResponse;
 import org.bellatrix.services.ws.virtualaccount.VaBankRequest;
 import org.bellatrix.services.ws.virtualaccount.VaBankResponse;
+import org.bellatrix.services.ws.virtualaccount.VaPaymentRequest;
+import org.bellatrix.services.ws.virtualaccount.VaPaymentResponse;
 import org.bellatrix.services.ws.virtualaccount.VaRegisterRequest;
 import org.bellatrix.services.ws.virtualaccount.VaRegisterResponse;
 import org.bellatrix.services.ws.virtualaccount.VirtualAccount;
 import org.bellatrix.services.ws.virtualaccount.VirtualAccountService;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 
-import com.jpa.optima.ipg.model.CreditCardParam;
-import com.jpa.optima.ipg.model.Ticket;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
-
 @Component
 public class PaymentPageProcessor {
-
 	@Autowired
 	private ContextLoader contextLoader;
 	@Autowired
 	private JmsTemplate jmsTemplate;
+	private Logger logger = Logger.getLogger(getClass());
+	//private static final String HMAC_SHA512 = "HmacSHA512";
+	//private static final String DEFAULT_ENCODING = "UTF-8";
 
-	public void sendToSettlement(PaymentResponse response) {
+	public PaymentPageProcessor() {
+	}
+
+	public void sendToSettlement(PaymentResponse response, BigDecimal amount) {
 		Map<String, Object> obj = new HashMap<String, Object>();
 		obj.put("transferID", response.getId());
 		obj.put("transferTypeID", response.getTransferType().getId());
@@ -84,7 +109,7 @@ public class PaymentPageProcessor {
 		obj.put("traceNumber", response.getTraceNumber());
 		obj.put("fromUsername", response.getFromMember().getUsername());
 		obj.put("toUsername", response.getToMember().getUsername());
-		obj.put("amount", response.getAmount().toPlainString());
+		obj.put("amount", amount.toPlainString());
 		jmsTemplate.convertAndSend(obj);
 	}
 
@@ -104,6 +129,7 @@ public class PaymentPageProcessor {
 		messageRequest.setToUsername(toUsername);
 		messageRequest.setBody(body);
 		messageRequest.setSubject(subject);
+		
 		client.sendMessage(headerAuth, messageRequest);
 	}
 
@@ -175,7 +201,7 @@ public class PaymentPageProcessor {
 		} else {
 			vaRegisterRequest.setEventID(eventID);
 		}
-		
+
 		vaRegisterRequest.setMinimumPayment(BigDecimal.ZERO);
 		vaRegisterRequest.setEmail(email);
 		vaRegisterRequest.setFullPayment(true);
@@ -220,9 +246,8 @@ public class PaymentPageProcessor {
 
 		List<BankVA> trxList = new ArrayList<>();
 		if (vaBankResponse.getBank().size() > 0) {
-			BankVA bank;
 			for (BankVA va : vaBankResponse.getBank()) {
-				bank = new BankVA();
+				BankVA bank = new BankVA();
 				bank.setId(va.getId());
 				bank.setBankCode(va.getBankCode());
 				bank.setBankName(va.getBankName());
@@ -312,7 +337,7 @@ public class PaymentPageProcessor {
 	public CreditCardParam forwardCreditCardPayment(String ticketID, String invoiceID, String name, String email,
 			BigDecimal amount, String description) throws IOException {
 		String words = DigestUtils
-				.sha1Hex(amount + ".00" + contextLoader.getDokuMallID() + contextLoader.getDokuSharedKey() + invoiceID);
+				.sha1Hex(amount + contextLoader.getDokuMallID() + contextLoader.getDokuSharedKey() + invoiceID);
 		CreditCardParam param = new CreditCardParam();
 		param.setMallID(contextLoader.getDokuMallID());
 		param.setChainMerchant("NA");
@@ -337,15 +362,14 @@ public class PaymentPageProcessor {
 	public XMLGregorianCalendar stringToXMLGregorianCalendar(Date s)
 			throws ParseException, DatatypeConfigurationException {
 		XMLGregorianCalendar result = null;
-		GregorianCalendar gregorianCalendar;
-		gregorianCalendar = (GregorianCalendar) GregorianCalendar.getInstance();
+
+		GregorianCalendar gregorianCalendar = (GregorianCalendar) GregorianCalendar.getInstance();
 		gregorianCalendar.setTime(s);
 		result = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
 		return result;
 	}
 
 	public String sendCheckStatus(String transID, String sessionID) throws IOException {
-
 		String result = "";
 		HttpPost post = new HttpPost(contextLoader.getCheckStatusURL());
 		String words = DigestUtils.sha1Hex(contextLoader.getDokuMallID() + contextLoader.getDokuSharedKey() + transID);
@@ -359,11 +383,41 @@ public class PaymentPageProcessor {
 
 		post.setEntity(new UrlEncodedFormEntity(urlParameters));
 
-		try (CloseableHttpClient httpClient = HttpClients.createDefault();
-				CloseableHttpResponse response = httpClient.execute(post)) {
-			result = EntityUtils.toString(response.getEntity());
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		Throwable localThrowable6 = null;
+		try {
+			CloseableHttpResponse response = httpClient.execute(post);
+			Throwable localThrowable7 = null;
+			try {
+				result = EntityUtils.toString(response.getEntity());
+			} catch (Throwable localThrowable1) {
+				localThrowable7 = localThrowable1;
+				throw localThrowable1;
+			} finally {
+				if (response != null)
+					if (localThrowable7 != null)
+						try {
+							response.close();
+						} catch (Throwable localThrowable2) {
+							localThrowable7.addSuppressed(localThrowable2);
+						}
+					else
+						response.close();
+			}
+		} catch (Throwable localThrowable4) {
+			localThrowable6 = localThrowable4;
+			throw localThrowable4;
+		} finally {
+			if (httpClient != null)
+				if (localThrowable6 != null)
+					try {
+						httpClient.close();
+					} catch (Throwable localThrowable5) {
+						localThrowable6.addSuppressed(localThrowable5);
+					}
+				else
+					httpClient.close();
 		}
-
 		return result;
 	}
 
@@ -387,16 +441,105 @@ public class PaymentPageProcessor {
 
 		post.setEntity(new UrlEncodedFormEntity(urlParameters));
 
-		try (CloseableHttpClient httpClient = HttpClients.createDefault();
-				CloseableHttpResponse response = httpClient.execute(post)) {
-			result = EntityUtils.toString(response.getEntity());
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		Throwable localThrowable6 = null;
+		try {
+			CloseableHttpResponse response = httpClient.execute(post);
+			Throwable localThrowable7 = null;
+			try {
+				result = EntityUtils.toString(response.getEntity());
+			} catch (Throwable localThrowable1) {
+				localThrowable7 = localThrowable1;
+				throw localThrowable1;
+			} finally {
+				if (response != null)
+					if (localThrowable7 != null)
+						try {
+							response.close();
+						} catch (Throwable localThrowable2) {
+							localThrowable7.addSuppressed(localThrowable2);
+						}
+					else
+						response.close();
+			}
+		} catch (Throwable localThrowable4) {
+			localThrowable6 = localThrowable4;
+			throw localThrowable4;
+		} finally {
+			if (httpClient != null)
+				if (localThrowable6 != null)
+					try {
+						httpClient.close();
+					} catch (Throwable localThrowable5) {
+						localThrowable6.addSuppressed(localThrowable5);
+					}
+				else
+					httpClient.close();
 		}
+		return result;
+	}
 
+	public String sendVALinkAjaNotification(Ticket t, String trxNumber) throws IOException {
+		String result = "";
+		HttpPost post = new HttpPost(t.getCallback());
+
+		List<NameValuePair> urlParameters = new ArrayList<>();
+		urlParameters.add(new BasicNameValuePair("ticketID", t.getEventID()));
+		urlParameters.add(new BasicNameValuePair("transactionNumber", trxNumber));
+		urlParameters.add(new BasicNameValuePair("merchantID", t.getMerchantID()));
+		urlParameters.add(new BasicNameValuePair("invoiceID", t.getInvoiceID()));
+		urlParameters.add(new BasicNameValuePair("amount", t.getAmount().toPlainString()));
+		urlParameters.add(new BasicNameValuePair("sessionID", t.getSessionID()));
+		urlParameters.add(new BasicNameValuePair("currency", t.getCurrency()));
+		urlParameters.add(new BasicNameValuePair("name", t.getName()));
+		urlParameters.add(new BasicNameValuePair("email", t.getEmail()));
+		urlParameters.add(new BasicNameValuePair("msisdn", t.getMsisdn()));
+		urlParameters.add(new BasicNameValuePair("description", t.getDescription()));
+		urlParameters.add(new BasicNameValuePair("paymentChannel", String.valueOf(t.getPaymentChannel())));
+		urlParameters.add(new BasicNameValuePair("words", t.getWords()));
+		urlParameters.add(new BasicNameValuePair("status", "PROCESSED"));
+
+		post.setEntity(new UrlEncodedFormEntity(urlParameters));
+
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		Throwable localThrowable6 = null;
+		try {
+			CloseableHttpResponse response = httpClient.execute(post);
+			Throwable localThrowable7 = null;
+			try {
+				result = EntityUtils.toString(response.getEntity());
+			} catch (Throwable localThrowable1) {
+				localThrowable7 = localThrowable1;
+				throw localThrowable1;
+			} finally {
+				if (response != null)
+					if (localThrowable7 != null)
+						try {
+							response.close();
+						} catch (Throwable localThrowable2) {
+							localThrowable7.addSuppressed(localThrowable2);
+						}
+					else
+						response.close();
+			}
+		} catch (Throwable localThrowable4) {
+			localThrowable6 = localThrowable4;
+			throw localThrowable4;
+		} finally {
+			if (httpClient != null)
+				if (localThrowable6 != null)
+					try {
+						httpClient.close();
+					} catch (Throwable localThrowable5) {
+						localThrowable6.addSuppressed(localThrowable5);
+					}
+				else
+					httpClient.close();
+		}
 		return result;
 	}
 
 	public String sendVoid(String transID, String sessionID) throws IOException {
-
 		String result = "";
 		HttpPost post = new HttpPost(contextLoader.getVoidURL());
 		String words = DigestUtils.sha1Hex(contextLoader.getDokuMallID() + contextLoader.getDokuSharedKey() + transID);
@@ -410,12 +553,207 @@ public class PaymentPageProcessor {
 
 		post.setEntity(new UrlEncodedFormEntity(urlParameters));
 
-		try (CloseableHttpClient httpClient = HttpClients.createDefault();
-				CloseableHttpResponse response = httpClient.execute(post)) {
-			result = EntityUtils.toString(response.getEntity());
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		Throwable localThrowable6 = null;
+		try {
+			CloseableHttpResponse response = httpClient.execute(post);
+			Throwable localThrowable7 = null;
+			try {
+				result = EntityUtils.toString(response.getEntity());
+			} catch (Throwable localThrowable1) {
+				localThrowable7 = localThrowable1;
+				throw localThrowable1;
+			} finally {
+				if (response != null)
+					if (localThrowable7 != null)
+						try {
+							response.close();
+						} catch (Throwable localThrowable2) {
+							localThrowable7.addSuppressed(localThrowable2);
+						}
+					else
+						response.close();
+			}
+		} catch (Throwable localThrowable4) {
+			localThrowable6 = localThrowable4;
+			throw localThrowable4;
+		} finally {
+			if (httpClient != null)
+				if (localThrowable6 != null)
+					try {
+						httpClient.close();
+					} catch (Throwable localThrowable5) {
+						localThrowable6.addSuppressed(localThrowable5);
+					}
+				else
+					httpClient.close();
+		}
+		return result;
+	}
+
+	public QRCodeResponse forwardQRPayment(QRCodeParam param)
+			throws IOException, NoSuchAlgorithmException, InvalidKeyException {
+		QRCodeResponse qrRes = new QRCodeResponse();
+		String result = "";
+
+		ObjectMapper mapper = new ObjectMapper();
+		String json = mapper.writeValueAsString(param);
+
+		String words = contextLoader.getLinkAjaCID() + ":" + json + ":" + contextLoader.getLinkAjaSecretKey();
+		logger.info("[Request WORDS : " + words + "]");
+
+		SecretKeySpec keySpec = new SecretKeySpec(contextLoader.getLinkAjaSecretKey().getBytes("UTF-8"), "HmacSHA512");
+
+		Mac mac = Mac.getInstance("HmacSHA512");
+		mac.init(keySpec);
+		String sha512Hex = BaseEncoding.base16().lowerCase().encode(mac.doFinal(words.getBytes("UTF-8")));
+
+		logger.info("[Hashed WORDS : " + sha512Hex + "]");
+
+		HttpPost post = new HttpPost(contextLoader.getLinkAjaHostURL());
+		post.setHeader("Accept", "application/json");
+		post.setHeader("Content-Type", "application/json");
+		post.setHeader("cid", contextLoader.getLinkAjaCID());
+		post.setHeader("signature", sha512Hex);
+		StringEntity entity = new StringEntity(json);
+		post.setEntity(entity);
+
+		logger.info("Request to LinkAja Host: " + post.toString());
+		logger.info("Request to LinkAja Body: " + json);
+
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		Throwable localThrowable6 = null;
+		try {
+			CloseableHttpResponse response = httpClient.execute(post);
+			Throwable localThrowable7 = null;
+			try {
+				result = EntityUtils.toString(response.getEntity());
+			} catch (Throwable localThrowable1) {
+				localThrowable7 = localThrowable1;
+				throw localThrowable1;
+			} finally {
+				if (response != null)
+					if (localThrowable7 != null)
+						try {
+							response.close();
+						} catch (Throwable localThrowable2) {
+							localThrowable7.addSuppressed(localThrowable2);
+						}
+					else
+						response.close();
+			}
+		} catch (Throwable localThrowable4) {
+			localThrowable6 = localThrowable4;
+			throw localThrowable4;
+		} finally {
+			if (httpClient != null)
+				if (localThrowable6 != null)
+					try {
+						httpClient.close();
+					} catch (Throwable localThrowable5) {
+						localThrowable6.addSuppressed(localThrowable5);
+					}
+				else
+					httpClient.close();
+		}
+		JSONObject jsonResult = new JSONObject(result);
+		logger.info("Response from LinkAja: " + jsonResult.toString());
+		if (jsonResult.getString("responseCode").equalsIgnoreCase("00")) {
+			qrRes.setMerchantTrxID(String.valueOf(jsonResult.getString("merchantTrxID")));
+			qrRes.setQrString(String.valueOf(jsonResult.getString("qrString")));
+			qrRes.setResponseCode(String.valueOf(jsonResult.getString("responseCode")));
+			qrRes.setResponseMessage(String.valueOf(jsonResult.getString("responseMessage")));
+		} else {
+			qrRes.setResponseCode(String.valueOf(jsonResult.getString("responseCode")));
+			qrRes.setResponseMessage(String.valueOf(jsonResult.getString("responseMessage")));
 		}
 
-		return result;
+		return qrRes;
+	}
+
+	public VaPaymentResponse paymentVA(String paymentCode, String trxNumber, Number amount)
+			throws MalformedURLException {
+		URL url = new URL(contextLoader.getHostWSUrl() + "virtualaccounts?wsdl");
+		QName qName = new QName(contextLoader.getHostWSPort(), "VirtualAccountService");
+		VirtualAccountService service = new VirtualAccountService(url, qName);
+		VirtualAccount client = service.getVirtualAccountPort();
+
+		org.bellatrix.services.ws.virtualaccount.Header headerPayment = new org.bellatrix.services.ws.virtualaccount.Header();
+		headerPayment.setToken(contextLoader.getHeaderToken());
+		Holder<org.bellatrix.services.ws.virtualaccount.Header> payHeaderAuth = new Holder<org.bellatrix.services.ws.virtualaccount.Header>();
+		payHeaderAuth.value = headerPayment;
+
+		VaPaymentRequest req = new VaPaymentRequest();
+		req.setPaymentCode(paymentCode);
+		req.setAmount(new BigDecimal(amount.toString()));
+		req.setTraceNumber(trxNumber);
+		req.setFromMember(contextLoader.getLinkAjaUsername());
+		req.setTransferTypeID(contextLoader.getLinkAjaTransferTypeID());
+
+		VaPaymentResponse res = client.paymentVA(payHeaderAuth, req);
+
+		return res;
+	}
+
+	public LoadPaymentChannelByMemberIDResponse loadPaymentChannelByMember(String username)
+			throws MalformedURLException {
+		URL url = new URL(contextLoader.getHostWSUrl() + "billpayments?wsdl");
+		QName qName = new QName(contextLoader.getHostWSPort(), "BillPaymentService");
+		BillPaymentService service = new BillPaymentService(url, qName);
+		BillPayment client = service.getBillPaymentPort();
+
+		org.bellatrix.services.ws.billpayments.Header headerPayment = new org.bellatrix.services.ws.billpayments.Header();
+		headerPayment.setToken(contextLoader.getHeaderToken());
+		Holder<org.bellatrix.services.ws.billpayments.Header> payHeaderAuth = new Holder<org.bellatrix.services.ws.billpayments.Header>();
+		payHeaderAuth.value = headerPayment;
+
+		LoadPaymentChannelByMemberIDRequest req = new LoadPaymentChannelByMemberIDRequest();
+		req.setMemberID(((Members) loadMember(username).getMembers().get(0)).getId());
+
+		LoadPaymentChannelByMemberIDResponse res = client.loadPaymentChannelByMemberID(payHeaderAuth, req);
+
+		return res;
+	}
+
+	public InquiryResponse validateTransactionInquiry(InquiryRequest req) throws MalformedURLException {
+		URL url = new URL(contextLoader.getHostWSUrl() + "payments?wsdl");
+		QName qName = new QName(contextLoader.getHostWSPort(), "PaymentService");
+		PaymentService service = new PaymentService(url, qName);
+		Payment client = service.getPaymentPort();
+
+		org.bellatrix.services.ws.payments.Header headerPayment = new org.bellatrix.services.ws.payments.Header();
+		headerPayment.setToken(contextLoader.getHeaderToken());
+		Holder<org.bellatrix.services.ws.payments.Header> payHeaderAuth = new Holder<org.bellatrix.services.ws.payments.Header>();
+		payHeaderAuth.value = headerPayment;
+
+		InquiryRequest inquiryRequest = new InquiryRequest();
+		inquiryRequest.setAmount(req.getAmount());
+		inquiryRequest.setFromMember(req.getFromMember());
+		inquiryRequest.setToMember(req.getToMember());
+		inquiryRequest.setTransferTypeID(req.getTransferTypeID());
+
+		InquiryResponse inqRes = client.doInquiry(payHeaderAuth, inquiryRequest);
+
+		return inqRes;
+	}
+
+	public LoadFeesByTransferTypeResponse loadFeeByTransferType(Integer trfTypeID) throws MalformedURLException {
+		URL url = new URL(contextLoader.getHostWSUrl() + "transfertypes?wsdl");
+		QName qName = new QName(contextLoader.getHostWSPort(), "TransferTypeService");
+		TransferTypeService service = new TransferTypeService(url, qName);
+		TransferType client = service.getTransferTypePort();
+
+		org.bellatrix.services.ws.transfertypes.Header headerTransferType = new org.bellatrix.services.ws.transfertypes.Header();
+		headerTransferType.setToken(contextLoader.getHeaderToken());
+		Holder<org.bellatrix.services.ws.transfertypes.Header> transferTypeAuth = new Holder<org.bellatrix.services.ws.transfertypes.Header>();
+		transferTypeAuth.value = headerTransferType;
+
+		LoadFeesByTransferTypeRequest feeReq = new LoadFeesByTransferTypeRequest();
+		feeReq.setId(trfTypeID);
+
+		LoadFeesByTransferTypeResponse feeRes = client.loadFeesByTransferType(transferTypeAuth, feeReq);
+
+		return feeRes;
 	}
 
 	public JmsTemplate getJmsTemplate() {

@@ -44,11 +44,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ResponseStatus }
+     * Create an instance of {@link LoadMessageByIDRequest }
      * 
      */
-    public ResponseStatus createResponseStatus() {
-        return new ResponseStatus();
+    public LoadMessageByIDRequest createLoadMessageByIDRequest() {
+        return new LoadMessageByIDRequest();
+    }
+
+    /**
+     * Create an instance of {@link MessageRequest }
+     * 
+     */
+    public MessageRequest createMessageRequest() {
+        return new MessageRequest();
+    }
+
+    /**
+     * Create an instance of {@link UnreadMessage }
+     * 
+     */
+    public UnreadMessage createUnreadMessage() {
+        return new UnreadMessage();
+    }
+
+    /**
+     * Create an instance of {@link LoadMessageByUsernameRequest }
+     * 
+     */
+    public LoadMessageByUsernameRequest createLoadMessageByUsernameRequest() {
+        return new LoadMessageByUsernameRequest();
     }
 
     /**
@@ -60,11 +84,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link NotificationMessage }
+     * Create an instance of {@link ResponseStatus }
      * 
      */
-    public NotificationMessage createNotificationMessage() {
-        return new NotificationMessage();
+    public ResponseStatus createResponseStatus() {
+        return new ResponseStatus();
     }
 
     /**
@@ -84,27 +108,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LoadMessageByIDRequest }
+     * Create an instance of {@link NotificationMessage }
      * 
      */
-    public LoadMessageByIDRequest createLoadMessageByIDRequest() {
-        return new LoadMessageByIDRequest();
-    }
-
-    /**
-     * Create an instance of {@link UnreadMessage }
-     * 
-     */
-    public UnreadMessage createUnreadMessage() {
-        return new UnreadMessage();
-    }
-
-    /**
-     * Create an instance of {@link MessageRequest }
-     * 
-     */
-    public MessageRequest createMessageRequest() {
-        return new MessageRequest();
+    public NotificationMessage createNotificationMessage() {
+        return new NotificationMessage();
     }
 
     /**
@@ -113,14 +121,6 @@ public class ObjectFactory {
      */
     public LoadMessageResponse createLoadMessageResponse() {
         return new LoadMessageResponse();
-    }
-
-    /**
-     * Create an instance of {@link LoadMessageByUsernameRequest }
-     * 
-     */
-    public LoadMessageByUsernameRequest createLoadMessageByUsernameRequest() {
-        return new LoadMessageByUsernameRequest();
     }
 
     /**

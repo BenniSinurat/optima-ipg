@@ -27,6 +27,17 @@ public class Ticket implements Serializable {
 	private String words;
 	private Date localDateTime;
 
+	private BigDecimal fee;
+	private String merchantName;
+	private String city;
+	private String postalCode;
+
+	private BigDecimal totalFee;
+	private BigDecimal transactionAmount;
+	private BigDecimal finalAmount;
+	
+	private Integer transferTypeID;
+
 	public String getInvoiceID() {
 		return invoiceID;
 	}
@@ -153,6 +164,70 @@ public class Ticket implements Serializable {
 
 	public void setEventID(String eventID) {
 		this.eventID = eventID;
+	}
+
+	public BigDecimal getFee() {
+		return fee;
+	}
+
+	public void setFee(BigDecimal fee) {
+		this.fee = fee;
+	}
+
+	public String getMerchantName() {
+		return merchantName;
+	}
+
+	public void setMerchantName(String merchantName) {
+		this.merchantName = merchantName;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getPostalCode() {
+		return postalCode;
+	}
+
+	public void setPostalCode(String postalCode) {
+		this.postalCode = postalCode;
+	}
+
+	public BigDecimal getTotalFee() {
+		return totalFee;
+	}
+
+	public void setTotalFee(BigDecimal totalFee) {
+		this.totalFee = totalFee;
+	}
+
+	public BigDecimal getTransactionAmount() {
+		return transactionAmount;
+	}
+
+	public void setTransactionAmount(BigDecimal transactionAmount) {
+		this.transactionAmount = transactionAmount;
+	}
+
+	public BigDecimal getFinalAmount() {
+		return finalAmount;
+	}
+
+	public void setFinalAmount(BigDecimal finalAmount) {
+		this.finalAmount = finalAmount;
+	}
+
+	public Integer getTransferTypeID() {
+		return transferTypeID;
+	}
+
+	public void setTransferTypeID(Integer transferTypeID) {
+		this.transferTypeID = transferTypeID;
 	}
 
 }

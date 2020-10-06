@@ -24,6 +24,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *       &lt;sequence>
  *         &lt;element name="amount" type="{http://www.w3.org/2001/XMLSchema}decimal" minOccurs="0"/>
  *         &lt;element name="bankID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+ *         &lt;element name="billingCycle" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="callbackURL" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="email" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -31,12 +32,14 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="expiredDateTime" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="fromMember" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="fullPayment" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
+ *         &lt;element name="membership" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="minimumPayment" type="{http://www.w3.org/2001/XMLSchema}decimal" minOccurs="0"/>
  *         &lt;element name="mobileNo" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="persistent" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *         &lt;element name="privateField" type="{http://services.bellatrix.org/}billerServiceField" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="referenceNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="subscribed" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *         &lt;element name="username" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -50,6 +53,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 @XmlType(name = "vaRegisterRequest", propOrder = {
     "amount",
     "bankID",
+    "billingCycle",
     "callbackURL",
     "description",
     "email",
@@ -57,18 +61,21 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "expiredDateTime",
     "fromMember",
     "fullPayment",
+    "membership",
     "minimumPayment",
     "mobileNo",
     "name",
     "persistent",
     "privateField",
     "referenceNumber",
+    "subscribed",
     "username"
 })
 public class VaRegisterRequest {
 
     protected BigDecimal amount;
     protected Integer bankID;
+    protected Integer billingCycle;
     protected String callbackURL;
     protected String description;
     protected String email;
@@ -77,6 +84,7 @@ public class VaRegisterRequest {
     protected XMLGregorianCalendar expiredDateTime;
     protected String fromMember;
     protected boolean fullPayment;
+    protected String membership;
     protected BigDecimal minimumPayment;
     protected String mobileNo;
     protected String name;
@@ -84,6 +92,7 @@ public class VaRegisterRequest {
     @XmlElement(nillable = true)
     protected List<BillerServiceField> privateField;
     protected String referenceNumber;
+    protected boolean subscribed;
     protected String username;
 
     /**
@@ -132,6 +141,30 @@ public class VaRegisterRequest {
      */
     public void setBankID(Integer value) {
         this.bankID = value;
+    }
+
+    /**
+     * Gets the value of the billingCycle property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getBillingCycle() {
+        return billingCycle;
+    }
+
+    /**
+     * Sets the value of the billingCycle property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setBillingCycle(Integer value) {
+        this.billingCycle = value;
     }
 
     /**
@@ -295,6 +328,30 @@ public class VaRegisterRequest {
     }
 
     /**
+     * Gets the value of the membership property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getMembership() {
+        return membership;
+    }
+
+    /**
+     * Sets the value of the membership property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setMembership(String value) {
+        this.membership = value;
+    }
+
+    /**
      * Gets the value of the minimumPayment property.
      * 
      * @return
@@ -433,6 +490,22 @@ public class VaRegisterRequest {
      */
     public void setReferenceNumber(String value) {
         this.referenceNumber = value;
+    }
+
+    /**
+     * Gets the value of the subscribed property.
+     * 
+     */
+    public boolean isSubscribed() {
+        return subscribed;
+    }
+
+    /**
+     * Sets the value of the subscribed property.
+     * 
+     */
+    public void setSubscribed(boolean value) {
+        this.subscribed = value;
     }
 
     /**
