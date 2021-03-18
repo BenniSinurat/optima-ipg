@@ -31,6 +31,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="fromMember" type="{http://services.bellatrix.org/}memberView" minOccurs="0"/>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="parentID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="referenceNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="reverseBy" type="{http://services.bellatrix.org/}memberView" minOccurs="0"/>
  *         &lt;element name="toMember" type="{http://services.bellatrix.org/}memberView" minOccurs="0"/>
  *         &lt;element name="traceNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -57,6 +58,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "fromMember",
     "id",
     "parentID",
+    "referenceNumber",
     "reverseBy",
     "toMember",
     "traceNumber",
@@ -77,6 +79,7 @@ public class TransferHistory {
     protected MemberView fromMember;
     protected Integer id;
     protected String parentID;
+    protected String referenceNumber;
     protected MemberView reverseBy;
     protected MemberView toMember;
     protected String traceNumber;
@@ -297,6 +300,30 @@ public class TransferHistory {
      */
     public void setParentID(String value) {
         this.parentID = value;
+    }
+
+    /**
+     * Gets the value of the referenceNumber property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getReferenceNumber() {
+        return referenceNumber;
+    }
+
+    /**
+     * Sets the value of the referenceNumber property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setReferenceNumber(String value) {
+        this.referenceNumber = value;
     }
 
     /**

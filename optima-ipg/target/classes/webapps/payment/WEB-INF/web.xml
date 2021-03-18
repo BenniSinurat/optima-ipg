@@ -30,6 +30,7 @@
 		<url-pattern>/paymentNotification</url-pattern>
 		<url-pattern>/paymentVANotification</url-pattern>
 		<url-pattern>/paymentRedirection</url-pattern>
+		<url-pattern>/paymentRedirect</url-pattern>
 		<url-pattern>/creditCard</url-pattern>
 		<url-pattern>/merchantRedirection</url-pattern>
 		<url-pattern>/checkStatus</url-pattern>
@@ -43,6 +44,9 @@
 		<url-pattern>/transactionInquiry</url-pattern>
 		<url-pattern>/transactionRedirect</url-pattern>
 		<url-pattern>/merchantTransactionInquiry</url-pattern>
+		<url-pattern>/felloForm</url-pattern>
+		<url-pattern>/felloInquiry</url-pattern>
+		<url-pattern>/felloPayment</url-pattern>
 	</servlet-mapping>
 
 	<listener>

@@ -36,6 +36,9 @@
 			<hz:map name="PaymentAmountMap" read-backup-data="true"
 				time-to-live-seconds="1800">
 			</hz:map>
+			<hz:map name="OTPRequestMap" read-backup-data="true"
+				time-to-live-seconds="3600">
+			</hz:map>
 		</hz:config>
 	</hz:hazelcast>
 

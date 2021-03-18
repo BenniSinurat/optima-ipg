@@ -26,6 +26,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="dateOfBirth" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="email" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="emailVerify" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *         &lt;element name="fcmID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="groupID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="idCardNo" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -35,6 +36,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="nationality" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="placeOfBirth" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="sex" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="uid" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="username" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="work" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
@@ -52,6 +54,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "dateOfBirth",
     "email",
     "emailVerify",
+    "fcmID",
     "groupID",
     "id",
     "idCardNo",
@@ -61,6 +64,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "nationality",
     "placeOfBirth",
     "sex",
+    "uid",
     "username",
     "work"
 })
@@ -73,6 +77,7 @@ public class UpdateMemberRequest {
     protected XMLGregorianCalendar dateOfBirth;
     protected String email;
     protected Boolean emailVerify;
+    protected String fcmID;
     protected Integer groupID;
     protected Integer id;
     protected String idCardNo;
@@ -82,6 +87,7 @@ public class UpdateMemberRequest {
     protected String nationality;
     protected String placeOfBirth;
     protected String sex;
+    protected String uid;
     protected String username;
     protected String work;
 
@@ -208,6 +214,30 @@ public class UpdateMemberRequest {
      */
     public void setEmailVerify(Boolean value) {
         this.emailVerify = value;
+    }
+
+    /**
+     * Gets the value of the fcmID property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getFcmID() {
+        return fcmID;
+    }
+
+    /**
+     * Sets the value of the fcmID property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setFcmID(String value) {
+        this.fcmID = value;
     }
 
     /**
@@ -424,6 +454,30 @@ public class UpdateMemberRequest {
      */
     public void setSex(String value) {
         this.sex = value;
+    }
+
+    /**
+     * Gets the value of the uid property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getUid() {
+        return uid;
+    }
+
+    /**
+     * Sets the value of the uid property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setUid(String value) {
+        this.uid = value;
     }
 
     /**

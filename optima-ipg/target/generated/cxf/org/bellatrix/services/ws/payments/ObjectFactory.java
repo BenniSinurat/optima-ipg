@@ -25,11 +25,13 @@ import javax.xml.namespace.QName;
 public class ObjectFactory {
 
     private final static QName _AgentCashoutConfirmationResponse_QNAME = new QName("http://services.bellatrix.org/", "agentCashoutConfirmationResponse");
+    private final static QName _Exception_QNAME = new QName("http://services.bellatrix.org/", "Exception");
     private final static QName _RequestPaymentConfirmationResponse_QNAME = new QName("http://services.bellatrix.org/", "requestPaymentConfirmationResponse");
     private final static QName _ReversePayment_QNAME = new QName("http://services.bellatrix.org/", "reversePayment");
     private final static QName _ValidatePaymentTicket_QNAME = new QName("http://services.bellatrix.org/", "validatePaymentTicket");
     private final static QName _MerchantRequestPayment_QNAME = new QName("http://services.bellatrix.org/", "merchantRequestPayment");
     private final static QName _TransactionStatus_QNAME = new QName("http://services.bellatrix.org/", "transactionStatus");
+    private final static QName _UpdateTransfer_QNAME = new QName("http://services.bellatrix.org/", "updateTransfer");
     private final static QName _DoPaymentResponse_QNAME = new QName("http://services.bellatrix.org/", "doPaymentResponse");
     private final static QName _MerchantConfirmPaymentResponse_QNAME = new QName("http://services.bellatrix.org/", "merchantConfirmPaymentResponse");
     private final static QName _ConfirmAgentCashoutResponse_QNAME = new QName("http://services.bellatrix.org/", "confirmAgentCashoutResponse");
@@ -60,59 +62,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ConfirmAgentCashoutResponse }
+     * Create an instance of {@link ValidatePaymentTicketResponse }
      * 
      */
-    public ConfirmAgentCashoutResponse createConfirmAgentCashoutResponse() {
-        return new ConfirmAgentCashoutResponse();
+    public ValidatePaymentTicketResponse createValidatePaymentTicketResponse() {
+        return new ValidatePaymentTicketResponse();
     }
 
     /**
-     * Create an instance of {@link InquiryResponse }
+     * Create an instance of {@link PaymentRequest }
      * 
      */
-    public InquiryResponse createInquiryResponse() {
-        return new InquiryResponse();
-    }
-
-    /**
-     * Create an instance of {@link ConfirmPaymentTicketRequest }
-     * 
-     */
-    public ConfirmPaymentTicketRequest createConfirmPaymentTicketRequest() {
-        return new ConfirmPaymentTicketRequest();
-    }
-
-    /**
-     * Create an instance of {@link PaymentResponse }
-     * 
-     */
-    public PaymentResponse createPaymentResponse() {
-        return new PaymentResponse();
-    }
-
-    /**
-     * Create an instance of {@link Header }
-     * 
-     */
-    public Header createHeader() {
-        return new Header();
-    }
-
-    /**
-     * Create an instance of {@link ResponseStatus }
-     * 
-     */
-    public ResponseStatus createResponseStatus() {
-        return new ResponseStatus();
-    }
-
-    /**
-     * Create an instance of {@link TransactionStatusResponse }
-     * 
-     */
-    public TransactionStatusResponse createTransactionStatusResponse() {
-        return new TransactionStatusResponse();
+    public PaymentRequest createPaymentRequest() {
+        return new PaymentRequest();
     }
 
     /**
@@ -124,11 +86,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ReversalRequest }
+     * Create an instance of {@link InquiryResponse }
      * 
      */
-    public ReversalRequest createReversalRequest() {
-        return new ReversalRequest();
+    public InquiryResponse createInquiryResponse() {
+        return new InquiryResponse();
     }
 
     /**
@@ -140,19 +102,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link InquiryRequest }
+     * Create an instance of {@link TransactionStatusResponse }
      * 
      */
-    public InquiryRequest createInquiryRequest() {
-        return new InquiryRequest();
-    }
-
-    /**
-     * Create an instance of {@link ReversalResponse }
-     * 
-     */
-    public ReversalResponse createReversalResponse() {
-        return new ReversalResponse();
+    public TransactionStatusResponse createTransactionStatusResponse() {
+        return new TransactionStatusResponse();
     }
 
     /**
@@ -164,27 +118,59 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GeneratePaymentTicketRequest }
+     * Create an instance of {@link InquiryRequest }
      * 
      */
-    public GeneratePaymentTicketRequest createGeneratePaymentTicketRequest() {
-        return new GeneratePaymentTicketRequest();
+    public InquiryRequest createInquiryRequest() {
+        return new InquiryRequest();
     }
 
     /**
-     * Create an instance of {@link ConfirmAgentCashoutRequest }
+     * Create an instance of {@link ConfirmPaymentTicketRequest }
      * 
      */
-    public ConfirmAgentCashoutRequest createConfirmAgentCashoutRequest() {
-        return new ConfirmAgentCashoutRequest();
+    public ConfirmPaymentTicketRequest createConfirmPaymentTicketRequest() {
+        return new ConfirmPaymentTicketRequest();
     }
 
     /**
-     * Create an instance of {@link TransferTypeFields }
+     * Create an instance of {@link UpdateTransferRequest }
      * 
      */
-    public TransferTypeFields createTransferTypeFields() {
-        return new TransferTypeFields();
+    public UpdateTransferRequest createUpdateTransferRequest() {
+        return new UpdateTransferRequest();
+    }
+
+    /**
+     * Create an instance of {@link ConfirmAgentCashoutResponse }
+     * 
+     */
+    public ConfirmAgentCashoutResponse createConfirmAgentCashoutResponse() {
+        return new ConfirmAgentCashoutResponse();
+    }
+
+    /**
+     * Create an instance of {@link AgentCashoutResponse }
+     * 
+     */
+    public AgentCashoutResponse createAgentCashoutResponse() {
+        return new AgentCashoutResponse();
+    }
+
+    /**
+     * Create an instance of {@link PaymentFields }
+     * 
+     */
+    public PaymentFields createPaymentFields() {
+        return new PaymentFields();
+    }
+
+    /**
+     * Create an instance of {@link PaymentResponse }
+     * 
+     */
+    public PaymentResponse createPaymentResponse() {
+        return new PaymentResponse();
     }
 
     /**
@@ -212,27 +198,51 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AgentCashoutResponse }
+     * Create an instance of {@link ConfirmAgentCashoutRequest }
      * 
      */
-    public AgentCashoutResponse createAgentCashoutResponse() {
-        return new AgentCashoutResponse();
+    public ConfirmAgentCashoutRequest createConfirmAgentCashoutRequest() {
+        return new ConfirmAgentCashoutRequest();
     }
 
     /**
-     * Create an instance of {@link ValidatePaymentTicketResponse }
+     * Create an instance of {@link GeneratePaymentTicketRequest }
      * 
      */
-    public ValidatePaymentTicketResponse createValidatePaymentTicketResponse() {
-        return new ValidatePaymentTicketResponse();
+    public GeneratePaymentTicketRequest createGeneratePaymentTicketRequest() {
+        return new GeneratePaymentTicketRequest();
     }
 
     /**
-     * Create an instance of {@link PaymentRequest }
+     * Create an instance of {@link ReversalResponse }
      * 
      */
-    public PaymentRequest createPaymentRequest() {
-        return new PaymentRequest();
+    public ReversalResponse createReversalResponse() {
+        return new ReversalResponse();
+    }
+
+    /**
+     * Create an instance of {@link ResponseStatus }
+     * 
+     */
+    public ResponseStatus createResponseStatus() {
+        return new ResponseStatus();
+    }
+
+    /**
+     * Create an instance of {@link Exception }
+     * 
+     */
+    public Exception createException() {
+        return new Exception();
+    }
+
+    /**
+     * Create an instance of {@link TransferTypeFields }
+     * 
+     */
+    public TransferTypeFields createTransferTypeFields() {
+        return new TransferTypeFields();
     }
 
     /**
@@ -244,19 +254,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Header }
+     * 
+     */
+    public Header createHeader() {
+        return new Header();
+    }
+
+    /**
+     * Create an instance of {@link ReversalRequest }
+     * 
+     */
+    public ReversalRequest createReversalRequest() {
+        return new ReversalRequest();
+    }
+
+    /**
      * Create an instance of {@link TransferHistory }
      * 
      */
     public TransferHistory createTransferHistory() {
         return new TransferHistory();
-    }
-
-    /**
-     * Create an instance of {@link PaymentFields }
-     * 
-     */
-    public PaymentFields createPaymentFields() {
-        return new PaymentFields();
     }
 
     /**
@@ -266,6 +284,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services.bellatrix.org/", name = "agentCashoutConfirmationResponse")
     public JAXBElement<AgentCashoutResponse> createAgentCashoutConfirmationResponse(AgentCashoutResponse value) {
         return new JAXBElement<AgentCashoutResponse>(_AgentCashoutConfirmationResponse_QNAME, AgentCashoutResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link Exception }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services.bellatrix.org/", name = "Exception")
+    public JAXBElement<Exception> createException(Exception value) {
+        return new JAXBElement<Exception>(_Exception_QNAME, Exception.class, null, value);
     }
 
     /**
@@ -311,6 +338,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://services.bellatrix.org/", name = "transactionStatus")
     public JAXBElement<TransactionStatusRequest> createTransactionStatus(TransactionStatusRequest value) {
         return new JAXBElement<TransactionStatusRequest>(_TransactionStatus_QNAME, TransactionStatusRequest.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link UpdateTransferRequest }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services.bellatrix.org/", name = "updateTransfer")
+    public JAXBElement<UpdateTransferRequest> createUpdateTransfer(UpdateTransferRequest value) {
+        return new JAXBElement<UpdateTransferRequest>(_UpdateTransfer_QNAME, UpdateTransferRequest.class, null, value);
     }
 
     /**

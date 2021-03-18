@@ -7,6 +7,8 @@ import com.hazelcast.core.IMap;
 import com.jpa.optima.ipg.helper.QRCodeHelper;
 import com.jpa.optima.ipg.helper.Utils;
 import com.jpa.optima.ipg.model.CreditCardParam;
+import com.jpa.optima.ipg.model.FelloInquiryRequest;
+import com.jpa.optima.ipg.model.FelloPaymentRequest;
 import com.jpa.optima.ipg.model.LinkAjaNotificationRequest;
 import com.jpa.optima.ipg.model.LinkAjaNotificationResponse;
 import com.jpa.optima.ipg.model.QRCodeParam;
@@ -33,8 +35,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.bellatrix.services.ws.access.CredentialResponse;
+import org.bellatrix.services.ws.access.ValidateCredentialResponse;
 import org.bellatrix.services.ws.billpayments.LoadPaymentChannelByMemberIDResponse;
-import org.bellatrix.services.ws.billpayments.PaymentChannel;
 import org.bellatrix.services.ws.members.LoadMembersResponse;
 import org.bellatrix.services.ws.members.Members;
 import org.bellatrix.services.ws.payments.InquiryRequest;
@@ -43,7 +45,6 @@ import org.bellatrix.services.ws.payments.PaymentResponse;
 import org.bellatrix.services.ws.virtualaccount.LoadVAByIDResponse;
 import org.bellatrix.services.ws.virtualaccount.VaEvent;
 import org.bellatrix.services.ws.virtualaccount.VaPaymentResponse;
-import org.bellatrix.services.ws.virtualaccount.VaRecordView;
 import org.bellatrix.services.ws.virtualaccount.VaRegisterResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -368,10 +369,18 @@ public class IPGController {
 
 			IMap<String, Ticket> tMap = instance.getMap("PaymentRequestMap");
 			Ticket t = tMap.get(transfer.getTicketID());
+			
+			logger.info("-- BANK Transfer Payment Channel : " + transfer.getPaymentChannel());
+			Integer bankId = 0;
+			if(transfer.getPaymentChannel() == 2) {
+				bankId = 1;
+			}else {
+				bankId = 4;
+			}
 
 			VaRegisterResponse vaRegisterResponse = paymentPageProcessor.registerVABilling(t.getMerchantID(),
 					transfer.getName(), transfer.getMsisdn(), transfer.getEmail(), transfer.getDescription(),
-					transfer.getAmount(), Integer.valueOf(1), t.getEventID(), t.getCallback());
+					transfer.getAmount(), Integer.valueOf(bankId), t.getEventID(), t.getCallback(), transfer.getPaymentChannel());
 
 			if (vaRegisterResponse.getStatus().getMessage().equalsIgnoreCase("PROCESSED")) {
 				model.addAttribute("ticketID", transfer.getTicketID());
@@ -450,6 +459,7 @@ public class IPGController {
 			model.addAttribute("eventOrganizer", lmr.getMembers().get(0).getName());
 			model.addAttribute("username", lmr.getMembers().get(0).getUsername());
 			model.addAttribute("description", loadVAByIDResponse.getVaRecord().get(0).getDescription());
+			model.addAttribute("paymentChannel", ti.getPaymentChannel());
 			tMap.delete(ticketID);
 			amMap.delete(ticketID);
 			return "bankTransferPayment";
@@ -484,7 +494,7 @@ public class IPGController {
 
 			VaRegisterResponse vaRegisterResponse = paymentPageProcessor.registerVABilling(t.getMerchantID(),
 					transfer.getName(), transfer.getMsisdn(), transfer.getEmail(), transfer.getDescription(),
-					transfer.getAmount(), Integer.valueOf(1), t.getEventID(), t.getCallback());
+					transfer.getAmount(), Integer.valueOf(1), t.getEventID(), t.getCallback(), 3);
 
 			if (vaRegisterResponse.getStatus().getMessage().equalsIgnoreCase("PROCESSED")) {
 				model.addAttribute("ticketID", transfer.getTicketID());
@@ -552,20 +562,17 @@ public class IPGController {
 			model.addAttribute("finalAmount", ti.getFinalAmount());
 			model.addAttribute("formattedFinalAmount",
 					Utils.formatAmount(ti.getFinalAmount(), ".", ",", "#,##0.00", "Rp.", ",-"));
-			model.addAttribute("expiredAt",
-					loadVAByIDResponse.getVaRecord().get(0).getFormattedExpiredAt());
+			model.addAttribute("expiredAt", loadVAByIDResponse.getVaRecord().get(0).getFormattedExpiredAt());
 			if (t.getEventID().equalsIgnoreCase("NA")) {
 				model.addAttribute("eventName", "");
 			} else {
 				model.addAttribute("eventName",
-					 paymentPageProcessor.loadVAEvent(t.getEventID()).getEvent().get(0)
-								.getDescription());
+						paymentPageProcessor.loadVAEvent(t.getEventID()).getEvent().get(0).getDescription());
 			}
 
 			model.addAttribute("eventOrganizer", lmr.getMembers().get(0).getName());
 			model.addAttribute("username", lmr.getMembers().get(0).getUsername());
-			model.addAttribute("description",
-					loadVAByIDResponse.getVaRecord().get(0).getDescription());
+			model.addAttribute("description", loadVAByIDResponse.getVaRecord().get(0).getDescription());
 			tMap.delete(ticketID);
 			amMap.delete(ticketID);
 			return "retailPayment";
@@ -600,7 +607,7 @@ public class IPGController {
 
 			VaRegisterResponse vaRegisterResponse = paymentPageProcessor.registerVABilling(t.getMerchantID(),
 					transfer.getName(), transfer.getMsisdn(), transfer.getEmail(), transfer.getDescription(),
-					transfer.getAmount(), Integer.valueOf(1), t.getEventID(), t.getCallback());
+					transfer.getAmount(), Integer.valueOf(1), t.getEventID(), t.getCallback(), 4);
 
 			if (vaRegisterResponse.getStatus().getMessage().equalsIgnoreCase("PROCESSED")) {
 				model.addAttribute("ticketID", transfer.getTicketID());
@@ -651,8 +658,6 @@ public class IPGController {
 			Ticket ti = amMap.get(ticketID);
 
 			QRCodeParam qrParam = new QRCodeParam();
-			logger.info("AMOUNT===> " + StringUtils.leftPad(ti.getFinalAmount().toString().replace(".", ""), 10, '0')
-					+ "/ Ti AMount: " + ti.getFinalAmount().toString().replace(".00", ""));
 			qrParam.setAmount(StringUtils.leftPad(ti.getFinalAmount().toString().replace(".", ""), 10, '0'));
 			qrParam.setCity(t.getCity());
 			String fee = StringUtils.leftPad(t.getFee().toString(), 10, '0') + "00";
@@ -684,30 +689,257 @@ public class IPGController {
 				model.addAttribute("finalAmount", ti.getFinalAmount());
 				model.addAttribute("formattedFinalAmount",
 						Utils.formatAmount(ti.getFinalAmount(), ".", ",", "#,##0.00", "Rp.", ",-"));
-				model.addAttribute("expiredAt",
-						loadVAByIDResponse.getVaRecord().get(0).getFormattedExpiredAt());
+				model.addAttribute("expiredAt", loadVAByIDResponse.getVaRecord().get(0).getFormattedExpiredAt());
 				if (t.getEventID().equalsIgnoreCase("NA")) {
 					model.addAttribute("eventName", "");
 				} else {
 					model.addAttribute("eventName",
-							paymentPageProcessor.loadVAEvent(t.getEventID()).getEvent().get(0)
-									.getDescription());
+							paymentPageProcessor.loadVAEvent(t.getEventID()).getEvent().get(0).getDescription());
 				}
 
 				model.addAttribute("username", lmr.getMembers().get(0).getUsername());
 				model.addAttribute("eventOrganizer", lmr.getMembers().get(0).getName());
-				model.addAttribute("description",
-						loadVAByIDResponse.getVaRecord().get(0).getDescription());
+				model.addAttribute("description", loadVAByIDResponse.getVaRecord().get(0).getDescription());
 				model.addAttribute("qrcode", qrResponse.getQrString());
-				tMap.delete(ticketID);
 				amMap.delete(ticketID);
+				tMap.delete(ticketID);
 				return "qrCodePayment";
 			}
-			logger.error("RC " + qrResponse.getResponseCode() + " : " + qrResponse.getResponseMessage());
+
 			model.addAttribute("httpResponseCode", "404");
 			model.addAttribute("status", "FAILED");
 			model.addAttribute("description", qrResponse.getResponseMessage());
 			return "page_exception";
+		} catch (NullPointerException ex) {
+			ex.printStackTrace();
+			logger.error("[Ticket Not Found/Expired]");
+			model.addAttribute("httpResponseCode", "404");
+			model.addAttribute("status", "TicketID Not Found");
+			model.addAttribute("description", "Expired/Invalid TicketID");
+			return "page_exception";
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			logger.error("[" + ex.getCause() + "]");
+			model.addAttribute("httpResponseCode", "500");
+			model.addAttribute("status", "Oops !");
+			model.addAttribute("description",
+					"We are experiencing some trouble here, but don't worry our team are OTW to solve this");
+		}
+		return "page_exception";
+	}
+
+	@RequestMapping(value = { "/felloForm" }, method = RequestMethod.POST)
+	public String submitFelloForm(@Valid @ModelAttribute("fello") Transfer transfer, BindingResult result,
+			ModelMap model) throws Exception {
+		try {
+			if (result.hasErrors()) {
+				return "page_500";
+			}
+
+			IMap<String, Ticket> tMap = instance.getMap("PaymentRequestMap");
+			Ticket t = tMap.get(transfer.getTicketID());
+
+			IMap<String, Ticket> amMap = instance.getMap("PaymentAmountMap");
+			Ticket ti = amMap.get(transfer.getTicketID());
+
+			VaRegisterResponse vaRegisterResponse = paymentPageProcessor.registerVABilling(t.getMerchantID(),
+					transfer.getName(), transfer.getMsisdn(), transfer.getEmail(), transfer.getDescription(),
+					transfer.getAmount(), Integer.valueOf(1), t.getEventID(), t.getCallback(), 5);
+
+			if (vaRegisterResponse.getStatus().getMessage().equalsIgnoreCase("PROCESSED")) {
+				model.addAttribute("ticketID", transfer.getTicketID());
+				model.addAttribute("ticketVA", vaRegisterResponse.getTicketID());
+				if (t.getEventID().equalsIgnoreCase("NA")) {
+					model.addAttribute("eventName", "");
+				} else {
+					model.addAttribute("eventName",
+							paymentPageProcessor.loadVAEvent(t.getEventID()).getEvent().get(0).getDescription());
+				}
+
+				LoadMembersResponse lmr = paymentPageProcessor.loadMember(t.getMerchantID());
+				model.addAttribute("formattedTransactionAmount",
+						Utils.formatAmount(ti.getTransactionAmount(), ".", ",", "#,##0.00", "Rp.", ",-"));
+				model.addAttribute("formattedTotalFee",
+						Utils.formatAmount(ti.getTotalFee(), ".", ",", "#,##0.00", "Rp.", ",-"));
+				model.addAttribute("formattedFinalAmount",
+						Utils.formatAmount(ti.getFinalAmount(), ".", ",", "#,##0.00", "Rp.", ",-"));
+				model.addAttribute("eventOrganizer", lmr.getMembers().get(0).getName());
+				model.addAttribute("paymentChannel", transfer.getPaymentChannel());
+				return "felloForm";
+			}
+			if (vaRegisterResponse.getStatus().getMessage().equalsIgnoreCase("DUPLICATE_TRANSACTION")) {
+				logger.error("[Ticket Not Found/Expired]");
+				model.addAttribute("httpResponseCode", "404");
+				model.addAttribute("status", "Duplicate Billing");
+				model.addAttribute("description", "Your billing already exist with the same billing ID");
+				return "page_exception";
+			}
+			logger.error(vaRegisterResponse.getStatus().getDescription());
+			model.addAttribute("httpResponseCode", "404");
+			model.addAttribute("status", vaRegisterResponse.getStatus().getMessage());
+			model.addAttribute("description", vaRegisterResponse.getStatus().getDescription());
+			return "page_exception";
+		} catch (NullPointerException ex) {
+			logger.error("[Ticket Not Found/Expired]");
+			model.addAttribute("httpResponseCode", "404");
+			model.addAttribute("status", "TicketID Not Found");
+			model.addAttribute("description", "Expired/Invalid TicketID");
+			return "page_exception";
+		} catch (MalformedURLException | DatatypeConfigurationException | ParseException ex) {
+			ex.printStackTrace();
+			logger.error("[" + ex.getCause() + "]");
+			model.addAttribute("httpResponseCode", "500");
+			model.addAttribute("status", "Oops !");
+			model.addAttribute("description",
+					"We are experiencing some trouble here, but don't worry our team are OTW to solve this");
+		}
+		return "page_exception";
+	}
+
+	@RequestMapping(value = { "/felloInquiry" }, method = RequestMethod.POST)
+	public String submitFelloInquiry(@Valid @ModelAttribute("felloInquiry") FelloInquiryRequest fello,
+			BindingResult result, ModelMap model) throws Exception {
+		try {
+			if (result.hasErrors()) {
+				return "page_500";
+			}
+
+			IMap<String, Ticket> tMap = instance.getMap("PaymentRequestMap");
+			Ticket t = tMap.get(fello.getTicketID());
+
+			IMap<String, Ticket> amMap = instance.getMap("PaymentAmountMap");
+			Ticket ti = amMap.get(fello.getTicketID());
+
+			ValidateCredentialResponse val = paymentPageProcessor.validateCredential(fello.getMsisdn(), fello.getPin(),
+					1);
+			if (val.getStatus().getMessage().equalsIgnoreCase("VALID")) {
+				IMap<String, String> otpMap = instance.getMap("OTPRequestMap");
+				String otp = Utils.GenerateRandomNumber(6);
+
+				otpMap.put(fello.getTicketVA(), otp);
+
+				paymentPageProcessor.sendOTPMessage("62" + fello.getMsisdn().substring(1), otp);
+
+				if (t.getEventID().equalsIgnoreCase("NA")) {
+					model.addAttribute("eventName", "");
+				} else {
+					model.addAttribute("eventName",
+							paymentPageProcessor.loadVAEvent(t.getEventID()).getEvent().get(0).getDescription());
+				}
+
+				LoadMembersResponse lmr = paymentPageProcessor.loadMember(t.getMerchantID());
+				model.addAttribute("formattedTransactionAmount",
+						Utils.formatAmount(ti.getTransactionAmount(), ".", ",", "#,##0.00", "Rp.", ",-"));
+				model.addAttribute("formattedTotalFee",
+						Utils.formatAmount(ti.getTotalFee(), ".", ",", "#,##0.00", "Rp.", ",-"));
+				model.addAttribute("formattedFinalAmount",
+						Utils.formatAmount(ti.getFinalAmount(), ".", ",", "#,##0.00", "Rp.", ",-"));
+				model.addAttribute("eventOrganizer", lmr.getMembers().get(0).getName());
+				model.addAttribute("ticketID", fello.getTicketID());
+				model.addAttribute("ticketVA", fello.getTicketVA());
+				model.addAttribute("msisdn", fello.getMsisdn());
+				model.addAttribute("paymentChannel", fello.getPaymentChannel());
+				return "felloOTP";
+			} else {
+				logger.error("[Credential Not VALID]");
+				model.addAttribute("httpResponseCode", "404");
+				model.addAttribute("status", val.getStatus().getMessage());
+				model.addAttribute("description", val.getStatus().getDescription());
+				return "page_exception";
+			}
+		} catch (NullPointerException ex) {
+			logger.error("[Ticket Not Found/Expired]");
+			model.addAttribute("httpResponseCode", "404");
+			model.addAttribute("status", "TicketID Not Found");
+			model.addAttribute("description", "Expired/Invalid TicketID");
+			return "page_exception";
+		}
+	}
+
+	@RequestMapping(value = { "/felloPayment" }, method = RequestMethod.POST)
+	public String felloFormRedirection(@Valid @ModelAttribute("felloPayment") FelloPaymentRequest fello,
+			BindingResult result, ModelMap model) {
+		try {
+			if (result.hasErrors()) {
+				return "page_500";
+			}
+
+			IMap<String, String> otpMap = instance.getMap("OTPRequestMap");
+			String otp = otpMap.get(fello.getTicketVA());
+			if (!otp.equalsIgnoreCase(fello.getOtp())) {
+				logger.error("[OTP Failed]");
+				model.addAttribute("httpResponseCode", "404");
+				model.addAttribute("status", "Invalid OTP");
+				model.addAttribute("description", "Expired/Invalid OTP");
+				return "page_exception";
+			}
+
+			otpMap.delete(fello.getTicketVA());
+
+			IMap<String, Ticket> tMap = instance.getMap("PaymentRequestMap");
+			Ticket t = tMap.get(fello.getTicketID());
+			LoadVAByIDResponse loadVAByIDResponse = paymentPageProcessor.loadVAByID(fello.getTicketVA());
+			if (loadVAByIDResponse.getVaRecord().size() == 0) {
+				logger.error("[Ticket Not Found/Expired]");
+				model.addAttribute("httpResponseCode", "404");
+				model.addAttribute("status", "TicketID Not Found");
+				model.addAttribute("description", "Expired/Invalid TicketID");
+				return "page_exception";
+			}
+
+			IMap<String, Ticket> amMap = instance.getMap("PaymentAmountMap");
+			Ticket ti = amMap.get(fello.getTicketID());
+
+			IMap<String, Ticket> vaMap = instance.getMap("PaymentVAMap");
+			vaMap.put(loadVAByIDResponse.getVaRecord().get(0).getId(), t);
+
+			LoadMembersResponse lmr = paymentPageProcessor
+					.loadMember(loadVAByIDResponse.getVaRecord().get(0).getParentUsername());
+
+			String trxNumber = Utils.GetDate("yyyyMMddhhmmss") + Utils.GenerateTransactionNumber();
+			VaPaymentResponse payRes = paymentPageProcessor.paymentVA(loadVAByIDResponse.getVaRecord().get(0).getId(),
+					trxNumber, ti.getFinalAmount(), fello.getMsisdn(), contextLoader.getFelloTransferTypeID());
+
+			//if (payRes.getStatus().getMessage().equalsIgnoreCase("PROCESSED")) {
+
+				model.addAttribute("paymentCode", loadVAByIDResponse.getVaRecord().get(0).getId());
+				model.addAttribute("amount", loadVAByIDResponse.getVaRecord().get(0).getAmount());
+				model.addAttribute("formattedAmount",
+						Utils.formatAmount(ti.getAmount(), ".", ",", "#,##0.00", "Rp.", ",-"));
+				model.addAttribute("transactionAmount", ti.getTransactionAmount());
+				model.addAttribute("formattedTransactionAmount",
+						Utils.formatAmount(ti.getTransactionAmount(), ".", ",", "#,##0.00", "Rp.", ",-"));
+				model.addAttribute("totalFee", ti.getTotalFee());
+				model.addAttribute("formattedTotalFee",
+						Utils.formatAmount(ti.getTotalFee(), ".", ",", "#,##0.00", "Rp.", ",-"));
+				model.addAttribute("finalAmount", ti.getFinalAmount());
+				model.addAttribute("formattedFinalAmount",
+						Utils.formatAmount(ti.getFinalAmount(), ".", ",", "#,##0.00", "Rp.", ",-"));
+				model.addAttribute("expiredAt", loadVAByIDResponse.getVaRecord().get(0).getFormattedExpiredAt());
+				if (t.getEventID().equalsIgnoreCase("NA")) {
+					model.addAttribute("eventName", "");
+				} else {
+					model.addAttribute("eventName",
+							paymentPageProcessor.loadVAEvent(t.getEventID()).getEvent().get(0).getDescription());
+				}
+
+				model.addAttribute("username", lmr.getMembers().get(0).getUsername());
+				model.addAttribute("eventOrganizer", lmr.getMembers().get(0).getName());
+				model.addAttribute("description", loadVAByIDResponse.getVaRecord().get(0).getDescription());
+				model.addAttribute("transactionDate", Utils.formatDate(payRes.getTransactionDate()));
+				model.addAttribute("transactionNumber", payRes.getTransactionNumber());
+				model.addAttribute("status", payRes.getStatus().getMessage());
+				model.addAttribute("msisdn", fello.getMsisdn());
+				model.addAttribute("ticketID", fello.getTicketID());
+				model.addAttribute("redirectURL", contextLoader.getFelloRedirectURL());
+			/*} else {
+				logger.error("[Payment VA Failed]");
+				model.addAttribute("httpResponseCode", "404");
+				model.addAttribute("status", payRes.getStatus().getMessage());
+				model.addAttribute("description", payRes.getStatus().getDescription());
+				return "page_exception";
+			}*/
+			return "felloPayment";
 		} catch (NullPointerException ex) {
 			ex.printStackTrace();
 			logger.error("[Ticket Not Found/Expired]");
@@ -732,6 +964,7 @@ public class IPGController {
 			@RequestParam(value = "transactionNumber", required = true) String transactionNumber,
 			@RequestParam(value = "notificationDate", required = true) String notificationDate, ModelMap model) {
 		try {
+			logger.info("[VA Notification Request : " + paymentCode + "]");
 			IMap<String, Ticket> vaMap = instance.getMap("PaymentVAMap");
 			Ticket t = vaMap.get(paymentCode);
 			String res = paymentPageProcessor.sendVANotification(t);
@@ -795,7 +1028,8 @@ public class IPGController {
 				return resNotif;
 			}
 			String trxNumber = Utils.GetDate("yyyyMMddhhmmss") + Utils.GenerateTransactionNumber();
-			VaPaymentResponse payRes = paymentPageProcessor.paymentVA(req.getMsg(), trxNumber, req.getAmount());
+			VaPaymentResponse payRes = paymentPageProcessor.paymentVA(req.getMsg(), trxNumber, req.getAmount(),
+					contextLoader.getLinkAjaUsername(), contextLoader.getLinkAjaTransferTypeID());
 			if (payRes.getStatus().getMessage().equalsIgnoreCase("PROCESSED")) {
 				String res = paymentPageProcessor.sendVALinkAjaNotification(t, trxNumber);
 				logger.info("[VA Notification Response : " + res + "]");
@@ -852,7 +1086,91 @@ public class IPGController {
 		}
 		return "TICKET_NOT_FOUND";
 	}
+	
+	//Fello Redirection
+	@RequestMapping(value = { "/paymentRedirect" }, method = RequestMethod.GET)
+	public String paymentRedirect(@RequestParam(value = "ticketID", required = true) String ticketID,
+			@RequestParam(value = "msisdn", required = true) String msisdn,
+			@RequestParam(value = "transactionNumber", required = false) String transactionNumber,
+			@RequestParam(value = "status", required = true) String status, ModelMap model, HttpServletRequest req)
+			throws Exception {
+		try {
+			IMap<String, Ticket> tMap = instance.getMap("PaymentRequestMap");
+			Ticket t = (Ticket) tMap.get(ticketID);
 
+			IMap<String, Ticket> vaMap = instance.getMap("PaymentAmountMap");
+			Ticket ti = (Ticket) vaMap.get(ticketID);
+
+			logger.info("[Payment IP Address : " + req.getRemoteAddr() + "]");
+			if (!t.getIpAddress().equalsIgnoreCase(req.getRemoteAddr())) {
+				logger.error("[IP Address Violation]");
+				model.addAttribute("httpResponseCode", "403");
+				model.addAttribute("status", "Forbidden");
+				model.addAttribute("description", "Invalid RemoteAddress");
+				return "page_exception";
+			}
+
+			CredentialResponse cr = paymentPageProcessor.loadCredential(t.getMerchantID(), Integer.valueOf(2));
+			String rawhashing = "";
+			rawhashing = t.getMerchantID() + t.getInvoiceID() + ti.getFinalAmount() + t.getCallback()
+					+ cr.getCredential();
+
+			String sha256hex = DigestUtils.sha256Hex(rawhashing);
+
+			logger.info("Words: " + sha256hex);
+
+			String sessionMap = t.getMerchantID() + t.getInvoiceID() + t.getSessionID();
+			if (status.equalsIgnoreCase("PROCESSED")) {
+				t.setPaymentChannel(t.getPaymentChannel());
+				t.setStatus("PROCESSED");
+				model.addAttribute("merchantID", t.getMerchantID());
+				model.addAttribute("invoiceID", t.getInvoiceID());
+				model.addAttribute("amount", ti.getFinalAmount());
+				model.addAttribute("sessionID", t.getSessionID());
+				model.addAttribute("currency", t.getCurrency());
+				model.addAttribute("transactionNumber", transactionNumber);
+				model.addAttribute("name", t.getName());
+				model.addAttribute("email", t.getEmail());
+				model.addAttribute("msisdn", t.getMsisdn());
+				model.addAttribute("description", t.getDescription());
+				model.addAttribute("paymentChannel", t.getPaymentChannel());
+				model.addAttribute("ticketID", ticketID);
+				model.addAttribute("words", sha256hex);
+				model.addAttribute("status", "PROCESSED");
+				paymentPageProcessor.sendMessage(msisdn, t.getMerchantID(), "Payment Received " + t.getDescription(),
+						"You have received a payment "
+								+ Utils.formatAmount(ti.getFinalAmount(), ".", ",", "#,##0.00", "Rp.", ",-")
+								+ " using Credit Card from " + t.getName() + " (" + t.getEmail() + ") with Invoice ID "
+								+ t.getInvoiceID());
+			} else {
+				logger.info("[VOID Status ResponseCode : FAILED ]");
+				t.setStatus("FAILED");
+				model.addAttribute("merchantID", t.getMerchantID());
+				model.addAttribute("invoiceID", t.getInvoiceID());
+				model.addAttribute("amount", ti.getFinalAmount());
+				model.addAttribute("sessionID", t.getSessionID());
+				model.addAttribute("currency", t.getCurrency());
+				model.addAttribute("paymentChannel", t.getPaymentChannel());
+				model.addAttribute("ticketID", ticketID);
+				model.addAttribute("words", sha256hex);
+				model.addAttribute("status", "FAILED");
+				model.addAttribute("description", "Something isn't quite right, We were reversing your payment...");
+			}
+
+			IMap<String, Ticket> sMap = instance.getMap("PaymentSessionMap");
+			sMap.put(sessionMap, t);
+			return "merchantRedirect";
+		} catch (NullPointerException ex) {
+			ex.printStackTrace();
+			logger.error("[Ticket Not Found/Expired]");
+			model.addAttribute("httpResponseCode", "404");
+			model.addAttribute("status", "TicketID Not Found");
+			model.addAttribute("description", "Expired/Invalid TicketID");
+			return "page_exception";
+		}
+	}
+
+	// Credit Card Payment Redirection
 	@RequestMapping(value = { "/paymentRedirection" }, method = RequestMethod.POST)
 	public String paymentRedirection(@RequestParam(value = "AMOUNT", required = true) String amount,
 			@RequestParam(value = "TRANSIDMERCHANT", required = true) String transID,
@@ -888,6 +1206,7 @@ public class IPGController {
 
 			String sessionMap = t.getMerchantID() + t.getInvoiceID() + t.getSessionID();
 			if (status.equalsIgnoreCase("0000")) {
+				//add code to create billing va di table billing_va
 				PaymentResponse pr = paymentPageProcessor.doPayment(sessionID, t.getMerchantID(), t.getInvoiceID(),
 						t.getDescription(), ti.getFinalAmount());
 				if (pr.getStatus().getMessage().equalsIgnoreCase("PROCESSED")) {
@@ -993,6 +1312,7 @@ public class IPGController {
 			URI url = new URI(t.getCallback());
 			HttpHeaders httpHeaders = new HttpHeaders();
 			httpHeaders.setLocation(url);
+			httpHeaders.set("status", status);
 			return new ResponseEntity<>(httpHeaders, HttpStatus.TEMPORARY_REDIRECT);
 		} catch (NullPointerException ex) {
 			logger.error("[Ticket Not Found/Expired]");
@@ -1045,7 +1365,6 @@ public class IPGController {
 			if (result.hasErrors()) {
 				return "page_500";
 			}
-
 			IMap<String, Ticket> tMap = instance.getMap("PaymentRequestMap");
 			Ticket t = tMap.get(transactionInq.getTicketID());
 
@@ -1106,6 +1425,7 @@ public class IPGController {
 						ti.setFinalAmount(new BigDecimal(
 								inqRes.getFinalAmount().setScale(0, RoundingMode.UP).toString() + ".00"));
 						ti.setTransactionAmount(new BigDecimal(inqRes.getTransactionAmount().toString() + ".00"));
+						ti.setPaymentChannel(transactionInq.getPaymentChannel());
 						vaMap.put(transactionInq.getTicketID(), ti);
 					} else {
 						model.addAttribute("status", inqRes.getStatus().getDescription());
@@ -1143,7 +1463,7 @@ public class IPGController {
 			Ticket t = tMap.get(transactionInq.getTicketID());
 
 			IMap<String, Ticket> vaMap = instance.getMap("PaymentAmountMap");
-			Ticket ti =  vaMap.get(transactionInq.getTicketID());
+			Ticket ti = vaMap.get(transactionInq.getTicketID());
 
 			LoadMembersResponse lmr = paymentPageProcessor.loadMember(t.getMerchantID());
 			CreditCardParam response = paymentPageProcessor.forwardCreditCardPayment(transactionInq.getTicketID(),
@@ -1152,8 +1472,7 @@ public class IPGController {
 				model.addAttribute("eventName", "");
 			} else {
 				model.addAttribute("eventName",
-						paymentPageProcessor.loadVAEvent(t.getEventID()).getEvent().get(0)
-								.getDescription());
+						paymentPageProcessor.loadVAEvent(t.getEventID()).getEvent().get(0).getDescription());
 			}
 
 			model.addAttribute("username", lmr.getMembers().get(0).getUsername());
@@ -1179,13 +1498,14 @@ public class IPGController {
 			model.addAttribute("receiveURL", contextLoader.getReceiveURL());
 			model.addAttribute("ticketID", transactionInq.getTicketID());
 			model.addAttribute("transferTypeID", ti.getTransferTypeID());
+			model.addAttribute("paymentChannel", transactionInq.getPaymentChannel());
 
 			if (transactionInq.getPaymentChannel().intValue() == 1) {
 				logger.info("--KARTU KREDIT--");
 				return "creditCardRedirect";
 			}
 			if (transactionInq.getPaymentChannel().intValue() == 2) {
-				logger.info("--TRANSFER BANK--");
+				logger.info("--TRANSFER BANK MANDIRI--");
 				return "bankTransferRedirect";
 			}
 			if (transactionInq.getPaymentChannel().intValue() == 3) {
@@ -1195,6 +1515,14 @@ public class IPGController {
 			if (transactionInq.getPaymentChannel().intValue() == 4) {
 				logger.info("--PEMBAYARAN QRIS--");
 				return "qrCodeRedirect";
+			}
+			if (transactionInq.getPaymentChannel().intValue() == 5) {
+				logger.info("--FELLO EMONEY--");
+				return "felloRedirect";
+			}
+			if (transactionInq.getPaymentChannel().intValue() == 6) {
+				logger.info("--TRANSFER BANK BCA--");
+				return "bankTransferRedirect";
 			}
 			logger.error("[Payment Channel Not Found]");
 			model.addAttribute("httpResponseCode", "404");
@@ -1267,6 +1595,7 @@ public class IPGController {
 								inqRes.getFinalAmount().setScale(0, RoundingMode.UP).toString() + ".00"));
 						ti.setTransactionAmount(new BigDecimal(
 								inqRes.getTransactionAmount().setScale(0, RoundingMode.UP).toString() + ".00"));
+						ti.setPaymentChannel(paymentChannel);
 						vaMap.put(ticketID, ti);
 
 						tInqRes.setStatus("PROCESSED");

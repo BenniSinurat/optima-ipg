@@ -50,6 +50,12 @@ public class ContextLoader {
 	private String LinkAjaUsername;
 	@Value("${ipg.username}")
 	private String IPGUsername;
+	@Value("${fello.username}")
+	private String FelloUsername;
+	@Value("${fello.transfer.type.id}")
+	private Integer FelloTransferTypeID;
+	@Value("${fello.redirect.url}")
+	private String FelloRedirectURL;
 
 	public String getPaymentPageURL() {
 		return PaymentPageURL;
@@ -214,6 +220,30 @@ public class ContextLoader {
 
 	public void setIPGUsername(String iPGUsername) {
 		IPGUsername = iPGUsername;
+	}
+
+	public String getFelloUsername() {
+		return FelloUsername;
+	}
+
+	public void setFelloUsername(String felloUsername) {
+		FelloUsername = felloUsername;
+	}
+
+	public Integer getFelloTransferTypeID() {
+		return FelloTransferTypeID;
+	}
+
+	public void setFelloTransferTypeID(Integer felloTransferTypeID) {
+		FelloTransferTypeID = felloTransferTypeID;
+	}
+
+	public String getFelloRedirectURL() {
+		return FelloRedirectURL;
+	}
+
+	public void setFelloRedirectURL(String felloRedirectURL) {
+		FelloRedirectURL = felloRedirectURL;
 	}
 
 }

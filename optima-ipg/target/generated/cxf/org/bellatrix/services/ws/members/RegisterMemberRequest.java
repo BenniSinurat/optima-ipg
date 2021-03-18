@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="groupID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="msisdn" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="uid" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="username" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -42,6 +43,7 @@ import javax.xml.bind.annotation.XmlType;
     "groupID",
     "msisdn",
     "name",
+    "uid",
     "username"
 })
 public class RegisterMemberRequest {
@@ -53,6 +55,7 @@ public class RegisterMemberRequest {
     protected Integer groupID;
     protected String msisdn;
     protected String name;
+    protected String uid;
     protected String username;
 
     /**
@@ -202,6 +205,30 @@ public class RegisterMemberRequest {
      */
     public void setName(String value) {
         this.name = value;
+    }
+
+    /**
+     * Gets the value of the uid property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getUid() {
+        return uid;
+    }
+
+    /**
+     * Sets the value of the uid property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setUid(String value) {
+        this.uid = value;
     }
 
     /**

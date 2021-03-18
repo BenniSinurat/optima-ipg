@@ -3,12 +3,14 @@ package com.jpa.optima.ipg.helper;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.XMLGregorianCalendar;
+
 public class Utils {
-	public Utils() {
-	}
 
 	public static String formatAmount(java.math.BigDecimal amount, String grouping, String decimal, String format,
 			String prefix, String trailer) {
@@ -35,7 +37,7 @@ public class Utils {
 	}
 
 	public static String GetDate(String form) {
-		java.util.Date date = new java.util.Date();
+		Date date = new java.util.Date();
 		SimpleDateFormat format = new SimpleDateFormat(form);
 		return format.format(date);
 	}
@@ -43,5 +45,15 @@ public class Utils {
 	public static String GenerateTransactionNumber() {
 		int randomNum = ThreadLocalRandom.current().nextInt(100000, 1000000);
 		return String.valueOf(randomNum);
+	}
+
+	public static String GenerateRandomNumber(int charLength) {
+		return String.valueOf(charLength < 1 ? 0
+				: new Random().nextInt((9 * (int) Math.pow(10, charLength - 1)) - 1)
+						+ (int) Math.pow(10, charLength - 1));
+	}
+
+	public static String formatDate(XMLGregorianCalendar xml) throws DatatypeConfigurationException {
+		return  xml.toGregorianCalendar().getTime().toString();
 	}
 }

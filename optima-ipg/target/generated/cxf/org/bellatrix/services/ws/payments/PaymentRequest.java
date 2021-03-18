@@ -23,11 +23,13 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="accessTypeID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+ *         &lt;element name="acquiringID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="amount" type="{http://www.w3.org/2001/XMLSchema}decimal" minOccurs="0"/>
  *         &lt;element name="billingID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="credential" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="fromMember" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="nnsID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="originator" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="paymentFields" type="{http://services.bellatrix.org/}paymentFields" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="referenceNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -47,11 +49,13 @@ import javax.xml.datatype.XMLGregorianCalendar;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "paymentRequest", propOrder = {
     "accessTypeID",
+    "acquiringID",
     "amount",
     "billingID",
     "credential",
     "description",
     "fromMember",
+    "nnsID",
     "originator",
     "paymentFields",
     "referenceNumber",
@@ -64,11 +68,13 @@ import javax.xml.datatype.XMLGregorianCalendar;
 public class PaymentRequest {
 
     protected Integer accessTypeID;
+    protected String acquiringID;
     protected BigDecimal amount;
     protected Integer billingID;
     protected String credential;
     protected String description;
     protected String fromMember;
+    protected String nnsID;
     protected String originator;
     @XmlElement(nillable = true)
     protected List<PaymentFields> paymentFields;
@@ -102,6 +108,30 @@ public class PaymentRequest {
      */
     public void setAccessTypeID(Integer value) {
         this.accessTypeID = value;
+    }
+
+    /**
+     * Gets the value of the acquiringID property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getAcquiringID() {
+        return acquiringID;
+    }
+
+    /**
+     * Sets the value of the acquiringID property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setAcquiringID(String value) {
+        this.acquiringID = value;
     }
 
     /**
@@ -222,6 +252,30 @@ public class PaymentRequest {
      */
     public void setFromMember(String value) {
         this.fromMember = value;
+    }
+
+    /**
+     * Gets the value of the nnsID property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getNnsID() {
+        return nnsID;
+    }
+
+    /**
+     * Sets the value of the nnsID property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setNnsID(String value) {
+        this.nnsID = value;
     }
 
     /**

@@ -27,6 +27,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="fromAccountID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="fromAllGroup" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *         &lt;element name="fromMemberID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+ *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="initialRangeAmount" type="{http://www.w3.org/2001/XMLSchema}decimal" minOccurs="0"/>
  *         &lt;element name="maxRangeAmount" type="{http://www.w3.org/2001/XMLSchema}decimal" minOccurs="0"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -54,6 +55,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "fromAccountID",
     "fromAllGroup",
     "fromMemberID",
+    "id",
     "initialRangeAmount",
     "maxRangeAmount",
     "name",
@@ -75,6 +77,7 @@ public class FeeRequest {
     protected Integer fromAccountID;
     protected boolean fromAllGroup;
     protected Integer fromMemberID;
+    protected Integer id;
     protected BigDecimal initialRangeAmount;
     protected BigDecimal maxRangeAmount;
     protected String name;
@@ -252,6 +255,30 @@ public class FeeRequest {
      */
     public void setFromMemberID(Integer value) {
         this.fromMemberID = value;
+    }
+
+    /**
+     * Gets the value of the id property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     * Sets the value of the id property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setId(Integer value) {
+        this.id = value;
     }
 
     /**

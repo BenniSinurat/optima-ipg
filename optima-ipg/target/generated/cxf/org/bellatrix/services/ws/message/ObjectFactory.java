@@ -44,11 +44,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LoadMessageByIDRequest }
+     * Create an instance of {@link NotificationMessage }
      * 
      */
-    public LoadMessageByIDRequest createLoadMessageByIDRequest() {
-        return new LoadMessageByIDRequest();
+    public NotificationMessage createNotificationMessage() {
+        return new NotificationMessage();
     }
 
     /**
@@ -68,27 +68,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LoadMessageByUsernameRequest }
-     * 
-     */
-    public LoadMessageByUsernameRequest createLoadMessageByUsernameRequest() {
-        return new LoadMessageByUsernameRequest();
-    }
-
-    /**
      * Create an instance of {@link SendMessageRequest }
      * 
      */
     public SendMessageRequest createSendMessageRequest() {
         return new SendMessageRequest();
-    }
-
-    /**
-     * Create an instance of {@link ResponseStatus }
-     * 
-     */
-    public ResponseStatus createResponseStatus() {
-        return new ResponseStatus();
     }
 
     /**
@@ -100,6 +84,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link LoadMessageResponse }
+     * 
+     */
+    public LoadMessageResponse createLoadMessageResponse() {
+        return new LoadMessageResponse();
+    }
+
+    /**
      * Create an instance of {@link Exception }
      * 
      */
@@ -108,19 +100,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link NotificationMessage }
+     * Create an instance of {@link LoadMessageByUsernameRequest }
      * 
      */
-    public NotificationMessage createNotificationMessage() {
-        return new NotificationMessage();
+    public LoadMessageByUsernameRequest createLoadMessageByUsernameRequest() {
+        return new LoadMessageByUsernameRequest();
     }
 
     /**
-     * Create an instance of {@link LoadMessageResponse }
+     * Create an instance of {@link LoadMessageByIDRequest }
      * 
      */
-    public LoadMessageResponse createLoadMessageResponse() {
-        return new LoadMessageResponse();
+    public LoadMessageByIDRequest createLoadMessageByIDRequest() {
+        return new LoadMessageByIDRequest();
+    }
+
+    /**
+     * Create an instance of {@link ResponseStatus }
+     * 
+     */
+    public ResponseStatus createResponseStatus() {
+        return new ResponseStatus();
     }
 
     /**

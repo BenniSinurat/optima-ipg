@@ -81,7 +81,7 @@
             </div>
             <br>
             <div class="row m-0 justify-content-between">
-            		<form id="bankTransferPayment" name="bankTransferform" role="form" class="form-horizontal" action="/payment/transactionInquiry" method="POST" modelAttribute="transactionInquiry">								
+            		<form id="bankTransferPaymentMandiri" name="bankTransferform" role="form" class="form-horizontal" action="/payment/transactionInquiry" method="POST" modelAttribute="transactionInquiry">								
 					          <input type="hidden" name="name" id="name" value="${name}" class="form-control validate">
 					          <input type="hidden" name="email" id="email" value="${email}" class="form-control validate">
 					          <input type="hidden" name="msisdn" id="msisdn" value="${msisdn}" class="form-control validate">
@@ -99,9 +99,33 @@
 							  <button type="submit" name="bt-submit" id="bt-submit" class="btn btn-default card card-pembayaran" style="height:55px;width:640px;display:none;"><p class="mb-0">Transfer Bank 
 							      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							      <span><img class="mr-2" src="assets/img/bank-transfer.png" alt="Bank Transfer">
-                    <img src="assets/img/ic_arrow_right.png" alt="Arrow Right"></span></p>
+                    						<img src="assets/img/ic_arrow_right.png" alt="Arrow Right"></span></p>
 							  </button>
-					    </form>
+				</form>
+            </div>
+            <br>
+            <div class="row m-0 justify-content-between">
+            		<form id="bankTransferPaymentBca" name="bankTransferform" role="form" class="form-horizontal" action="/payment/transactionInquiry" method="POST" modelAttribute="transactionInquiry">								
+					          <input type="hidden" name="name" id="name" value="${name}" class="form-control validate">
+					          <input type="hidden" name="email" id="email" value="${email}" class="form-control validate">
+					          <input type="hidden" name="msisdn" id="msisdn" value="${msisdn}" class="form-control validate">
+					          <input type="hidden" name="ticketID" id="ticketID" value="${ticketID}" class="form-control validate">
+					          <input type="hidden" name="description" id="description" value="${description}" class="form-control validate">
+					          <input type="hidden" name="amount" id="amount" value="${amount}" class="form-control validate">
+					          <input type="hidden" name="paymentChannel" id="paymentChannel" value="6" class="form-control validate">
+					          <c:forEach var="paymentChannel" items="${paymentChannel.paymentChannel}">
+							  	<c:if test="${not empty paymentChannel.id}">
+									<c:if test="${paymentChannel.id eq 6}">
+										<input type="hidden" name="btb-channel" id="btb-channel" value="yes"  class="form-control validate">
+									</c:if>
+								</c:if>
+							  </c:forEach>
+							  <button type="submit" name="btb-submit" id="btb-submit" class="btn btn-default card card-pembayaran" style="height:55px;width:640px;display:none;"><p class="mb-0">Transfer Bank
+							      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							      <span><img class="mr-2" src="assets/img/bca.png" alt="Bank Transfer">
+                    						<img src="assets/img/ic_arrow_right.png" alt="Arrow Right"></span></p>
+							  </button>
+				</form>
             </div>
             <br>
             <div class="row m-0 justify-content-between">
@@ -131,7 +155,7 @@
             </div>
             <br>
             <div class="row m-0 justify-content-between">
-            		<form id="bankTransferPayment" name="bankTransferform" role="form" class="form-horizontal" action="/payment/transactionInquiry" method="POST" modelAttribute="transactionInquiry">								
+            		<form id="qrPayment" name="qrForm" role="form" class="form-horizontal" action="/payment/transactionInquiry" method="POST" modelAttribute="transactionInquiry">								
 					          <input type="hidden" name="name" id="name" value="${name}" class="form-control validate">
 					          <input type="hidden" name="email" id="email" value="${email}" class="form-control validate">
 					          <input type="hidden" name="msisdn" id="msisdn" value="${msisdn}" class="form-control validate">
@@ -156,8 +180,34 @@
                     					<img src="assets/img/ic_arrow_right.png" alt="Arrow Right">
                         			</span></p>
 					      	</button>
-					   </form>
-        </div>
+				</form>
+        		</div>
+        		<br>
+            <div class="row m-0 justify-content-between">
+            		<form id="felloPayment" name="felloForm" role="form" class="form-horizontal" action="/payment/transactionInquiry" method="POST" modelAttribute="transactionInquiry">								
+					          <input type="hidden" name="name" id="name" value="${name}" class="form-control validate">
+					          <input type="hidden" name="email" id="email" value="${email}" class="form-control validate">
+					          <input type="hidden" name="msisdn" id="msisdn" value="${msisdn}" class="form-control validate">
+					          <input type="hidden" name="ticketID" id="ticketID" value="${ticketID}" class="form-control validate">
+					          <input type="hidden" name="description" id="description" value="${description}" class="form-control validate">
+					          <input type="hidden" name="amount" id="amount" value="${amount}" class="form-control validate">
+					          <input type="hidden" name="paymentChannel" id="paymentChannel" value="5" class="form-control validate">
+					          <c:forEach var="paymentChannel" items="${paymentChannel.paymentChannel}">
+							  	<c:if test="${not empty paymentChannel.id}">
+									<c:if test="${paymentChannel.id eq 5}">
+										<input type="hidden" name="f-channel" id="f-channel" value="yes"  class="form-control validate">
+									</c:if>
+								</c:if>
+							  </c:forEach>
+					      	  <button type="submit" name="f-submit" id="f-submit" class="btn btn-default card card-pembayaran" data-toggle="modal" style="height:55px;width:640px;display:none;"><p class="mb-0">Fello
+					      		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					      		<span>
+                            			<img class="mr-2" src="assets/img/fello.png" alt="Fello">
+                   					<img src="assets/img/ic_arrow_right.png" alt="Arrow Right">
+                        			</span></p>
+					      	  </button>
+					   	</form>
+            </div>
       </div>
       <!-- modal detail pembayaran -->
       <div class="modal fade" id="modal-detail" tabindex="-1" role="dialog" aria-labelledby="modal-detail" aria-hidden="true">
@@ -228,6 +278,17 @@
     </script>
     
     <script type="text/javascript">	
+		var b = document.getElementById("btb-channel").value;
+    		console.log(b);
+    		
+    		if(b == 'yes') {
+			document.getElementById("btb-submit").style.display = "block";
+		}else{
+			document.getElementById("btb-submit").style.display = "none";
+		}
+    </script>
+    
+    <script type="text/javascript">	
 		var c = document.getElementById("rt-channel").value;
     		console.log(c);
     		
@@ -246,6 +307,17 @@
 			document.getElementById("qr-submit").style.display = "block";
 		}else{
 			document.getElementById("qr-submit").style.display = "none";
+		}
+    </script>
+    
+    <script type="text/javascript">	
+		var d = document.getElementById("f-channel").value;
+    		console.log(d);
+    		
+    		if(d == 'yes') {
+			document.getElementById("f-submit").style.display = "block";
+		}else{
+			document.getElementById("f-submit").style.display = "none";
 		}
     </script>
 

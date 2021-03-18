@@ -29,17 +29,19 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="email" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="emailVerify" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *         &lt;element name="externalMembers" type="{http://services.bellatrix.org/}externalMemberFields" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="fcmID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="formattedCreatedDate" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="groupID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="idCardNo" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="kycStatus" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *         &lt;element name="kycStatus" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="motherMaidenName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="msisdn" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="nationality" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="placeOfBirth" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="sex" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="uid" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="username" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="work" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
@@ -60,6 +62,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "email",
     "emailVerify",
     "externalMembers",
+    "fcmID",
     "formattedCreatedDate",
     "groupID",
     "id",
@@ -71,6 +74,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "nationality",
     "placeOfBirth",
     "sex",
+    "uid",
     "username",
     "work"
 })
@@ -89,17 +93,19 @@ public class Members {
     protected Boolean emailVerify;
     @XmlElement(nillable = true)
     protected List<ExternalMemberFields> externalMembers;
+    protected String fcmID;
     protected String formattedCreatedDate;
     protected Integer groupID;
     protected Integer id;
     protected String idCardNo;
-    protected Boolean kycStatus;
+    protected String kycStatus;
     protected String motherMaidenName;
     protected String msisdn;
     protected String name;
     protected String nationality;
     protected String placeOfBirth;
     protected String sex;
+    protected String uid;
     protected String username;
     protected String work;
 
@@ -311,6 +317,30 @@ public class Members {
     }
 
     /**
+     * Gets the value of the fcmID property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getFcmID() {
+        return fcmID;
+    }
+
+    /**
+     * Sets the value of the fcmID property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setFcmID(String value) {
+        this.fcmID = value;
+    }
+
+    /**
      * Gets the value of the formattedCreatedDate property.
      * 
      * @return
@@ -411,10 +441,10 @@ public class Members {
      * 
      * @return
      *     possible object is
-     *     {@link Boolean }
+     *     {@link String }
      *     
      */
-    public Boolean isKycStatus() {
+    public String getKycStatus() {
         return kycStatus;
     }
 
@@ -423,10 +453,10 @@ public class Members {
      * 
      * @param value
      *     allowed object is
-     *     {@link Boolean }
+     *     {@link String }
      *     
      */
-    public void setKycStatus(Boolean value) {
+    public void setKycStatus(String value) {
         this.kycStatus = value;
     }
 
@@ -572,6 +602,30 @@ public class Members {
      */
     public void setSex(String value) {
         this.sex = value;
+    }
+
+    /**
+     * Gets the value of the uid property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getUid() {
+        return uid;
+    }
+
+    /**
+     * Sets the value of the uid property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setUid(String value) {
+        this.uid = value;
     }
 
     /**

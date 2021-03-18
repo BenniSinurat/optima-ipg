@@ -44,6 +44,8 @@ import org.bellatrix.services.ws.access.AccessService;
 import org.bellatrix.services.ws.access.CredentialRequest;
 import org.bellatrix.services.ws.access.CredentialResponse;
 import org.bellatrix.services.ws.access.Exception_Exception;
+import org.bellatrix.services.ws.access.ValidateCredentialRequest;
+import org.bellatrix.services.ws.access.ValidateCredentialResponse;
 import org.bellatrix.services.ws.billpayments.BillPayment;
 import org.bellatrix.services.ws.billpayments.BillPaymentService;
 import org.bellatrix.services.ws.billpayments.LoadPaymentChannelByMemberIDRequest;
@@ -95,11 +97,8 @@ public class PaymentPageProcessor {
 	@Autowired
 	private JmsTemplate jmsTemplate;
 	private Logger logger = Logger.getLogger(getClass());
-	//private static final String HMAC_SHA512 = "HmacSHA512";
-	//private static final String DEFAULT_ENCODING = "UTF-8";
-
-	public PaymentPageProcessor() {
-	}
+	// private static final String HMAC_SHA512 = "HmacSHA512";
+	// private static final String DEFAULT_ENCODING = "UTF-8";
 
 	public void sendToSettlement(PaymentResponse response, BigDecimal amount) {
 		Map<String, Object> obj = new HashMap<String, Object>();
@@ -129,7 +128,7 @@ public class PaymentPageProcessor {
 		messageRequest.setToUsername(toUsername);
 		messageRequest.setBody(body);
 		messageRequest.setSubject(subject);
-		
+
 		client.sendMessage(headerAuth, messageRequest);
 	}
 
@@ -176,7 +175,7 @@ public class PaymentPageProcessor {
 	}
 
 	public VaRegisterResponse registerVABilling(String username, String billName, String msisdn, String email,
-			String description, BigDecimal amount, Integer bankID, String eventID, String callback)
+			String description, BigDecimal amount, Integer bankID, String eventID, String callback, Integer paymentChannel)
 			throws MalformedURLException, DatatypeConfigurationException, ParseException {
 		URL url = new URL(contextLoader.getHostWSUrl() + "virtualaccounts?wsdl");
 		QName qName = new QName(contextLoader.getHostWSPort(), "VirtualAccountService");
@@ -196,7 +195,7 @@ public class PaymentPageProcessor {
 		vaRegisterRequest.setReferenceNumber(msisdn);
 		vaRegisterRequest.setUsername(username);
 
-		if (eventID.equalsIgnoreCase("NA")) {
+		if (paymentChannel == 2 || paymentChannel == 3) {
 			vaRegisterRequest.setCallbackURL(contextLoader.getPaymentVANotifURL());
 		} else {
 			vaRegisterRequest.setEventID(eventID);
@@ -671,7 +670,7 @@ public class PaymentPageProcessor {
 		return qrRes;
 	}
 
-	public VaPaymentResponse paymentVA(String paymentCode, String trxNumber, Number amount)
+	public VaPaymentResponse paymentVA(String paymentCode, String trxNumber, Number amount, String fromMember, Integer trfTypeID)
 			throws MalformedURLException {
 		URL url = new URL(contextLoader.getHostWSUrl() + "virtualaccounts?wsdl");
 		QName qName = new QName(contextLoader.getHostWSPort(), "VirtualAccountService");
@@ -687,8 +686,8 @@ public class PaymentPageProcessor {
 		req.setPaymentCode(paymentCode);
 		req.setAmount(new BigDecimal(amount.toString()));
 		req.setTraceNumber(trxNumber);
-		req.setFromMember(contextLoader.getLinkAjaUsername());
-		req.setTransferTypeID(contextLoader.getLinkAjaTransferTypeID());
+		req.setFromMember(fromMember);
+		req.setTransferTypeID(trfTypeID);
 
 		VaPaymentResponse res = client.paymentVA(payHeaderAuth, req);
 
@@ -754,6 +753,35 @@ public class PaymentPageProcessor {
 		LoadFeesByTransferTypeResponse feeRes = client.loadFeesByTransferType(transferTypeAuth, feeReq);
 
 		return feeRes;
+	}
+
+	public ValidateCredentialResponse validateCredential(String username, String pin, Integer accessTypeID)
+			throws Exception_Exception, MalformedURLException {
+		URL url = new URL(contextLoader.getHostWSUrl() + "access?wsdl");
+		QName qName = new QName(contextLoader.getHostWSPort(), "AccessService");
+		AccessService service = new AccessService(url, qName);
+		Access client = service.getAccessPort();
+
+		org.bellatrix.services.ws.access.Header headerMember = new org.bellatrix.services.ws.access.Header();
+		headerMember.setToken(contextLoader.getHeaderToken());
+		Holder<org.bellatrix.services.ws.access.Header> accessHeaderAuth = new Holder<org.bellatrix.services.ws.access.Header>();
+		accessHeaderAuth.value = headerMember;
+
+		ValidateCredentialRequest cr = new ValidateCredentialRequest();
+		cr.setUsername(username);
+		cr.setAccessTypeID(accessTypeID);
+		cr.setCredential(pin);
+		ValidateCredentialResponse lmr = client.validateCredential(accessHeaderAuth, cr);
+		return lmr;
+	}
+	
+	public void sendOTPMessage(String msisdn, String otp) {
+		Map<String, Object> obj = new HashMap<String, Object>();
+		obj.put("text", "GUNAKAN OTP : " + otp + " BERLAKU 15 MENIT. JAGA KERAHASIAAN PIN OTP ANDA, JANGAN DIBERIKAN KEPADA SIAPAPUN TERMASUK PETUGAS OPTIMA");
+		obj.put("to", msisdn);
+		obj.put("from", "OPTIMA");
+		jmsTemplate.setDefaultDestinationName("emoney.notification.sms");
+		jmsTemplate.convertAndSend(obj);
 	}
 
 	public JmsTemplate getJmsTemplate() {

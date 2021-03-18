@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="accessTypeID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="email" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="newCredential" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="username" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="usernameMember" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
@@ -32,6 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "resetCredentialRequest", propOrder = {
     "accessTypeID",
     "email",
+    "newCredential",
     "username",
     "usernameMember"
 })
@@ -39,6 +41,7 @@ public class ResetCredentialRequest {
 
     protected Integer accessTypeID;
     protected String email;
+    protected String newCredential;
     protected String username;
     protected String usernameMember;
 
@@ -88,6 +91,30 @@ public class ResetCredentialRequest {
      */
     public void setEmail(String value) {
         this.email = value;
+    }
+
+    /**
+     * Gets the value of the newCredential property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getNewCredential() {
+        return newCredential;
+    }
+
+    /**
+     * Sets the value of the newCredential property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setNewCredential(String value) {
+        this.newCredential = value;
     }
 
     /**
