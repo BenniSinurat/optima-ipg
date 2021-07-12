@@ -1,6 +1,4 @@
 <!doctype html>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -42,14 +40,7 @@
       <div class="container mt-4">
         <div class="row m-0 justify-content-between">
           <h3 class="mb-0 judul" style="font-size: 16px;">Transfer Bank</h3>
-          <c:choose>
-         	<c:when test = "${paymentChannel == 2}">
-          		<img class="mt-n1" src="assets/img/bank-transfer.png" alt="Bank Transfer">
-          	 </c:when>
-          	<c:otherwise>
-            		<img class="mt-n1" src="assets/img/bca.png" alt="Bank Transfer">
-         	</c:otherwise>
-      	 </c:choose>
+          <img class="mt-n1" src="assets/img/bank-transfer.png" alt="Bank Transfer">
         </div>
       </div>
       <div class="row waktu-bayar justify-content-between">

@@ -70,131 +70,19 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ResponseStatus }
+     * 
+     */
+    public ResponseStatus createResponseStatus() {
+        return new ResponseStatus();
+    }
+
+    /**
      * Create an instance of {@link LoadMerchantByUsernameRequest }
      * 
      */
     public LoadMerchantByUsernameRequest createLoadMerchantByUsernameRequest() {
         return new LoadMerchantByUsernameRequest();
-    }
-
-    /**
-     * Create an instance of {@link MemberView }
-     * 
-     */
-    public MemberView createMemberView() {
-        return new MemberView();
-    }
-
-    /**
-     * Create an instance of {@link LoadMembersByExternalIDRequest }
-     * 
-     */
-    public LoadMembersByExternalIDRequest createLoadMembersByExternalIDRequest() {
-        return new LoadMembersByExternalIDRequest();
-    }
-
-    /**
-     * Create an instance of {@link RegisterMerchantRequest }
-     * 
-     */
-    public RegisterMerchantRequest createRegisterMerchantRequest() {
-        return new RegisterMerchantRequest();
-    }
-
-    /**
-     * Create an instance of {@link ConfirmKYCResponse }
-     * 
-     */
-    public ConfirmKYCResponse createConfirmKYCResponse() {
-        return new ConfirmKYCResponse();
-    }
-
-    /**
-     * Create an instance of {@link LoadKYCResponse }
-     * 
-     */
-    public LoadKYCResponse createLoadKYCResponse() {
-        return new LoadKYCResponse();
-    }
-
-    /**
-     * Create an instance of {@link SubscribeMemberRequest }
-     * 
-     */
-    public SubscribeMemberRequest createSubscribeMemberRequest() {
-        return new SubscribeMemberRequest();
-    }
-
-    /**
-     * Create an instance of {@link MerchantSubCategory }
-     * 
-     */
-    public MerchantSubCategory createMerchantSubCategory() {
-        return new MerchantSubCategory();
-    }
-
-    /**
-     * Create an instance of {@link ConfirmKYCRequest }
-     * 
-     */
-    public ConfirmKYCRequest createConfirmKYCRequest() {
-        return new ConfirmKYCRequest();
-    }
-
-    /**
-     * Create an instance of {@link ConfirmMerchantResponse }
-     * 
-     */
-    public ConfirmMerchantResponse createConfirmMerchantResponse() {
-        return new ConfirmMerchantResponse();
-    }
-
-    /**
-     * Create an instance of {@link Merchants }
-     * 
-     */
-    public Merchants createMerchants() {
-        return new Merchants();
-    }
-
-    /**
-     * Create an instance of {@link ConfirmMerchantRequest }
-     * 
-     */
-    public ConfirmMerchantRequest createConfirmMerchantRequest() {
-        return new ConfirmMerchantRequest();
-    }
-
-    /**
-     * Create an instance of {@link Header }
-     * 
-     */
-    public Header createHeader() {
-        return new Header();
-    }
-
-    /**
-     * Create an instance of {@link MemberKYCRequest }
-     * 
-     */
-    public MemberKYCRequest createMemberKYCRequest() {
-        return new MemberKYCRequest();
-    }
-
-    /**
-     * Create an instance of {@link LoadMerchantBusinessScaleResponse }
-     * 
-     */
-    public LoadMerchantBusinessScaleResponse createLoadMerchantBusinessScaleResponse() {
-        return new LoadMerchantBusinessScaleResponse();
-    }
-
-    /**
-     * Create an instance of {@link UpdateMemberRequest }
-     * 
-     */
-    public UpdateMemberRequest createUpdateMemberRequest() {
-        return new UpdateMemberRequest();
     }
 
     /**
@@ -206,43 +94,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LoadMerchantCategoryRequest }
+     * Create an instance of {@link LoadMembersByUsernameRequest }
      * 
      */
-    public LoadMerchantCategoryRequest createLoadMerchantCategoryRequest() {
-        return new LoadMerchantCategoryRequest();
+    public LoadMembersByUsernameRequest createLoadMembersByUsernameRequest() {
+        return new LoadMembersByUsernameRequest();
     }
 
     /**
-     * Create an instance of {@link MerchantCategory }
+     * Create an instance of {@link SubscribeMemberRequest }
      * 
      */
-    public MerchantCategory createMerchantCategory() {
-        return new MerchantCategory();
+    public SubscribeMemberRequest createSubscribeMemberRequest() {
+        return new SubscribeMemberRequest();
     }
 
     /**
-     * Create an instance of {@link MerchantBusinessScale }
+     * Create an instance of {@link ConfirmKYCResponse }
      * 
      */
-    public MerchantBusinessScale createMerchantBusinessScale() {
-        return new MerchantBusinessScale();
+    public ConfirmKYCResponse createConfirmKYCResponse() {
+        return new ConfirmKYCResponse();
     }
 
     /**
-     * Create an instance of {@link MemberFields }
+     * Create an instance of {@link ConfirmMerchantResponse }
      * 
      */
-    public MemberFields createMemberFields() {
-        return new MemberFields();
-    }
-
-    /**
-     * Create an instance of {@link LoadMerchantCategoryResponse }
-     * 
-     */
-    public LoadMerchantCategoryResponse createLoadMerchantCategoryResponse() {
-        return new LoadMerchantCategoryResponse();
+    public ConfirmMerchantResponse createConfirmMerchantResponse() {
+        return new ConfirmMerchantResponse();
     }
 
     /**
@@ -254,27 +134,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LoadMerchantSubCategoryResponse }
+     * Create an instance of {@link Exception }
      * 
      */
-    public LoadMerchantSubCategoryResponse createLoadMerchantSubCategoryResponse() {
-        return new LoadMerchantSubCategoryResponse();
-    }
-
-    /**
-     * Create an instance of {@link ResponseStatus }
-     * 
-     */
-    public ResponseStatus createResponseStatus() {
-        return new ResponseStatus();
-    }
-
-    /**
-     * Create an instance of {@link ExternalMemberFields }
-     * 
-     */
-    public ExternalMemberFields createExternalMemberFields() {
-        return new ExternalMemberFields();
+    public Exception createException() {
+        return new Exception();
     }
 
     /**
@@ -286,6 +150,30 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ConfirmKYCRequest }
+     * 
+     */
+    public ConfirmKYCRequest createConfirmKYCRequest() {
+        return new ConfirmKYCRequest();
+    }
+
+    /**
+     * Create an instance of {@link MemberView }
+     * 
+     */
+    public MemberView createMemberView() {
+        return new MemberView();
+    }
+
+    /**
+     * Create an instance of {@link MerchantSubCategory }
+     * 
+     */
+    public MerchantSubCategory createMerchantSubCategory() {
+        return new MerchantSubCategory();
+    }
+
+    /**
      * Create an instance of {@link ValidateKYCResponse }
      * 
      */
@@ -294,83 +182,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LoadMembersResponse }
+     * Create an instance of {@link LoadMerchantCategoryResponse }
      * 
      */
-    public LoadMembersResponse createLoadMembersResponse() {
-        return new LoadMembersResponse();
+    public LoadMerchantCategoryResponse createLoadMerchantCategoryResponse() {
+        return new LoadMerchantCategoryResponse();
     }
 
     /**
-     * Create an instance of {@link UpdateMerchantRequest }
+     * Create an instance of {@link ConfirmMerchantRequest }
      * 
      */
-    public UpdateMerchantRequest createUpdateMerchantRequest() {
-        return new UpdateMerchantRequest();
+    public ConfirmMerchantRequest createConfirmMerchantRequest() {
+        return new ConfirmMerchantRequest();
     }
 
     /**
-     * Create an instance of {@link RegisterMemberRequest }
+     * Create an instance of {@link MerchantCategory }
      * 
      */
-    public RegisterMemberRequest createRegisterMemberRequest() {
-        return new RegisterMemberRequest();
+    public MerchantCategory createMerchantCategory() {
+        return new MerchantCategory();
     }
 
     /**
-     * Create an instance of {@link Groups }
+     * Create an instance of {@link LoadMerchantResponse }
      * 
      */
-    public Groups createGroups() {
-        return new Groups();
-    }
-
-    /**
-     * Create an instance of {@link MerchantOwner }
-     * 
-     */
-    public MerchantOwner createMerchantOwner() {
-        return new MerchantOwner();
-    }
-
-    /**
-     * Create an instance of {@link LoadMerchantSubCategoryRequest }
-     * 
-     */
-    public LoadMerchantSubCategoryRequest createLoadMerchantSubCategoryRequest() {
-        return new LoadMerchantSubCategoryRequest();
-    }
-
-    /**
-     * Create an instance of {@link LoadMembersByIDRequest }
-     * 
-     */
-    public LoadMembersByIDRequest createLoadMembersByIDRequest() {
-        return new LoadMembersByIDRequest();
-    }
-
-    /**
-     * Create an instance of {@link LoadMembersByUsernameRequest }
-     * 
-     */
-    public LoadMembersByUsernameRequest createLoadMembersByUsernameRequest() {
-        return new LoadMembersByUsernameRequest();
-    }
-
-    /**
-     * Create an instance of {@link Exception }
-     * 
-     */
-    public Exception createException() {
-        return new Exception();
-    }
-
-    /**
-     * Create an instance of {@link Billers }
-     * 
-     */
-    public Billers createBillers() {
-        return new Billers();
+    public LoadMerchantResponse createLoadMerchantResponse() {
+        return new LoadMerchantResponse();
     }
 
     /**
@@ -382,11 +222,139 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LoadMerchantResponse }
+     * Create an instance of {@link RegisterMemberRequest }
      * 
      */
-    public LoadMerchantResponse createLoadMerchantResponse() {
-        return new LoadMerchantResponse();
+    public RegisterMemberRequest createRegisterMemberRequest() {
+        return new RegisterMemberRequest();
+    }
+
+    /**
+     * Create an instance of {@link LoadMembersResponse }
+     * 
+     */
+    public LoadMembersResponse createLoadMembersResponse() {
+        return new LoadMembersResponse();
+    }
+
+    /**
+     * Create an instance of {@link LoadKYCResponse }
+     * 
+     */
+    public LoadKYCResponse createLoadKYCResponse() {
+        return new LoadKYCResponse();
+    }
+
+    /**
+     * Create an instance of {@link LoadMerchantBusinessScaleRequest }
+     * 
+     */
+    public LoadMerchantBusinessScaleRequest createLoadMerchantBusinessScaleRequest() {
+        return new LoadMerchantBusinessScaleRequest();
+    }
+
+    /**
+     * Create an instance of {@link LoadMerchantCategoryRequest }
+     * 
+     */
+    public LoadMerchantCategoryRequest createLoadMerchantCategoryRequest() {
+        return new LoadMerchantCategoryRequest();
+    }
+
+    /**
+     * Create an instance of {@link MerchantBusinessScale }
+     * 
+     */
+    public MerchantBusinessScale createMerchantBusinessScale() {
+        return new MerchantBusinessScale();
+    }
+
+    /**
+     * Create an instance of {@link MerchantOwner }
+     * 
+     */
+    public MerchantOwner createMerchantOwner() {
+        return new MerchantOwner();
+    }
+
+    /**
+     * Create an instance of {@link RegisterMerchantRequest }
+     * 
+     */
+    public RegisterMerchantRequest createRegisterMerchantRequest() {
+        return new RegisterMerchantRequest();
+    }
+
+    /**
+     * Create an instance of {@link Billers }
+     * 
+     */
+    public Billers createBillers() {
+        return new Billers();
+    }
+
+    /**
+     * Create an instance of {@link Groups }
+     * 
+     */
+    public Groups createGroups() {
+        return new Groups();
+    }
+
+    /**
+     * Create an instance of {@link MemberFields }
+     * 
+     */
+    public MemberFields createMemberFields() {
+        return new MemberFields();
+    }
+
+    /**
+     * Create an instance of {@link LoadMembersByExternalIDRequest }
+     * 
+     */
+    public LoadMembersByExternalIDRequest createLoadMembersByExternalIDRequest() {
+        return new LoadMembersByExternalIDRequest();
+    }
+
+    /**
+     * Create an instance of {@link LoadMerchantRequest }
+     * 
+     */
+    public LoadMerchantRequest createLoadMerchantRequest() {
+        return new LoadMerchantRequest();
+    }
+
+    /**
+     * Create an instance of {@link ExternalMemberFields }
+     * 
+     */
+    public ExternalMemberFields createExternalMemberFields() {
+        return new ExternalMemberFields();
+    }
+
+    /**
+     * Create an instance of {@link Merchants }
+     * 
+     */
+    public Merchants createMerchants() {
+        return new Merchants();
+    }
+
+    /**
+     * Create an instance of {@link UpdateMerchantRequest }
+     * 
+     */
+    public UpdateMerchantRequest createUpdateMerchantRequest() {
+        return new UpdateMerchantRequest();
+    }
+
+    /**
+     * Create an instance of {@link Header }
+     * 
+     */
+    public Header createHeader() {
+        return new Header();
     }
 
     /**
@@ -406,11 +374,51 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LoadMerchantRequest }
+     * Create an instance of {@link LoadMerchantSubCategoryResponse }
      * 
      */
-    public LoadMerchantRequest createLoadMerchantRequest() {
-        return new LoadMerchantRequest();
+    public LoadMerchantSubCategoryResponse createLoadMerchantSubCategoryResponse() {
+        return new LoadMerchantSubCategoryResponse();
+    }
+
+    /**
+     * Create an instance of {@link LoadMerchantSubCategoryRequest }
+     * 
+     */
+    public LoadMerchantSubCategoryRequest createLoadMerchantSubCategoryRequest() {
+        return new LoadMerchantSubCategoryRequest();
+    }
+
+    /**
+     * Create an instance of {@link UpdateMemberRequest }
+     * 
+     */
+    public UpdateMemberRequest createUpdateMemberRequest() {
+        return new UpdateMemberRequest();
+    }
+
+    /**
+     * Create an instance of {@link LoadMembersByIDRequest }
+     * 
+     */
+    public LoadMembersByIDRequest createLoadMembersByIDRequest() {
+        return new LoadMembersByIDRequest();
+    }
+
+    /**
+     * Create an instance of {@link MemberKYCRequest }
+     * 
+     */
+    public MemberKYCRequest createMemberKYCRequest() {
+        return new MemberKYCRequest();
+    }
+
+    /**
+     * Create an instance of {@link LoadMerchantBusinessScaleResponse }
+     * 
+     */
+    public LoadMerchantBusinessScaleResponse createLoadMerchantBusinessScaleResponse() {
+        return new LoadMerchantBusinessScaleResponse();
     }
 
     /**
@@ -419,14 +427,6 @@ public class ObjectFactory {
      */
     public MemberKYC createMemberKYC() {
         return new MemberKYC();
-    }
-
-    /**
-     * Create an instance of {@link LoadMerchantBusinessScaleRequest }
-     * 
-     */
-    public LoadMerchantBusinessScaleRequest createLoadMerchantBusinessScaleRequest() {
-        return new LoadMerchantBusinessScaleRequest();
     }
 
     /**

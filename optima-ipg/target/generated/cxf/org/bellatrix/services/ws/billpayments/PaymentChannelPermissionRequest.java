@@ -18,8 +18,8 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="channelID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *         &lt;element name="memberID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="transferTypeID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+ *         &lt;element name="username" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -32,15 +32,15 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "paymentChannelPermissionRequest", propOrder = {
     "channelID",
     "id",
-    "memberID",
-    "transferTypeID"
+    "transferTypeID",
+    "username"
 })
 public class PaymentChannelPermissionRequest {
 
     protected Integer channelID;
     protected Integer id;
-    protected Integer memberID;
     protected Integer transferTypeID;
+    protected String username;
 
     /**
      * Gets the value of the channelID property.
@@ -91,30 +91,6 @@ public class PaymentChannelPermissionRequest {
     }
 
     /**
-     * Gets the value of the memberID property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getMemberID() {
-        return memberID;
-    }
-
-    /**
-     * Sets the value of the memberID property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setMemberID(Integer value) {
-        this.memberID = value;
-    }
-
-    /**
      * Gets the value of the transferTypeID property.
      * 
      * @return
@@ -136,6 +112,30 @@ public class PaymentChannelPermissionRequest {
      */
     public void setTransferTypeID(Integer value) {
         this.transferTypeID = value;
+    }
+
+    /**
+     * Gets the value of the username property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * Sets the value of the username property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setUsername(String value) {
+        this.username = value;
     }
 
 }

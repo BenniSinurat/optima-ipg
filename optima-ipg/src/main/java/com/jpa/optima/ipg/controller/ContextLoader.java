@@ -56,6 +56,34 @@ public class ContextLoader {
 	private Integer FelloTransferTypeID;
 	@Value("${fello.redirect.url}")
 	private String FelloRedirectURL;
+	@Value("${linkaja.deep.link.host}")
+	private String LinkAjaDeepLinkHostURL;
+	@Value("${linkaja.deep.link.username}")
+	private String LinkAjaDeepLinkUsername;
+	@Value("${linkaja.deep.link.password}")
+	private String LinkAjaDeepLinkPassword;
+	@Value("${linkaja.deep.link.merchant.id}")
+	private String LinkAjaDeepLinkMerchantID;
+	@Value("${linkaja.deep.link.encryption.key}")
+	private String LinkAjaDeepLinkEncryptKey;
+	@Value("${direct.debit.host.url}")
+	private String DirectDebitHost;
+	@Value("${direct.debit.username}")
+	private String DirectDebitUsername;
+	@Value("${direct.debit.password}")
+	private String DirectDebitPassword;
+	@Value("${direct.debit.token.requestor.id}")
+	private String DirectDebitTokenRequestorID;
+	@Value("${direct.debit.merchant.id}")
+	private String DirectDebitMerchantID;
+	@Value("${direct.debit.terminal.id}")
+	private String DirectDebitTerminalID;
+	@Value("${direct.debit.public.key}")
+	private String DirectDebitPublicKey;
+	@Value("${direct.debit.secret.key}")
+	private String DirectDebitSecretKey;
+	@Value("${direct.debit.host.registration}")
+	private String DirectDebitRegistrationURL;
 
 	public String getPaymentPageURL() {
 		return PaymentPageURL;
@@ -244,6 +272,126 @@ public class ContextLoader {
 
 	public void setFelloRedirectURL(String felloRedirectURL) {
 		FelloRedirectURL = felloRedirectURL;
+	}
+
+	public String getLinkAjaDeepLinkUsername() {
+		return LinkAjaDeepLinkUsername;
+	}
+
+	public void setLinkAjaDeepLinkUsername(String linkAjaDeepLinkUsername) {
+		LinkAjaDeepLinkUsername = linkAjaDeepLinkUsername;
+	}
+
+	public String getLinkAjaDeepLinkPassword() {
+		return LinkAjaDeepLinkPassword;
+	}
+
+	public void setLinkAjaDeepLinkPassword(String linkAjaDeepLinkPassword) {
+		LinkAjaDeepLinkPassword = linkAjaDeepLinkPassword;
+	}
+
+	public String getLinkAjaDeepLinkMerchantID() {
+		return LinkAjaDeepLinkMerchantID;
+	}
+
+	public void setLinkAjaDeepLinkMerchantID(String linkAjaDeepLinkMerchantID) {
+		LinkAjaDeepLinkMerchantID = linkAjaDeepLinkMerchantID;
+	}
+
+	public String getLinkAjaDeepLinkEncryptKey() {
+		return LinkAjaDeepLinkEncryptKey;
+	}
+
+	public void setLinkAjaDeepLinkEncryptKey(String linkAjaDeepLinkEncryptKey) {
+		LinkAjaDeepLinkEncryptKey = linkAjaDeepLinkEncryptKey;
+	}
+
+	public String getLinkAjaDeepLinkHostURL() {
+		return LinkAjaDeepLinkHostURL;
+	}
+
+	public void setLinkAjaDeepLinkHostURL(String linkAjaDeepLinkHostURL) {
+		LinkAjaDeepLinkHostURL = linkAjaDeepLinkHostURL;
+	}
+
+	public String getDirectDebitHostURL() {
+		return DirectDebitHost;
+	}
+
+	public void setDirectDebitHostURL(String directDebitHost) {
+		DirectDebitHost = directDebitHost;
+	}
+
+	public String getDirectDebitUsername() {
+		return DirectDebitUsername;
+	}
+
+	public void setDirectDebitUsername(String directDebitUsername) {
+		DirectDebitUsername = directDebitUsername;
+	}
+
+	public String getDirectDebitPassword() {
+		return DirectDebitPassword;
+	}
+
+	public void setDirectDebitPassword(String directDebitPassword) {
+		DirectDebitPassword = directDebitPassword;
+	}
+
+	public String getDirectDebitHost() {
+		return DirectDebitHost;
+	}
+
+	public void setDirectDebitHost(String directDebitHost) {
+		DirectDebitHost = directDebitHost;
+	}
+
+	public String getDirectDebitTokenRequestorID() {
+		return DirectDebitTokenRequestorID;
+	}
+
+	public void setDirectDebitTokenRequestorID(String directDebitTokenRequestorID) {
+		DirectDebitTokenRequestorID = directDebitTokenRequestorID;
+	}
+
+	public String getDirectDebitMerchantID() {
+		return DirectDebitMerchantID;
+	}
+
+	public void setDirectDebitMerchantID(String directDebitMerchantID) {
+		DirectDebitMerchantID = directDebitMerchantID;
+	}
+
+	public String getDirectDebitTerminalID() {
+		return DirectDebitTerminalID;
+	}
+
+	public void setDirectDebitTerminalID(String directDebitTerminalID) {
+		DirectDebitTerminalID = directDebitTerminalID;
+	}
+
+	public String getDirectDebitPublicKey() {
+		return DirectDebitPublicKey;
+	}
+
+	public void setDirectDebitPublicKey(String directDebitPublicKey) {
+		DirectDebitPublicKey = directDebitPublicKey;
+	}
+
+	public String getDirectDebitSecretKey() {
+		return DirectDebitSecretKey;
+	}
+
+	public void setDirectDebitSecretKey(String directDebitSecretKey) {
+		DirectDebitSecretKey = directDebitSecretKey;
+	}
+
+	public String getDirectDebitRegistrationURL() {
+		return DirectDebitRegistrationURL;
+	}
+
+	public void setDirectDebitRegistrationURL(String directDebitRegistrationURL) {
+		DirectDebitRegistrationURL = directDebitRegistrationURL;
 	}
 
 }

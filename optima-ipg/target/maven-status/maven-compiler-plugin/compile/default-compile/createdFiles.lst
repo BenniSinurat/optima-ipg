@@ -8,6 +8,7 @@ org/bellatrix/services/ws/payments/ValidatePaymentTicketResponse.class
 org/bellatrix/services/ws/virtualaccount/Header.class
 org/bellatrix/services/ws/virtualaccount/VaUpdateResponse.class
 com/jpa/optima/ipg/controller/ContextLoader.class
+com/jpa/optima/ipg/model/DeepLinkRequest.class
 org/bellatrix/services/ws/virtualaccount/VaRecordView.class
 org/bellatrix/services/ws/payments/TransactionStatusRequest.class
 org/bellatrix/services/ws/members/ConfirmMerchantResponse.class
@@ -15,12 +16,15 @@ org/bellatrix/services/ws/message/Message.class
 org/bellatrix/services/ws/billpayments/Header.class
 org/bellatrix/services/ws/transfertypes/TransferTypeRequest.class
 org/bellatrix/services/ws/virtualaccount/VaRegisterBankRequest.class
+com/jpa/optima/ipg/helper/AESSecurity.class
 org/bellatrix/services/ws/members/package-info.class
 org/bellatrix/services/ws/transfertypes/LoadFeesByTransferTypeRequest.class
+com/jpa/optima/ipg/model/additionalData.class
 org/bellatrix/services/ws/access/ResetCredentialResponse.class
 org/bellatrix/services/ws/virtualaccount/VaUpdateRequest.class
 com/jpa/optima/ipg/model/QRCodeResponse.class
 org/bellatrix/services/ws/message/ObjectFactory.class
+com/jpa/optima/ipg/model/ValidateMandiriEncryptData.class
 com/jpa/optima/ipg/model/LinkAjaNotificationResponse.class
 org/bellatrix/services/ws/virtualaccount/LoadVAByEventRequest.class
 org/bellatrix/services/ws/members/LoadMerchantCategoryResponse.class
@@ -48,6 +52,8 @@ org/bellatrix/services/ws/members/ConfirmKYCRequest.class
 org/bellatrix/services/ws/transfertypes/LoadPermissionByTransferTypesResponse.class
 org/bellatrix/services/ws/access/ValidateCredentialResponse.class
 org/bellatrix/services/ws/members/MemberFields.class
+com/jpa/optima/ipg/model/DirectDebit.class
+com/jpa/optima/ipg/model/DirectDebitPurchaseRequest.class
 org/bellatrix/services/ws/billpayments/Exception.class
 org/bellatrix/services/ws/message/UnreadMessage.class
 org/bellatrix/services/ws/transfertypes/MemberFields.class
@@ -67,8 +73,11 @@ org/bellatrix/services/ws/virtualaccount/CreateEventStatusRequest.class
 org/bellatrix/services/ws/payments/PaymentFields.class
 org/bellatrix/services/ws/billpayments/ObjectFactory.class
 com/jpa/optima/ipg/model/TransactionInquiryRequest.class
+com/jpa/optima/ipg/helper/RSAHelper.class
 org/bellatrix/services/ws/message/package-info.class
+com/jpa/optima/ipg/model/DirectDebitPurchaseResponse.class
 org/bellatrix/services/ws/virtualaccount/Exception.class
+com/jpa/optima/ipg/model/DirectDebitInqRequest.class
 org/bellatrix/services/ws/message/LoadMessageByIDRequest.class
 org/bellatrix/services/ws/access/ResetCredentialRequest.class
 org/bellatrix/services/ws/members/LoadMerchantRequest.class
@@ -129,6 +138,7 @@ com/jpa/optima/ipg/model/QRCodeParam.class
 org/bellatrix/services/ws/virtualaccount/ReportBillingResponse.class
 org/bellatrix/services/ws/payments/AgentCashoutRequest.class
 org/bellatrix/services/ws/virtualaccount/VaInquiryResponse.class
+com/jpa/optima/ipg/model/DeepLinkResponse.class
 org/bellatrix/services/ws/virtualaccount/VaDeleteRequest.class
 org/bellatrix/services/ws/billpayments/ResponseStatus.class
 org/bellatrix/services/ws/virtualaccount/ReportBillingRequest.class
@@ -159,11 +169,13 @@ com/jpa/optima/ipg/model/FelloPaymentRequest.class
 org/bellatrix/services/ws/billpayments/PaymentChannel.class
 org/bellatrix/services/ws/payments/ReversalResponse.class
 org/bellatrix/services/ws/members/MerchantOwner.class
+com/jpa/optima/ipg/model/DirectDebitRegistrationNotificationResponse.class
 org/bellatrix/services/ws/payments/Payment.class
 org/bellatrix/services/ws/members/ObjectFactory.class
 org/bellatrix/services/ws/billpayments/BillerDetailsRequest.class
 org/bellatrix/services/ws/transfertypes/Members.class
 org/bellatrix/services/ws/access/CredentialResponse.class
+com/jpa/optima/ipg/model/DirectDebitRequest.class
 org/bellatrix/services/ws/billpayments/PaymentChannelRequest.class
 org/bellatrix/services/ws/transfertypes/ResponseStatus.class
 org/bellatrix/services/ws/transfertypes/TransactionException.class
@@ -177,6 +189,7 @@ org/bellatrix/services/ws/virtualaccount/DeleteVAEventRequest.class
 org/bellatrix/services/ws/billpayments/BillerListResponse.class
 org/bellatrix/services/ws/transfertypes/LoadTransferTypesByUsernameRequest.class
 com/jpa/optima/ipg/model/Transfer.class
+com/jpa/optima/ipg/model/ValidateDebitCardRequest.class
 org/bellatrix/services/ws/payments/Exception.class
 org/bellatrix/services/ws/payments/ObjectFactory.class
 org/bellatrix/services/ws/members/MerchantCategory.class
@@ -202,6 +215,7 @@ org/bellatrix/services/ws/access/AccessService.class
 org/bellatrix/services/ws/payments/MemberView.class
 org/bellatrix/services/ws/virtualaccount/VaPaymentResponse.class
 org/bellatrix/services/ws/transfertypes/LoadTransferTypesByAccountIDRequest.class
+com/jpa/optima/ipg/model/ValidateEncryptData.class
 org/bellatrix/services/ws/members/LoadMembersByIDRequest.class
 org/bellatrix/services/ws/transfertypes/LoadTransferTypesByIDResponse.class
 org/bellatrix/services/ws/virtualaccount/ExternalMemberFields.class
@@ -226,6 +240,7 @@ org/bellatrix/services/ws/virtualaccount/LoadVAByMemberRequest.class
 org/bellatrix/services/ws/virtualaccount/LoadVAEventResponse.class
 org/bellatrix/services/ws/members/ConfirmMerchantRequest.class
 org/bellatrix/services/ws/payments/InquiryResponse.class
+com/jpa/optima/ipg/model/DeepLinkPaymentRequest.class
 org/bellatrix/services/ws/virtualaccount/package-info.class
 org/bellatrix/services/ws/transfertypes/LoadTransferTypesResponse.class
 org/bellatrix/services/ws/payments/GeneratePaymentTicketResponse.class
@@ -237,7 +252,9 @@ org/bellatrix/services/ws/transfertypes/Billers.class
 org/bellatrix/services/ws/virtualaccount/VaEvent.class
 org/bellatrix/services/ws/access/package-info.class
 org/bellatrix/services/ws/virtualaccount/VaRegisterBankResponse.class
+com/jpa/optima/ipg/model/DirectDebitRegistrationNotificationRequest.class
 org/bellatrix/services/ws/access/UnblockCredentialRequest.class
 org/bellatrix/services/ws/transfertypes/ObjectFactory.class
 org/bellatrix/services/ws/virtualaccount/VirtualAccount.class
+com/jpa/optima/ipg/model/DirectTicket.class
 org/bellatrix/services/ws/members/LoadMerchantByUsernameResponse.class

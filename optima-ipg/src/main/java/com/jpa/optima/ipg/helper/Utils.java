@@ -1,5 +1,9 @@
 package com.jpa.optima.ipg.helper;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
@@ -7,10 +11,17 @@ import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.apache.log4j.Logger;
+
+import com.google.common.io.BaseEncoding;
+
 public class Utils {
+	private static Logger logger = Logger.getLogger(Utils.class);
 
 	public static String formatAmount(java.math.BigDecimal amount, String grouping, String decimal, String format,
 			String prefix, String trailer) {
@@ -54,6 +65,27 @@ public class Utils {
 	}
 
 	public static String formatDate(XMLGregorianCalendar xml) throws DatatypeConfigurationException {
-		return  xml.toGregorianCalendar().getTime().toString();
+		return xml.toGregorianCalendar().getTime().toString();
+	}
+
+	public static long getTimestamp() {
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		long tmp = timestamp.getTime();
+		
+		logger.info("Timestamp: " + tmp);
+		return tmp;
+	}
+	
+	public static String hmacSHA512Encrypt(String words, String key) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
+		SecretKeySpec keySpec = new SecretKeySpec(key.getBytes("UTF-8"),
+				"HmacSHA512");
+
+		Mac mac = Mac.getInstance("HmacSHA512");
+		mac.init(keySpec);
+		String sha512Hex = BaseEncoding.base16().lowerCase().encode(mac.doFinal(words.getBytes("UTF-8")));
+
+		logger.info("[Request WORDS : " + words + " /Hashed WORDS : " + sha512Hex + "]");
+		
+		return sha512Hex;
 	}
 }

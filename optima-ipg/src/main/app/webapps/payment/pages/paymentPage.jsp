@@ -105,30 +105,6 @@
             </div>
             <br>
             <div class="row m-0 justify-content-between">
-            		<form id="bankTransferPaymentBca" name="bankTransferform" role="form" class="form-horizontal" action="/payment/transactionInquiry" method="POST" modelAttribute="transactionInquiry">								
-					          <input type="hidden" name="name" id="name" value="${name}" class="form-control validate">
-					          <input type="hidden" name="email" id="email" value="${email}" class="form-control validate">
-					          <input type="hidden" name="msisdn" id="msisdn" value="${msisdn}" class="form-control validate">
-					          <input type="hidden" name="ticketID" id="ticketID" value="${ticketID}" class="form-control validate">
-					          <input type="hidden" name="description" id="description" value="${description}" class="form-control validate">
-					          <input type="hidden" name="amount" id="amount" value="${amount}" class="form-control validate">
-					          <input type="hidden" name="paymentChannel" id="paymentChannel" value="6" class="form-control validate">
-					          <c:forEach var="paymentChannel" items="${paymentChannel.paymentChannel}">
-							  	<c:if test="${not empty paymentChannel.id}">
-									<c:if test="${paymentChannel.id eq 6}">
-										<input type="hidden" name="btb-channel" id="btb-channel" value="yes"  class="form-control validate">
-									</c:if>
-								</c:if>
-							  </c:forEach>
-							  <button type="submit" name="btb-submit" id="btb-submit" class="btn btn-default card card-pembayaran" style="height:55px;width:640px;display:none;"><p class="mb-0">Transfer Bank
-							      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							      <span><img class="mr-2" src="assets/img/bca.png" alt="Bank Transfer">
-                    						<img src="assets/img/ic_arrow_right.png" alt="Arrow Right"></span></p>
-							  </button>
-				</form>
-            </div>
-            <br>
-            <div class="row m-0 justify-content-between">
             		<form id="geraiRetailPayment" name="geraiRetailform" role="form" class="form-horizontal" action="/payment/transactionInquiry" method="POST" modelAttribute="transactionInquiry">								
 					          <input type="hidden" name="name" id="name" value="${name}" class="form-control validate">
 					          <input type="hidden" name="email" id="email" value="${email}" class="form-control validate">
@@ -208,6 +184,89 @@
 					      	  </button>
 					   	</form>
             </div>
+            <br>
+            <div class="row m-0 justify-content-between">
+            		<form id="bankTransferPaymentBca" name="bankTransferform" role="form" class="form-horizontal" action="/payment/transactionInquiry" method="POST" modelAttribute="transactionInquiry">								
+					          <input type="hidden" name="name" id="name" value="${name}" class="form-control validate">
+					          <input type="hidden" name="email" id="email" value="${email}" class="form-control validate">
+					          <input type="hidden" name="msisdn" id="msisdn" value="${msisdn}" class="form-control validate">
+					          <input type="hidden" name="ticketID" id="ticketID" value="${ticketID}" class="form-control validate">
+					          <input type="hidden" name="description" id="description" value="${description}" class="form-control validate">
+					          <input type="hidden" name="amount" id="amount" value="${amount}" class="form-control validate">
+					          <input type="hidden" name="paymentChannel" id="paymentChannel" value="6" class="form-control validate">
+					          <c:forEach var="paymentChannel" items="${paymentChannel.paymentChannel}">
+							  	<c:if test="${not empty paymentChannel.id}">
+									<c:if test="${paymentChannel.id eq 6}">
+										<input type="hidden" name="btb-channel" id="btb-channel" value="yes"  class="form-control validate">
+									</c:if>
+								</c:if>
+							  </c:forEach>
+							  <button type="submit" name="btb-submit" id="btb-submit" class="btn btn-default card card-pembayaran" style="height:55px;width:640px;display:none;"><p class="mb-0">Virtual Account
+							      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							      <span><img class="mr-2" src="assets/img/bca.png" alt="Bank Transfer">
+                    						<img src="assets/img/ic_arrow_right.png" alt="Arrow Right"></span></p>
+							  </button>
+				</form>
+            </div>
+            <br>
+            <div class="row m-0 justify-content-between">
+            		<form id="linkAjaPayment" name="linkAjaForm" role="form" class="form-horizontal" action="/payment/transactionInquiry" method="POST" modelAttribute="transactionInquiry">								
+					          <input type="hidden" name="name" id="name" value="${name}" class="form-control validate">
+					          <input type="hidden" name="email" id="email" value="${email}" class="form-control validate">
+					          <input type="hidden" name="msisdn" id="msisdn" value="${msisdn}" class="form-control validate">
+					          <input type="hidden" name="ticketID" id="ticketID" value="${ticketID}" class="form-control validate">
+					          <input type="hidden" name="description" id="description" value="${description}" class="form-control validate">
+					          <input type="hidden" name="amount" id="amount" value="${amount}" class="form-control validate">
+					          <input type="hidden" name="fee" id="fee" value="${fee}" class="form-control validate">
+					          <input type="hidden" name="city" id="amount" value="${city}" class="form-control validate">
+					          <input type="hidden" name="postalCode" id="postalCode" value="${postalCode}" class="form-control validate">
+					          <input type="hidden" name="paymentChannel" id="paymentChannel" value="7" class="form-control validate">
+					      	  <c:forEach var="paymentChannel" items="${paymentChannel.paymentChannel}">
+							  	<c:if test="${not empty paymentChannel.id}">
+									<c:if test="${paymentChannel.id eq 7}">
+										<input type="hidden" name="dl-channel" id="dl-channel" value="yes"  class="form-control validate">
+									</c:if>
+								</c:if>
+							  </c:forEach>
+					      	  <button type="submit" name="dl-submit" id="dl-submit" class="btn btn-default card card-pembayaran" data-toggle="modal" style="height:55px;width:640px;display:none;"><p class="mb-0">LinkAja
+					      		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					      		<span>
+                            			<img class="mr-2" src="assets/img/LinkAja.png" alt="LinkAja">
+                    					<img src="assets/img/ic_arrow_right.png" alt="Arrow Right">
+                        			</span></p>
+					      	</button>
+				</form>
+        		</div>
+        		<br>
+        		<div class="row m-0 justify-content-between">
+            		<form id="directDebitPayment" name="directDebitPayment" role="form" class="form-horizontal" action="/payment/transactionInquiry" method="POST" modelAttribute="transactionInquiry">								
+					          <input type="hidden" name="name" id="name" value="${name}" class="form-control validate">
+					          <input type="hidden" name="email" id="email" value="${email}" class="form-control validate">
+					          <input type="hidden" name="msisdn" id="msisdn" value="${msisdn}" class="form-control validate">
+					          <input type="hidden" name="ticketID" id="ticketID" value="${ticketID}" class="form-control validate">
+					          <input type="hidden" name="description" id="description" value="${description}" class="form-control validate">
+					          <input type="hidden" name="amount" id="amount" value="${amount}" class="form-control validate">
+					          <input type="hidden" name="fee" id="fee" value="${fee}" class="form-control validate">
+					          <input type="hidden" name="city" id="amount" value="${city}" class="form-control validate">
+					          <input type="hidden" name="postalCode" id="postalCode" value="${postalCode}" class="form-control validate">
+					          <input type="hidden" name="paymentChannel" id="paymentChannel" value="8" class="form-control validate">
+					      	  <c:forEach var="paymentChannel" items="${paymentChannel.paymentChannel}">
+							  	<c:if test="${not empty paymentChannel.id}">
+									<c:if test="${paymentChannel.id eq 8}">
+										<input type="hidden" name="dd-channel" id="dd-channel" value="yes"  class="form-control validate">
+									</c:if>
+								</c:if>
+							  </c:forEach>
+					      	  <button type="submit" name="dd-submit" id="dd-submit" class="btn btn-default card card-pembayaran" data-toggle="modal" style="height:55px;width:640px;display:none;"><p class="mb-0">Kartu Debit
+					      		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					      		<span>
+                            			<img class="mr-2" src="assets/img/kartu-debit.png" alt="Direct Debit">
+                    					<img src="assets/img/ic_arrow_right.png" alt="Arrow Right">
+                        			</span></p>
+					      	</button>
+				</form>
+        		</div>
+        		<br>
       </div>
       <!-- modal detail pembayaran -->
       <div class="modal fade" id="modal-detail" tabindex="-1" role="dialog" aria-labelledby="modal-detail" aria-hidden="true">
@@ -318,6 +377,28 @@
 			document.getElementById("f-submit").style.display = "block";
 		}else{
 			document.getElementById("f-submit").style.display = "none";
+		}
+    </script>
+    
+    <script type="text/javascript">	
+		var d = document.getElementById("dl-channel").value;
+    		console.log(d);
+    		
+    		if(d == 'yes') {
+			document.getElementById("dl-submit").style.display = "block";
+		}else{
+			document.getElementById("dl-submit").style.display = "none";
+		}
+    </script>
+    
+    <script type="text/javascript">	
+		var d = document.getElementById("dd-channel").value;
+    		console.log(d);
+    		
+    		if(d == 'yes') {
+			document.getElementById("dd-submit").style.display = "block";
+		}else{
+			document.getElementById("dd-submit").style.display = "none";
 		}
     </script>
 

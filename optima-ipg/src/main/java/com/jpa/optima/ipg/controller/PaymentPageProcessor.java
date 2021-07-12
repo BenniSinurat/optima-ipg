@@ -1,38 +1,53 @@
 package com.jpa.optima.ipg.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.io.BaseEncoding;
+import com.jpa.optima.ipg.helper.AESSecurity;
+import com.jpa.optima.ipg.helper.Utils;
 import com.jpa.optima.ipg.model.CreditCardParam;
+import com.jpa.optima.ipg.model.DeepLinkRequest;
+import com.jpa.optima.ipg.model.DeepLinkResponse;
+import com.jpa.optima.ipg.model.DirectDebitPurchaseRequest;
+import com.jpa.optima.ipg.model.DirectDebitPurchaseResponse;
 import com.jpa.optima.ipg.model.QRCodeParam;
 import com.jpa.optima.ipg.model.QRCodeResponse;
 import com.jpa.optima.ipg.model.Ticket;
+import com.jpa.optima.ipg.model.ValidateDebitCardRequest;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Holder;
+
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -175,8 +190,8 @@ public class PaymentPageProcessor {
 	}
 
 	public VaRegisterResponse registerVABilling(String username, String billName, String msisdn, String email,
-			String description, BigDecimal amount, Integer bankID, String eventID, String callback, Integer paymentChannel)
-			throws MalformedURLException, DatatypeConfigurationException, ParseException {
+			String description, BigDecimal amount, Integer bankID, String eventID, String callback,
+			Integer paymentChannel) throws MalformedURLException, DatatypeConfigurationException, ParseException {
 		URL url = new URL(contextLoader.getHostWSUrl() + "virtualaccounts?wsdl");
 		QName qName = new QName(contextLoader.getHostWSPort(), "VirtualAccountService");
 		VirtualAccountService service = new VirtualAccountService(url, qName);
@@ -440,6 +455,8 @@ public class PaymentPageProcessor {
 
 		post.setEntity(new UrlEncodedFormEntity(urlParameters));
 
+		logger.info("Param Notification : " + urlParameters);
+
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		Throwable localThrowable6 = null;
 		try {
@@ -599,15 +616,8 @@ public class PaymentPageProcessor {
 		String json = mapper.writeValueAsString(param);
 
 		String words = contextLoader.getLinkAjaCID() + ":" + json + ":" + contextLoader.getLinkAjaSecretKey();
-		logger.info("[Request WORDS : " + words + "]");
 
-		SecretKeySpec keySpec = new SecretKeySpec(contextLoader.getLinkAjaSecretKey().getBytes("UTF-8"), "HmacSHA512");
-
-		Mac mac = Mac.getInstance("HmacSHA512");
-		mac.init(keySpec);
-		String sha512Hex = BaseEncoding.base16().lowerCase().encode(mac.doFinal(words.getBytes("UTF-8")));
-
-		logger.info("[Hashed WORDS : " + sha512Hex + "]");
+		String sha512Hex = Utils.hmacSHA512Encrypt(words, contextLoader.getLinkAjaSecretKey());
 
 		HttpPost post = new HttpPost(contextLoader.getLinkAjaHostURL());
 		post.setHeader("Accept", "application/json");
@@ -670,8 +680,8 @@ public class PaymentPageProcessor {
 		return qrRes;
 	}
 
-	public VaPaymentResponse paymentVA(String paymentCode, String trxNumber, Number amount, String fromMember, Integer trfTypeID)
-			throws MalformedURLException {
+	public VaPaymentResponse paymentVA(String paymentCode, String trxNumber, Number amount, String fromMember,
+			Integer trfTypeID) throws MalformedURLException {
 		URL url = new URL(contextLoader.getHostWSUrl() + "virtualaccounts?wsdl");
 		QName qName = new QName(contextLoader.getHostWSPort(), "VirtualAccountService");
 		VirtualAccountService service = new VirtualAccountService(url, qName);
@@ -774,14 +784,221 @@ public class PaymentPageProcessor {
 		ValidateCredentialResponse lmr = client.validateCredential(accessHeaderAuth, cr);
 		return lmr;
 	}
-	
+
 	public void sendOTPMessage(String msisdn, String otp) {
 		Map<String, Object> obj = new HashMap<String, Object>();
-		obj.put("text", "GUNAKAN OTP : " + otp + " BERLAKU 15 MENIT. JAGA KERAHASIAAN PIN OTP ANDA, JANGAN DIBERIKAN KEPADA SIAPAPUN TERMASUK PETUGAS OPTIMA");
+		obj.put("text", "GUNAKAN OTP : " + otp
+				+ " BERLAKU 15 MENIT. JAGA KERAHASIAAN PIN OTP ANDA, JANGAN DIBERIKAN KEPADA SIAPAPUN TERMASUK PETUGAS OPTIMA");
 		obj.put("to", msisdn);
 		obj.put("from", "OPTIMA");
 		jmsTemplate.setDefaultDestinationName("emoney.notification.sms");
 		jmsTemplate.convertAndSend(obj);
+	}
+
+	public DeepLinkResponse forwardDeepLink(DeepLinkRequest param)
+			throws IOException, NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException,
+			InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+		DeepLinkResponse qrRes = new DeepLinkResponse();
+		String result = "";
+		String timestamp = StringUtils.rightPad(Long.toString(Utils.getTimestamp()), 16, '0');
+
+		ObjectMapper mapper = new ObjectMapper();
+		String json = mapper.writeValueAsString(param);
+
+		HttpPost post = new HttpPost(contextLoader.getLinkAjaDeepLinkHostURL());
+		post.setHeader("Content-Type", "Text/plain");
+		post.setHeader("Authorization",
+				"Basic" + Base64.getEncoder().encodeToString(
+						(contextLoader.getLinkAjaDeepLinkUsername() + ":" + contextLoader.getLinkAjaDeepLinkPassword())
+								.getBytes()));
+		post.setHeader("timestamp", timestamp);
+		post.setHeader("User-Agent", "Web");
+		StringEntity entity = new StringEntity(
+				AESSecurity.encrypt(json, contextLoader.getLinkAjaDeepLinkEncryptKey(), timestamp),
+				ContentType.create("text/plain", "UTF-8"));
+		post.setEntity(entity);
+
+		logger.info("Request to LinkAja Host: " + post.getURI());
+		logger.info("Request to LinkAja Header: " + post.getEntity().toString());
+		logger.info("Request to LinkAja Body: " + json);
+
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		Throwable localThrowable6 = null;
+		try {
+			CloseableHttpResponse response = httpClient.execute(post);
+			Throwable localThrowable7 = null;
+			try {
+				result = EntityUtils.toString(response.getEntity());
+			} catch (Throwable localThrowable1) {
+				localThrowable7 = localThrowable1;
+				throw localThrowable1;
+			} finally {
+				if (response != null)
+					if (localThrowable7 != null)
+						try {
+							response.close();
+						} catch (Throwable localThrowable2) {
+							localThrowable7.addSuppressed(localThrowable2);
+						}
+					else
+						response.close();
+			}
+		} catch (Throwable localThrowable4) {
+			localThrowable6 = localThrowable4;
+			throw localThrowable4;
+		} finally {
+			if (httpClient != null)
+				if (localThrowable6 != null)
+					try {
+						httpClient.close();
+					} catch (Throwable localThrowable5) {
+						localThrowable6.addSuppressed(localThrowable5);
+					}
+				else
+					httpClient.close();
+		}
+		JSONObject jsonResult = new JSONObject(result);
+		logger.info("Response from LinkAja: " + jsonResult.toString());
+		if (jsonResult.getString("status").equalsIgnoreCase("00")) {
+			qrRes.setMessage(String.valueOf(jsonResult.getString("message")));
+			qrRes.setStatus(String.valueOf(jsonResult.get("status")));
+			qrRes.setUrl(String.valueOf(jsonResult.get("url")));
+		} else {
+			qrRes.setMessage(String.valueOf(jsonResult.getString("message")));
+			qrRes.setStatus(String.valueOf(jsonResult.get("status")));
+		}
+
+		return qrRes;
+	}
+
+	public String getTokenDirectDebit() throws IOException, NoSuchAlgorithmException, InvalidKeyException,
+			NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+		String result = "";
+		String timestamp = Utils.GetDate("yyyy-MM-dd HH:mm:ss");
+
+		String words = contextLoader.getDirectDebitUsername() + "|" + timestamp;
+		String sha512Hex = Utils.hmacSHA512Encrypt(words, contextLoader.getDirectDebitPassword());
+
+		HttpGet get = new HttpGet(contextLoader.getDirectDebitHostURL() + "/directDebit/getjwt");
+		get.setHeader("Accept", "application/json");
+		get.setHeader("X-TIMESTAMP", timestamp);
+		get.setHeader("X-MTI-Key", contextLoader.getDirectDebitUsername());
+		get.setHeader("X-SIGNATURE", sha512Hex);
+
+		logger.info("Request to Direct Debit Host: " + get.getURI());
+
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		Throwable localThrowable6 = null;
+		try {
+			CloseableHttpResponse response = httpClient.execute(get);
+			Throwable localThrowable7 = null;
+			try {
+				result = EntityUtils.toString(response.getEntity());
+			} catch (Throwable localThrowable1) {
+				localThrowable7 = localThrowable1;
+				throw localThrowable1;
+			} finally {
+				if (response != null)
+					if (localThrowable7 != null)
+						try {
+							response.close();
+						} catch (Throwable localThrowable2) {
+							localThrowable7.addSuppressed(localThrowable2);
+						}
+					else
+						response.close();
+			}
+		} catch (Throwable localThrowable4) {
+			localThrowable6 = localThrowable4;
+			throw localThrowable4;
+		} finally {
+			if (httpClient != null)
+				if (localThrowable6 != null)
+					try {
+						httpClient.close();
+					} catch (Throwable localThrowable5) {
+						localThrowable6.addSuppressed(localThrowable5);
+					}
+				else
+					httpClient.close();
+		}
+		JSONObject jsonResult = new JSONObject(result);
+		logger.info("Response from Direct Debit: " + jsonResult.toString());
+
+		return String.valueOf(jsonResult.getString("jwt"));
+	}
+
+	public DirectDebitPurchaseResponse directDebitPurchase(String token, String ticketId, DirectDebitPurchaseRequest req)
+			throws IOException, NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException,
+			InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+		DirectDebitPurchaseResponse res = new DirectDebitPurchaseResponse();
+		String result = "";
+
+		ObjectMapper mapper = new ObjectMapper();
+		String json = mapper.writeValueAsString(req);
+		
+		String signature = Utils.hmacSHA512Encrypt(json, contextLoader.getDirectDebitSecretKey());
+
+		HttpPost post = new HttpPost(contextLoader.getDirectDebitHostURL() + "/directDebit/purchaseSubmit");
+		post.setHeader("Content-Type", "application/json");
+		post.setHeader("requestID", ticketId);
+		post.setHeader("journeyID", ticketId);
+		post.setHeader("tokenRequestorID", contextLoader.getDirectDebitTokenRequestorID());
+		post.setHeader("Authorization", "Bearer" + token);
+		post.setHeader("signature", signature);
+		StringEntity entity = new StringEntity(json);
+		post.setEntity(entity);
+
+		logger.info("Request to Direct Debit Body: " + json);
+
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		Throwable localThrowable6 = null;
+		try {
+			CloseableHttpResponse response = httpClient.execute(post);
+			Throwable localThrowable7 = null;
+			try {
+				result = EntityUtils.toString(response.getEntity());
+			} catch (Throwable localThrowable1) {
+				localThrowable7 = localThrowable1;
+				throw localThrowable1;
+			} finally {
+				if (response != null)
+					if (localThrowable7 != null)
+						try {
+							response.close();
+						} catch (Throwable localThrowable2) {
+							localThrowable7.addSuppressed(localThrowable2);
+						}
+					else
+						response.close();
+			}
+		} catch (Throwable localThrowable4) {
+			localThrowable6 = localThrowable4;
+			throw localThrowable4;
+		} finally {
+			if (httpClient != null)
+				if (localThrowable6 != null)
+					try {
+						httpClient.close();
+					} catch (Throwable localThrowable5) {
+						localThrowable6.addSuppressed(localThrowable5);
+					}
+				else
+					httpClient.close();
+		}
+		JSONObject jsonResult = new JSONObject(result);
+		logger.info("Response from Direct Debit: " + jsonResult.toString());
+		if (jsonResult.getString("responseCode").equalsIgnoreCase("00")) {
+			res.setResponseMessage(String.valueOf(jsonResult.getString("responseMessage")));
+			res.setResponseCode(String.valueOf(jsonResult.get("responseCode")));
+			res.setAuthorizationDate(String.valueOf(jsonResult.get("authorizationDate")));
+			res.setAuthorizationTime(String.valueOf(jsonResult.get("uauthorizationTimerl")));
+		} else {
+			res.setResponseMessage(String.valueOf(jsonResult.getString("responseMessage")));
+			res.setResponseCode(String.valueOf(jsonResult.get("responseCode")));
+		}
+
+		return res;
 	}
 
 	public JmsTemplate getJmsTemplate() {
