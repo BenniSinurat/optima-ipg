@@ -50,83 +50,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LoadAccessTypeRequest }
-     * 
-     */
-    public LoadAccessTypeRequest createLoadAccessTypeRequest() {
-        return new LoadAccessTypeRequest();
-    }
-
-    /**
-     * Create an instance of {@link ChangeCredentialRequest }
-     * 
-     */
-    public ChangeCredentialRequest createChangeCredentialRequest() {
-        return new ChangeCredentialRequest();
-    }
-
-    /**
-     * Create an instance of {@link LoadAccessTypeResponse }
-     * 
-     */
-    public LoadAccessTypeResponse createLoadAccessTypeResponse() {
-        return new LoadAccessTypeResponse();
-    }
-
-    /**
-     * Create an instance of {@link ValidateCredentialResponse }
-     * 
-     */
-    public ValidateCredentialResponse createValidateCredentialResponse() {
-        return new ValidateCredentialResponse();
-    }
-
-    /**
-     * Create an instance of {@link ValidateCredentialRequest }
-     * 
-     */
-    public ValidateCredentialRequest createValidateCredentialRequest() {
-        return new ValidateCredentialRequest();
-    }
-
-    /**
      * Create an instance of {@link UnblockCredentialRequest }
      * 
      */
     public UnblockCredentialRequest createUnblockCredentialRequest() {
         return new UnblockCredentialRequest();
-    }
-
-    /**
-     * Create an instance of {@link Header }
-     * 
-     */
-    public Header createHeader() {
-        return new Header();
-    }
-
-    /**
-     * Create an instance of {@link Exception }
-     * 
-     */
-    public Exception createException() {
-        return new Exception();
-    }
-
-    /**
-     * Create an instance of {@link ResetCredentialRequest }
-     * 
-     */
-    public ResetCredentialRequest createResetCredentialRequest() {
-        return new ResetCredentialRequest();
-    }
-
-    /**
-     * Create an instance of {@link ResponseStatus }
-     * 
-     */
-    public ResponseStatus createResponseStatus() {
-        return new ResponseStatus();
     }
 
     /**
@@ -146,14 +74,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AccessStatus }
-     * 
-     */
-    public AccessStatus createAccessStatus() {
-        return new AccessStatus();
-    }
-
-    /**
      * Create an instance of {@link AccessTypeRequest }
      * 
      */
@@ -162,19 +82,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CredentialStatusResponse }
+     * Create an instance of {@link ResponseStatus }
      * 
      */
-    public CredentialStatusResponse createCredentialStatusResponse() {
-        return new CredentialStatusResponse();
-    }
-
-    /**
-     * Create an instance of {@link ResetCredentialResponse }
-     * 
-     */
-    public ResetCredentialResponse createResetCredentialResponse() {
-        return new ResetCredentialResponse();
+    public ResponseStatus createResponseStatus() {
+        return new ResponseStatus();
     }
 
     /**
@@ -186,6 +98,38 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ChangeCredentialRequest }
+     * 
+     */
+    public ChangeCredentialRequest createChangeCredentialRequest() {
+        return new ChangeCredentialRequest();
+    }
+
+    /**
+     * Create an instance of {@link ValidateCredentialRequest }
+     * 
+     */
+    public ValidateCredentialRequest createValidateCredentialRequest() {
+        return new ValidateCredentialRequest();
+    }
+
+    /**
+     * Create an instance of {@link LoadAccessTypeRequest }
+     * 
+     */
+    public LoadAccessTypeRequest createLoadAccessTypeRequest() {
+        return new LoadAccessTypeRequest();
+    }
+
+    /**
+     * Create an instance of {@link Exception }
+     * 
+     */
+    public Exception createException() {
+        return new Exception();
+    }
+
+    /**
      * Create an instance of {@link CredentialStatusRequest }
      * 
      */
@@ -194,11 +138,67 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link LoadAccessTypeResponse }
+     * 
+     */
+    public LoadAccessTypeResponse createLoadAccessTypeResponse() {
+        return new LoadAccessTypeResponse();
+    }
+
+    /**
+     * Create an instance of {@link ResetCredentialResponse }
+     * 
+     */
+    public ResetCredentialResponse createResetCredentialResponse() {
+        return new ResetCredentialResponse();
+    }
+
+    /**
      * Create an instance of {@link CredentialResponse }
      * 
      */
     public CredentialResponse createCredentialResponse() {
         return new CredentialResponse();
+    }
+
+    /**
+     * Create an instance of {@link CredentialStatusResponse }
+     * 
+     */
+    public CredentialStatusResponse createCredentialStatusResponse() {
+        return new CredentialStatusResponse();
+    }
+
+    /**
+     * Create an instance of {@link AccessStatus }
+     * 
+     */
+    public AccessStatus createAccessStatus() {
+        return new AccessStatus();
+    }
+
+    /**
+     * Create an instance of {@link ValidateCredentialResponse }
+     * 
+     */
+    public ValidateCredentialResponse createValidateCredentialResponse() {
+        return new ValidateCredentialResponse();
+    }
+
+    /**
+     * Create an instance of {@link ResetCredentialRequest }
+     * 
+     */
+    public ResetCredentialRequest createResetCredentialRequest() {
+        return new ResetCredentialRequest();
+    }
+
+    /**
+     * Create an instance of {@link Header }
+     * 
+     */
+    public Header createHeader() {
+        return new Header();
     }
 
     /**

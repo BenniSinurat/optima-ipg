@@ -1,4 +1,5 @@
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/virtualaccount/VaUpdateResponse.java
+/Users/bennisinurat/git/optima-ipg/optima-ipg/src/main/java/com/jpa/optima/ipg/model/BillingSuccess.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/virtualaccount/UpdateBillingStatusRequest.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/virtualaccount/LoadVAEventResponse.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/virtualaccount/BankVA.java
@@ -9,11 +10,13 @@
 /Users/bennisinurat/git/optima-ipg/optima-ipg/src/main/java/com/jpa/optima/ipg/controller/IPGController.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/transfertypes/LoadFeesByTransferTypeRequest.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/virtualaccount/LoadVAByIDRequest.java
+/Users/bennisinurat/git/optima-ipg/optima-ipg/src/main/java/com/jpa/optima/ipg/model/DirectDebitPurchaseOTPRequest.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/virtualaccount/CreateEventStatusRequest.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/members/LoadMembersRequest.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/access/CredentialRequest.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/billpayments/PaymentChannelPermissionRequest.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/transfertypes/LoadTransferTypesByAccountIDResponse.java
+/Users/bennisinurat/git/optima-ipg/optima-ipg/src/main/java/com/jpa/optima/ipg/model/DirectDebitPurchaseOTPResponse.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/members/LoadMerchantBusinessScaleResponse.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/transfertypes/TransactionException.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/message/Header.java
@@ -62,9 +65,11 @@
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/transfertypes/TransferTypesPermission.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/virtualaccount/Header.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/src/main/java/com/jpa/optima/ipg/model/TransactionInquiryResponse.java
+/Users/bennisinurat/git/optima-ipg/optima-ipg/src/main/java/com/jpa/optima/ipg/process/IPGRepository.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/members/RegisterMerchantRequest.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/src/main/java/com/jpa/optima/ipg/model/DirectDebit.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/virtualaccount/ExternalMemberFields.java
+/Users/bennisinurat/git/optima-ipg/optima-ipg/src/main/java/com/jpa/optima/ipg/model/DirectDebitPurchaseNotificationResponse.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/transfertypes/LoadPermissionByTransferTypesResponse.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/src/main/java/com/jpa/optima/ipg/model/additionalData.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/transfertypes/TransferTypeRequest.java
@@ -121,6 +126,7 @@
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/virtualaccount/LoadVAByEventResponse.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/payments/ReversalRequest.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/message/Exception.java
+/Users/bennisinurat/git/optima-ipg/optima-ipg/src/main/java/com/jpa/optima/ipg/process/IPGValidation.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/billpayments/BillPaymentService.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/src/main/java/com/jpa/optima/ipg/helper/Utils.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/virtualaccount/VaBankResponse.java
@@ -142,6 +148,7 @@
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/payments/ReversalResponse.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/members/Exception.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/billpayments/LoadPaymentChannelByMemberIDRequest.java
+/Users/bennisinurat/git/optima-ipg/optima-ipg/src/main/java/com/jpa/optima/ipg/process/BaseRepository.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/members/LoadMembersByGroupIDRequest.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/access/Exception_Exception.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/virtualaccount/Exception.java
@@ -221,6 +228,7 @@
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/payments/ConfirmPaymentTicketRequest.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/members/Member.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/src/main/java/com/jpa/optima/ipg/helper/AESSecurity.java
+/Users/bennisinurat/git/optima-ipg/optima-ipg/src/main/java/com/jpa/optima/ipg/model/DirectDebitPurchaseNotificationRequest.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/access/LoadAccessTypeResponse.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/members/LoadMembersResponse.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/src/main/java/com/jpa/optima/ipg/model/DirectDebitRegistrationNotificationResponse.java

@@ -84,6 +84,14 @@ public class ContextLoader {
 	private String DirectDebitSecretKey;
 	@Value("${direct.debit.host.registration}")
 	private String DirectDebitRegistrationURL;
+	@Value("${direct.debit.usrname}")
+	private String DirectDebitUsrname;
+	@Value("${direct.debit.transfer.type.id}")
+	private Integer DirectDebitTrfTypeID;
+	@Value("${direct.debit.purchase.url}")
+	private String DirectDebitPurchaseURL;
+	@Value("${direct.debit.redirect.url}")
+	private String DirectDebitPurchaseRedirect;
 
 	public String getPaymentPageURL() {
 		return PaymentPageURL;
@@ -392,6 +400,38 @@ public class ContextLoader {
 
 	public void setDirectDebitRegistrationURL(String directDebitRegistrationURL) {
 		DirectDebitRegistrationURL = directDebitRegistrationURL;
+	}
+
+	public String getDirectDebitUsrname() {
+		return DirectDebitUsrname;
+	}
+
+	public void setDirectDebitUsrname(String directDebitUsrname) {
+		DirectDebitUsrname = directDebitUsrname;
+	}
+
+	public Integer getDirectDebitTrfTypeID() {
+		return DirectDebitTrfTypeID;
+	}
+
+	public void setDirectDebitTrfTypeID(Integer directDebitTrfTypeID) {
+		DirectDebitTrfTypeID = directDebitTrfTypeID;
+	}
+
+	public String getDirectDebitPurchaseURL() {
+		return DirectDebitPurchaseURL;
+	}
+
+	public void setDirectDebitPurchaseURL(String directDebitPurchaseURL) {
+		DirectDebitPurchaseURL = directDebitPurchaseURL;
+	}
+
+	public String getDirectDebitPurchaseRedirect() {
+		return DirectDebitPurchaseRedirect;
+	}
+
+	public void setDirectDebitPurchaseRedirect(String directDebitPurchaseRedirect) {
+		DirectDebitPurchaseRedirect = directDebitPurchaseRedirect;
 	}
 
 }

@@ -6,7 +6,6 @@ public class DirectDebitPurchaseRequest {
 	private String merchantID;
 	private String terminalID;
 	private String token;
-	private String tokenLimit;
 	private String transactionAmount;
 	private String currency;
 	private String billReferenceNumber;
@@ -54,14 +53,6 @@ public class DirectDebitPurchaseRequest {
 
 	public void setToken(String token) {
 		this.token = token;
-	}
-
-	public String getTokenLimit() {
-		return tokenLimit;
-	}
-
-	public void setTokenLimit(String tokenLimit) {
-		this.tokenLimit = tokenLimit;
 	}
 
 	public String getTransactionAmount() {

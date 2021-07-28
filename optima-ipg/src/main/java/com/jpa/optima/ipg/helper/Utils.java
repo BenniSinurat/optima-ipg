@@ -6,14 +6,17 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.log4j.Logger;
@@ -22,6 +25,16 @@ import com.google.common.io.BaseEncoding;
 
 public class Utils {
 	private static Logger logger = Logger.getLogger(Utils.class);
+	
+	public static XMLGregorianCalendar stringToXMLGregorianCalendar(Date s)
+			throws ParseException, DatatypeConfigurationException {
+		XMLGregorianCalendar result = null;
+
+		GregorianCalendar gregorianCalendar = (GregorianCalendar) GregorianCalendar.getInstance();
+		gregorianCalendar.setTime(s);
+		result = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
+		return result;
+	}
 
 	public static String formatAmount(java.math.BigDecimal amount, String grouping, String decimal, String format,
 			String prefix, String trailer) {

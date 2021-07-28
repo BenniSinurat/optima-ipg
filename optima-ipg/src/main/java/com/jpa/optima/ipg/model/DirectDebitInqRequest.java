@@ -7,6 +7,7 @@ public class DirectDebitInqRequest {
 	private Integer paymentChannel;
 	private String name;
 	private String email;
+	private String otp;
 
 	public String getDebitNo() {
 		return debitNo;
@@ -54,6 +55,14 @@ public class DirectDebitInqRequest {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getOtp() {
+		return otp;
+	}
+
+	public void setOtp(String otp) {
+		this.otp = otp;
 	}
 
 }

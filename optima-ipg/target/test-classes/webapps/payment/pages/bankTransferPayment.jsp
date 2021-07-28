@@ -1,4 +1,5 @@
 <!doctype html>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -38,10 +39,20 @@
       <!-- end navbar -->
 
       <div class="container mt-4">
-        <div class="row m-0 justify-content-between">
-          <h3 class="mb-0 judul" style="font-size: 16px;">Transfer Bank</h3>
-          <img class="mt-n1" src="assets/img/bank-transfer.png" alt="Bank Transfer">
-        </div>
+      <c:choose>
+      	<c:when test = "${paymentChannel == 2}">
+	        <div class="row m-0 justify-content-between">
+	          <h3 class="mb-0 judul" style="font-size: 16px;">Transfer Bank</h3>
+	          <img class="mt-n1" src="assets/img/bank-transfer.png" alt="Bank Transfer">
+	        </div>
+	     </c:when>
+	     <c:otherwise>
+	     	<div class="row m-0 justify-content-between">
+		       <h3 class="mb-0 judul" style="font-size: 16px;">Virtual Account</h3>
+		       <img class="mt-n1" src="assets/img/bca.png" alt="Virtual Account">
+		     </div>
+		  </c:otherwise>
+      </c:choose>
       </div>
       <div class="row waktu-bayar justify-content-between">
         <p class="mb-0">Selesaikan pembayaran dalam waktu</p>

@@ -52,6 +52,9 @@
 		<url-pattern>/felloPayment</url-pattern>
 		<url-pattern>/directDebitRegistration</url-pattern>
 		<url-pattern>/directDebit/bind/notification</url-pattern>
+		<url-pattern>/directDebitPurchaseForm</url-pattern>
+		<url-pattern>/directDebitPurchase</url-pattern>
+		<url-pattern>/directDebit/purchase/notification</url-pattern>
 	</servlet-mapping>
 
 	<listener>

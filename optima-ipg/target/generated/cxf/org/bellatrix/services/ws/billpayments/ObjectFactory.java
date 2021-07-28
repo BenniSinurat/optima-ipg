@@ -54,35 +54,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Billers }
+     * Create an instance of {@link BillerRegisterRequest }
      * 
      */
-    public Billers createBillers() {
-        return new Billers();
-    }
-
-    /**
-     * Create an instance of {@link ResponseStatus }
-     * 
-     */
-    public ResponseStatus createResponseStatus() {
-        return new ResponseStatus();
-    }
-
-    /**
-     * Create an instance of {@link PaymentChannelPermissionRequest }
-     * 
-     */
-    public PaymentChannelPermissionRequest createPaymentChannelPermissionRequest() {
-        return new PaymentChannelPermissionRequest();
-    }
-
-    /**
-     * Create an instance of {@link Exception }
-     * 
-     */
-    public Exception createException() {
-        return new Exception();
+    public BillerRegisterRequest createBillerRegisterRequest() {
+        return new BillerRegisterRequest();
     }
 
     /**
@@ -94,11 +70,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link BillPaymentRequest }
+     * Create an instance of {@link Exception }
      * 
      */
-    public BillPaymentRequest createBillPaymentRequest() {
-        return new BillPaymentRequest();
+    public Exception createException() {
+        return new Exception();
     }
 
     /**
@@ -110,11 +86,51 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PaymentChannel }
+     * Create an instance of {@link BillInquiryResponse }
      * 
      */
-    public PaymentChannel createPaymentChannel() {
-        return new PaymentChannel();
+    public BillInquiryResponse createBillInquiryResponse() {
+        return new BillInquiryResponse();
+    }
+
+    /**
+     * Create an instance of {@link LoadPermissionByPaymentChannelResponse }
+     * 
+     */
+    public LoadPermissionByPaymentChannelResponse createLoadPermissionByPaymentChannelResponse() {
+        return new LoadPermissionByPaymentChannelResponse();
+    }
+
+    /**
+     * Create an instance of {@link LoadPaymentChannelByMemberIDResponse }
+     * 
+     */
+    public LoadPaymentChannelByMemberIDResponse createLoadPaymentChannelByMemberIDResponse() {
+        return new LoadPaymentChannelByMemberIDResponse();
+    }
+
+    /**
+     * Create an instance of {@link LoadPaymentChannelByMemberIDRequest }
+     * 
+     */
+    public LoadPaymentChannelByMemberIDRequest createLoadPaymentChannelByMemberIDRequest() {
+        return new LoadPaymentChannelByMemberIDRequest();
+    }
+
+    /**
+     * Create an instance of {@link PaymentChannelPermissionRequest }
+     * 
+     */
+    public PaymentChannelPermissionRequest createPaymentChannelPermissionRequest() {
+        return new PaymentChannelPermissionRequest();
+    }
+
+    /**
+     * Create an instance of {@link BillPaymentRequest }
+     * 
+     */
+    public BillPaymentRequest createBillPaymentRequest() {
+        return new BillPaymentRequest();
     }
 
     /**
@@ -123,6 +139,22 @@ public class ObjectFactory {
      */
     public PaymentChannelResponse createPaymentChannelResponse() {
         return new PaymentChannelResponse();
+    }
+
+    /**
+     * Create an instance of {@link Billers }
+     * 
+     */
+    public Billers createBillers() {
+        return new Billers();
+    }
+
+    /**
+     * Create an instance of {@link PaymentChannelPermissions }
+     * 
+     */
+    public PaymentChannelPermissions createPaymentChannelPermissions() {
+        return new PaymentChannelPermissions();
     }
 
     /**
@@ -142,38 +174,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LoadPermissionByPaymentChannelResponse }
-     * 
-     */
-    public LoadPermissionByPaymentChannelResponse createLoadPermissionByPaymentChannelResponse() {
-        return new LoadPermissionByPaymentChannelResponse();
-    }
-
-    /**
-     * Create an instance of {@link LoadPaymentChannelByMemberIDRequest }
-     * 
-     */
-    public LoadPaymentChannelByMemberIDRequest createLoadPaymentChannelByMemberIDRequest() {
-        return new LoadPaymentChannelByMemberIDRequest();
-    }
-
-    /**
-     * Create an instance of {@link PaymentChannelPermissions }
-     * 
-     */
-    public PaymentChannelPermissions createPaymentChannelPermissions() {
-        return new PaymentChannelPermissions();
-    }
-
-    /**
-     * Create an instance of {@link BillInquiryResponse }
-     * 
-     */
-    public BillInquiryResponse createBillInquiryResponse() {
-        return new BillInquiryResponse();
-    }
-
-    /**
      * Create an instance of {@link BillerDetailsRequest }
      * 
      */
@@ -182,11 +182,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LoadPermissionByPaymentChannelRequest }
+     * Create an instance of {@link ResponseStatus }
      * 
      */
-    public LoadPermissionByPaymentChannelRequest createLoadPermissionByPaymentChannelRequest() {
-        return new LoadPermissionByPaymentChannelRequest();
+    public ResponseStatus createResponseStatus() {
+        return new ResponseStatus();
+    }
+
+    /**
+     * Create an instance of {@link PaymentChannel }
+     * 
+     */
+    public PaymentChannel createPaymentChannel() {
+        return new PaymentChannel();
     }
 
     /**
@@ -198,19 +206,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link BillerRegisterRequest }
+     * Create an instance of {@link LoadPermissionByPaymentChannelRequest }
      * 
      */
-    public BillerRegisterRequest createBillerRegisterRequest() {
-        return new BillerRegisterRequest();
-    }
-
-    /**
-     * Create an instance of {@link LoadPaymentChannelByMemberIDResponse }
-     * 
-     */
-    public LoadPaymentChannelByMemberIDResponse createLoadPaymentChannelByMemberIDResponse() {
-        return new LoadPaymentChannelByMemberIDResponse();
+    public LoadPermissionByPaymentChannelRequest createLoadPermissionByPaymentChannelRequest() {
+        return new LoadPermissionByPaymentChannelRequest();
     }
 
     /**
