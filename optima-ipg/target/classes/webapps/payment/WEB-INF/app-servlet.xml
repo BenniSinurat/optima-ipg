@@ -25,7 +25,7 @@
 				</hz:join>
 			</hz:network>
 			<hz:map name="PaymentRequestMap" read-backup-data="true"
-				time-to-live-seconds="1800">
+				time-to-live-seconds="3600">
 			</hz:map>
 			<hz:map name="PaymentSessionMap" read-backup-data="true"
 				time-to-live-seconds="3600">
@@ -41,6 +41,9 @@
 			</hz:map>
 			<hz:map name="TicketIDMap" read-backup-data="true"
 				time-to-live-seconds="1800">
+			</hz:map>
+			<hz:map name="PurchaseMap" read-backup-data="true"
+				time-to-live-seconds="86400">
 			</hz:map>
 		</hz:config>
 	</hz:hazelcast>

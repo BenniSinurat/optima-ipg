@@ -40,16 +40,16 @@
 
       <div class="container mt-4">
       <c:choose>
-      	<c:when test = "${paymentChannel == 2}">
+      	<c:when test = "${paymentChannel == 6}">
 	        <div class="row m-0 justify-content-between">
-	          <h3 class="mb-0 judul" style="font-size: 16px;">Transfer Bank</h3>
-	          <img class="mt-n1" src="assets/img/bank-transfer.png" alt="Bank Transfer">
+	           <h3 class="mb-0 judul" style="font-size: 16px;">Virtual Account</h3>
+		       <img class="mt-n1" src="assets/img/bca.png" alt="Virtual Account">
 	        </div>
 	     </c:when>
 	     <c:otherwise>
 	     	<div class="row m-0 justify-content-between">
-		       <h3 class="mb-0 judul" style="font-size: 16px;">Virtual Account</h3>
-		       <img class="mt-n1" src="assets/img/bca.png" alt="Virtual Account">
+	     	  <h3 class="mb-0 judul" style="font-size: 16px;">Transfer Bank</h3>
+	          <img class="mt-n1" src="assets/img/bank-transfer.png" alt="Bank Transfer">
 		     </div>
 		  </c:otherwise>
       </c:choose>

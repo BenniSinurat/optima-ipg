@@ -80,7 +80,7 @@
               <form id="upload" class="needs-validation" role="form" action="/payment/directDebitPurchase" method="POST" modelAttribute="directdebit">
                 <div class="form-group">
                     <label for="inputOTP">OTP</label>
-                    <input type="text" class="form-control" id="otp" name="otp" placeholder="Masukkan OTP" aria-describedby="inputOTP" required>
+                    <input type="password" class="form-control" id="otp" name="otp" placeholder="Masukkan OTP" aria-describedby="inputOTP" required>
                     <div class="invalid-feedback error-msg">
                         OTP tidak boleh kosong.
                     </div>
@@ -89,6 +89,7 @@
                	 <input id="ticketID" name="ticketID" class="form-control" type="hidden" value="${ticketID}">
                	 <input id="ticketVA" name="ticketVA" class="form-control" type="hidden" value="${ticketVA}">
                	 <input id="otpReferenceNo" name="otpReferenceNo" class="form-control" type="hidden" value="${otpReferenceNo}">
+               	 <input id="referenceNo" name="referenceNo" class="form-control" type="hidden" value="${referenceNumber}">
                  <a href="index.html" class="btn btn-light btn-batal">Batal</a>
                  <button type="submit" class="btn btn-info btn-submit">Lanjutkan</button>
                 </div>

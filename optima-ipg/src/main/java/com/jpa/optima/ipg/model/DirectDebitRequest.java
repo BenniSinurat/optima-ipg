@@ -5,6 +5,7 @@ public class DirectDebitRequest {
 	private String ticketVA;
 	private String otp;
 	private String otpReferenceNo;
+	private String referenceNo;
 
 	public String getTicketID() {
 		return ticketID;
@@ -36,6 +37,14 @@ public class DirectDebitRequest {
 
 	public void setOtpReferenceNo(String otpReferenceNo) {
 		this.otpReferenceNo = otpReferenceNo;
+	}
+
+	public String getReferenceNo() {
+		return referenceNo;
+	}
+
+	public void setReferenceNo(String referenceNo) {
+		this.referenceNo = referenceNo;
 	}
 
 }

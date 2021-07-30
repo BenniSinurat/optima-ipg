@@ -7,10 +7,14 @@ import com.jpa.optima.ipg.model.BillingSuccess;
 import com.jpa.optima.ipg.model.CreditCardParam;
 import com.jpa.optima.ipg.model.DeepLinkRequest;
 import com.jpa.optima.ipg.model.DeepLinkResponse;
+import com.jpa.optima.ipg.model.DirectDebitCancelTrxRequest;
+import com.jpa.optima.ipg.model.DirectDebitCancelTrxResponse;
 import com.jpa.optima.ipg.model.DirectDebitPurchaseOTPRequest;
 import com.jpa.optima.ipg.model.DirectDebitPurchaseOTPResponse;
 import com.jpa.optima.ipg.model.DirectDebitPurchaseRequest;
 import com.jpa.optima.ipg.model.DirectDebitPurchaseResponse;
+import com.jpa.optima.ipg.model.DirectDebitRemoveCardRequest;
+import com.jpa.optima.ipg.model.DirectDebitRemoveCardResponse;
 import com.jpa.optima.ipg.model.QRCodeParam;
 import com.jpa.optima.ipg.model.QRCodeResponse;
 import com.jpa.optima.ipg.model.Ticket;
@@ -79,6 +83,8 @@ import org.bellatrix.services.ws.payments.Payment;
 import org.bellatrix.services.ws.payments.PaymentRequest;
 import org.bellatrix.services.ws.payments.PaymentResponse;
 import org.bellatrix.services.ws.payments.PaymentService;
+import org.bellatrix.services.ws.payments.ReversalRequest;
+import org.bellatrix.services.ws.payments.ReversalResponse;
 import org.bellatrix.services.ws.payments.ValidatePaymentTicketRequest;
 import org.bellatrix.services.ws.payments.ValidatePaymentTicketResponse;
 import org.bellatrix.services.ws.transfertypes.LoadFeesByTransferTypeRequest;
@@ -687,7 +693,7 @@ public class PaymentPageProcessor {
 		return res;
 	}
 
-	public void updateBillingStatus(BillingSuccess req)
+	public void updateBillingStatus(BillingSuccess req, String mid)
 			throws MalformedURLException, org.bellatrix.services.ws.virtualaccount.Exception_Exception {
 		URL url = new URL(contextLoader.getHostWSUrl() + "virtualaccounts?wsdl");
 		QName qName = new QName(contextLoader.getHostWSPort(), "VirtualAccountService");
@@ -700,7 +706,7 @@ public class PaymentPageProcessor {
 		vaHeaderAuth.value = headerVA;
 
 		UpdateBillingStatusRequest updateBillingStatusReq = new UpdateBillingStatusRequest();
-		updateBillingStatusReq.setUsername(contextLoader.getDirectDebitUsrname());
+		updateBillingStatusReq.setUsername(mid);
 		updateBillingStatusReq.setTraceNumber(req.getTraceNumber());
 		updateBillingStatusReq.setTransactionNumber(req.getTransactionNumber());
 
@@ -747,6 +753,27 @@ public class PaymentPageProcessor {
 		InquiryResponse inqRes = client.doInquiry(payHeaderAuth, inquiryRequest);
 
 		return inqRes;
+	}
+	
+	public ReversalResponse reversePayment(ReversalRequest req) throws MalformedURLException {
+		URL url = new URL(contextLoader.getHostWSUrl() + "payments?wsdl");
+		QName qName = new QName(contextLoader.getHostWSPort(), "PaymentService");
+		PaymentService service = new PaymentService(url, qName);
+		Payment client = service.getPaymentPort();
+
+		org.bellatrix.services.ws.payments.Header headerPayment = new org.bellatrix.services.ws.payments.Header();
+		headerPayment.setToken(contextLoader.getHeaderToken());
+		Holder<org.bellatrix.services.ws.payments.Header> payHeaderAuth = new Holder<org.bellatrix.services.ws.payments.Header>();
+		payHeaderAuth.value = headerPayment;
+
+		ReversalRequest rreq = new ReversalRequest();
+		rreq.setUsername(req.getUsername());
+		rreq.setTraceNumber(req.getTraceNumber());
+		rreq.setTransactionNumber(req.getTransactionNumber());
+
+		ReversalResponse res = client.reversePayment(payHeaderAuth, rreq);
+
+		return res;
 	}
 
 	public LoadFeesByTransferTypeResponse loadFeeByTransferType(Integer trfTypeID) throws MalformedURLException {
@@ -874,18 +901,18 @@ public class PaymentPageProcessor {
 		return qrRes;
 	}
 
-	public String getTokenDirectDebit() throws IOException, NoSuchAlgorithmException, InvalidKeyException,
+	public String getTokenDirectDebit(Ticket t) throws IOException, NoSuchAlgorithmException, InvalidKeyException,
 			NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
 		String result = "";
 		String timestamp = Utils.GetDate("yyyy-MM-dd HH:mm:ss");
 
-		String words = contextLoader.getDirectDebitUsername() + "|" + timestamp;
-		String sha512Hex = Utils.hmacSHA512Encrypt(words, contextLoader.getDirectDebitPassword());
+		String words = t.getMerchants().getUsername() + "|" + timestamp;
+		String sha512Hex = Utils.hmacSHA512Encrypt(words, t.getMerchants().getPassword());
 
 		HttpGet get = new HttpGet(contextLoader.getDirectDebitHostURL() + "/directDebit/getjwt");
 		get.setHeader("Accept", "application/json");
 		get.setHeader("X-TIMESTAMP", timestamp);
-		get.setHeader("X-MTI-Key", contextLoader.getDirectDebitUsername());
+		get.setHeader("X-MTI-Key", t.getMerchants().getUsername());
 		get.setHeader("X-SIGNATURE", sha512Hex);
 
 		logger.info("Request to Direct Debit Host: " + get.getURI());
@@ -931,7 +958,7 @@ public class PaymentPageProcessor {
 		return String.valueOf(jsonResult.getString("jwt"));
 	}
 
-	public DirectDebitPurchaseOTPResponse directDebitRequestOTP(String key, DirectDebitPurchaseOTPRequest req)
+	public DirectDebitPurchaseOTPResponse directDebitRequestOTP(Ticket t, String key, DirectDebitPurchaseOTPRequest req)
 			throws IOException, NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException,
 			InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
 		DirectDebitPurchaseOTPResponse res = new DirectDebitPurchaseOTPResponse();
@@ -940,14 +967,14 @@ public class PaymentPageProcessor {
 		ObjectMapper mapper = new ObjectMapper();
 		String json = mapper.writeValueAsString(req);
 
-		String signature = Utils.hmacSHA512Encrypt(json, contextLoader.getDirectDebitSecretKey());
+		String signature = Utils.hmacSHA512Encrypt(json, t.getMerchants().getSecretKey());
 
-		HttpPost post = new HttpPost(contextLoader.getDirectDebitHostURL() + "/directpayment/requestOTP");
+		HttpPost post = new HttpPost(contextLoader.getDirectDebitHostURL() + "/directDebit/requestOTP");
 		post.setHeader("Content-Type", "application/json");
 		post.setHeader("requestID", key);
-		post.setHeader("journeyID", key);
-		post.setHeader("tokenRequestorID", contextLoader.getDirectDebitTokenRequestorID());
-		post.setHeader("Authorization", "Bearer" + getTokenDirectDebit());
+		post.setHeader("journeyID", t.getInvoiceID());
+		post.setHeader("tokenRequestorID", t.getMerchants().getTokenRequestorID());
+		post.setHeader("Authorization", "Bearer " + getTokenDirectDebit(t));
 		post.setHeader("signature", signature);
 		StringEntity entity = new StringEntity(json);
 		post.setEntity(entity);
@@ -995,8 +1022,10 @@ public class PaymentPageProcessor {
 			res.setResponseMessage(String.valueOf(jsonResult.getString("responseMessage")));
 			res.setResponseCode(String.valueOf(jsonResult.get("responseCode")));
 			res.setAuthorizationDate(String.valueOf(jsonResult.get("authorizationDate")));
-			res.setAuthorizationTime(String.valueOf(jsonResult.get("uauthorizationTimerl")));
+			res.setAuthorizationTime(String.valueOf(jsonResult.get("authorizationTime")));
 			res.setOtpReferenceNumber(String.valueOf(jsonResult.get("otpReferenceNumber")));
+			res.setVerificationMethod(String.valueOf(jsonResult.get("verificationMethod")));
+			res.setReferenceNumber(String.valueOf(jsonResult.get("referenceNumber")));
 		} else {
 			res.setResponseMessage(String.valueOf(jsonResult.getString("responseMessage")));
 			res.setResponseCode(String.valueOf(jsonResult.get("responseCode")));
@@ -1005,7 +1034,7 @@ public class PaymentPageProcessor {
 		return res;
 	}
 
-	public DirectDebitPurchaseResponse directDebitPurchase(String key, DirectDebitPurchaseRequest req)
+	public DirectDebitPurchaseResponse directDebitPurchase(Ticket t, String key, DirectDebitPurchaseRequest req)
 			throws IOException, NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException,
 			InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
 		DirectDebitPurchaseResponse res = new DirectDebitPurchaseResponse();
@@ -1014,14 +1043,14 @@ public class PaymentPageProcessor {
 		ObjectMapper mapper = new ObjectMapper();
 		String json = mapper.writeValueAsString(req);
 
-		String signature = Utils.hmacSHA512Encrypt(json, contextLoader.getDirectDebitSecretKey());
+		String signature = Utils.hmacSHA512Encrypt(json, t.getMerchants().getSecretKey());
 
 		HttpPost post = new HttpPost(contextLoader.getDirectDebitHostURL() + "/directDebit/purchaseSubmit");
 		post.setHeader("Content-Type", "application/json");
 		post.setHeader("requestID", key);
-		post.setHeader("journeyID", key);
-		post.setHeader("tokenRequestorID", contextLoader.getDirectDebitTokenRequestorID());
-		post.setHeader("Authorization", "Bearer" + getTokenDirectDebit());
+		post.setHeader("journeyID", t.getInvoiceID());
+		post.setHeader("tokenRequestorID", t.getMerchants().getTokenRequestorID());
+		post.setHeader("Authorization", "Bearer " + getTokenDirectDebit(t));
 		post.setHeader("signature", signature);
 		StringEntity entity = new StringEntity(json);
 		post.setEntity(entity);
@@ -1069,7 +1098,7 @@ public class PaymentPageProcessor {
 			res.setResponseMessage(String.valueOf(jsonResult.getString("responseMessage")));
 			res.setResponseCode(String.valueOf(jsonResult.get("responseCode")));
 			res.setAuthorizationDate(String.valueOf(jsonResult.get("authorizationDate")));
-			res.setAuthorizationTime(String.valueOf(jsonResult.get("uauthorizationTimerl")));
+			res.setAuthorizationTime(String.valueOf(jsonResult.get("authorizationTime")));
 		} else {
 			res.setResponseMessage(String.valueOf(jsonResult.getString("responseMessage")));
 			res.setResponseCode(String.valueOf(jsonResult.get("responseCode")));
@@ -1169,6 +1198,152 @@ public class PaymentPageProcessor {
 		return result;
 	}
 
+	public DirectDebitRemoveCardResponse directDebitRemoveCard(Ticket t, String key, DirectDebitRemoveCardRequest req)
+			throws IOException, NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException,
+			InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+		DirectDebitRemoveCardResponse res = new DirectDebitRemoveCardResponse();
+		String result = "";
+
+		ObjectMapper mapper = new ObjectMapper();
+		String json = mapper.writeValueAsString(req);
+
+		String signature = Utils.hmacSHA512Encrypt(json, t.getMerchants().getSecretKey());
+
+		HttpPost post = new HttpPost(contextLoader.getDirectDebitHostURL() + "/directDebit/removeCard");
+		post.setHeader("Content-Type", "application/json");
+		post.setHeader("requestID", key);
+		post.setHeader("journeyID",key);
+		post.setHeader("tokenRequestorID", t.getMerchants().getTokenRequestorID());
+		post.setHeader("Authorization", "Bearer " + getTokenDirectDebit(t));
+		post.setHeader("signature", signature);
+		StringEntity entity = new StringEntity(json);
+		post.setEntity(entity);
+
+		logger.info("Request to Direct Debit Remove Card Body: " + json);
+
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		Throwable localThrowable6 = null;
+		try {
+			CloseableHttpResponse response = httpClient.execute(post);
+			Throwable localThrowable7 = null;
+			try {
+				result = EntityUtils.toString(response.getEntity());
+			} catch (Throwable localThrowable1) {
+				localThrowable7 = localThrowable1;
+				throw localThrowable1;
+			} finally {
+				if (response != null)
+					if (localThrowable7 != null)
+						try {
+							response.close();
+						} catch (Throwable localThrowable2) {
+							localThrowable7.addSuppressed(localThrowable2);
+						}
+					else
+						response.close();
+			}
+		} catch (Throwable localThrowable4) {
+			localThrowable6 = localThrowable4;
+			throw localThrowable4;
+		} finally {
+			if (httpClient != null)
+				if (localThrowable6 != null)
+					try {
+						httpClient.close();
+					} catch (Throwable localThrowable5) {
+						localThrowable6.addSuppressed(localThrowable5);
+					}
+				else
+					httpClient.close();
+		}
+		logger.info("Response from Direct Debit Remove Card: " + result);
+		JSONObject jsonResult = new JSONObject(result);
+		if (jsonResult.getString("responseCode").equalsIgnoreCase("00")) {
+			res.setResponseMessage(String.valueOf(jsonResult.getString("responseMessage")));
+			res.setResponseCode(String.valueOf(jsonResult.get("responseCode")));
+			res.setAuthorizationDate(String.valueOf(jsonResult.get("authorizationDate")));
+			res.setAuthorizationTime(String.valueOf(jsonResult.get("authorizationTime")));
+		} else {
+			res.setResponseMessage(String.valueOf(jsonResult.getString("responseMessage")));
+			res.setResponseCode(String.valueOf(jsonResult.get("responseCode")));
+		}
+
+		return res;
+	}
+	
+	public DirectDebitCancelTrxResponse directDebitCancelTrx(Ticket t, String key, DirectDebitCancelTrxRequest req)
+			throws IOException, NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException,
+			InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+		DirectDebitCancelTrxResponse res = new DirectDebitCancelTrxResponse();
+		String result = "";
+
+		ObjectMapper mapper = new ObjectMapper();
+		String json = mapper.writeValueAsString(req);
+
+		String signature = Utils.hmacSHA512Encrypt(json, t.getMerchants().getSecretKey());
+
+		HttpPost post = new HttpPost(contextLoader.getDirectDebitHostURL() + "/directDebit/cancelTrx");
+		post.setHeader("Content-Type", "application/json");
+		post.setHeader("requestID", key);
+		post.setHeader("journeyID",key);
+		post.setHeader("tokenRequestorID", t.getMerchants().getTokenRequestorID());
+		post.setHeader("Authorization", "Bearer " + getTokenDirectDebit(t));
+		post.setHeader("signature", signature);
+		StringEntity entity = new StringEntity(json);
+		post.setEntity(entity);
+
+		logger.info("Request to Direct Debit Cancel Trx Body: " + json);
+
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		Throwable localThrowable6 = null;
+		try {
+			CloseableHttpResponse response = httpClient.execute(post);
+			Throwable localThrowable7 = null;
+			try {
+				result = EntityUtils.toString(response.getEntity());
+			} catch (Throwable localThrowable1) {
+				localThrowable7 = localThrowable1;
+				throw localThrowable1;
+			} finally {
+				if (response != null)
+					if (localThrowable7 != null)
+						try {
+							response.close();
+						} catch (Throwable localThrowable2) {
+							localThrowable7.addSuppressed(localThrowable2);
+						}
+					else
+						response.close();
+			}
+		} catch (Throwable localThrowable4) {
+			localThrowable6 = localThrowable4;
+			throw localThrowable4;
+		} finally {
+			if (httpClient != null)
+				if (localThrowable6 != null)
+					try {
+						httpClient.close();
+					} catch (Throwable localThrowable5) {
+						localThrowable6.addSuppressed(localThrowable5);
+					}
+				else
+					httpClient.close();
+		}
+		logger.info("Response from Direct Debit Cancel Trx: " + result);
+		JSONObject jsonResult = new JSONObject(result);
+		if (jsonResult.getString("responseCode").equalsIgnoreCase("00")) {
+			res.setResponseMessage(String.valueOf(jsonResult.getString("responseMessage")));
+			res.setResponseCode(String.valueOf(jsonResult.get("responseCode")));
+			res.setAuthorizationDate(String.valueOf(jsonResult.get("authorizationDate")));
+			res.setAuthorizationTime(String.valueOf(jsonResult.get("authorizationTime")));
+		} else {
+			res.setResponseMessage(String.valueOf(jsonResult.getString("responseMessage")));
+			res.setResponseCode(String.valueOf(jsonResult.get("responseCode")));
+		}
+
+		return res;
+	}
+	
 	public JmsTemplate getJmsTemplate() {
 		return jmsTemplate;
 	}

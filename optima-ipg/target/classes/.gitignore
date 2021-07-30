@@ -1,11 +1,2 @@
-/com/
-/development.properties
-/hazelcast.xsd
-/log4j2.xml
-/mule-app.properties
-/mule-deploy.properties
-/optima-ipg.xml
-/org/
-/production.properties
-/staging.properties
 /webapps/
+/com/

@@ -37,7 +37,9 @@ public class Ticket implements Serializable {
 	private BigDecimal finalAmount;
 	
 	private Integer transferTypeID;
-
+	
+	private MerchantDetails merchants;
+	
 	public String getInvoiceID() {
 		return invoiceID;
 	}
@@ -228,6 +230,14 @@ public class Ticket implements Serializable {
 
 	public void setTransferTypeID(Integer transferTypeID) {
 		this.transferTypeID = transferTypeID;
+	}
+
+	public MerchantDetails getMerchants() {
+		return merchants;
+	}
+
+	public void setMerchants(MerchantDetails merchants) {
+		this.merchants = merchants;
 	}
 
 }

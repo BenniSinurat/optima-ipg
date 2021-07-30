@@ -13,6 +13,7 @@ public class DirectDebitPurchaseRequest {
 	private String otpReferenceNumber;
 	private String otpTransactionCode;
 	private String productType;
+	private String tokenLimit;
 	private additionalData additionalData;
 
 	public String getTransactionDate() {
@@ -117,5 +118,13 @@ public class DirectDebitPurchaseRequest {
 
 	public void setAdditionalData(additionalData additionalData) {
 		this.additionalData = additionalData;
+	}
+
+	public String getTokenLimit() {
+		return tokenLimit;
+	}
+
+	public void setTokenLimit(String tokenLimit) {
+		this.tokenLimit = tokenLimit;
 	}
 }

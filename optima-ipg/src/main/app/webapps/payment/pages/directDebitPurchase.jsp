@@ -55,16 +55,6 @@
         <div class="row m-0 justify-content-between">
             <h6 class="sub-judul">Organisasi <span>${eventOrganizer}</span></h6>
         </div>
-        <hr class="mt-1">
-        <div class="row m-0 justify-content-between">
-            <p class="text-uppercase">Transaction Date</p>
-            <p style="color: #333;">${transactionDate}</p>
-        </div>
-        <hr class="mt-0">
-        <div class="row m-0 justify-content-between">
-            <p class="text-uppercase">Transaction Number</p>
-            <p style="color: #333;">${transactionNumber}</p>
-        </div>
         <hr class="mt-0">
         <div class="row mt-1 mx-0 justify-content-between">
           <p class="text-uppercase mt-2">Id Bayar</p>
@@ -74,6 +64,16 @@
                   <img src="assets/img/ic-salin.png" alt="Copy to clipboard">
               </button>
           </div>
+        </div>
+        <hr class="mt-1">
+        <div class="row m-0 justify-content-between">
+            <p class="text-uppercase">Transaction Date</p>
+            <p style="color: #333;">${transactionDate}</p>
+        </div>
+        <hr class="mt-0">
+        <div class="row m-0 justify-content-between">
+            <p class="text-uppercase">Transaction Number</p>
+            <p style="color: #333;">${transactionNumber}</p>
         </div>
       	<hr class="mt-0">
         <div class="row m-0 justify-content-between">

@@ -50,11 +50,15 @@
 		<url-pattern>/felloForm</url-pattern>
 		<url-pattern>/felloInquiry</url-pattern>
 		<url-pattern>/felloPayment</url-pattern>
+		<url-pattern>/directDebit</url-pattern>
 		<url-pattern>/directDebitRegistration</url-pattern>
 		<url-pattern>/directDebit/bind/notification</url-pattern>
+		<url-pattern>/v1/bind/status</url-pattern>
 		<url-pattern>/directDebitPurchaseForm</url-pattern>
 		<url-pattern>/directDebitPurchase</url-pattern>
 		<url-pattern>/directDebit/purchase/notification</url-pattern>
+		<url-pattern>/directDebitRemoveCard</url-pattern>
+		<url-pattern>/directDebitReverse</url-pattern>
 	</servlet-mapping>
 
 	<listener>

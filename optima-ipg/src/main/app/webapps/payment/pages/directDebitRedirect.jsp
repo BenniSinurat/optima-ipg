@@ -16,7 +16,7 @@
 
 <body onload="document.directDebitRedirect.submit();">
 	<div>
-		<form id="directDebitRedirect" name="directDebitRedirect" role="form" class="form-horizontal" action="/payment/directDebitRegistration" method="POST" modelAttribute="directDebitRegistration">								
+		<form id="directDebitRedirect" name="directDebitRedirect" role="form" class="form-horizontal" action="/payment/directDebit" method="POST" modelAttribute="directDebit">								
 			<input type="hidden" name="name" id="name" value="${name}" class="form-control validate">
 			<input type="hidden" name="email" id="email" value="${email}" class="form-control validate">
 			<input type="hidden" name="msisdn" id="msisdn" value="${msisdn}" class="form-control validate">

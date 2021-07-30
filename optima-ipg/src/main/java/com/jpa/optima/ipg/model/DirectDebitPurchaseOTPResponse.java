@@ -7,6 +7,7 @@ public class DirectDebitPurchaseOTPResponse {
 	private String otpReferenceNumber;
 	private String responseCode;
 	private String responseMessage;
+	private String verificationMethod;
 	private additionalData additionalData;
 
 	public String getAuthorizationDate() {
@@ -63,6 +64,14 @@ public class DirectDebitPurchaseOTPResponse {
 
 	public void setAdditionalData(additionalData additionalData) {
 		this.additionalData = additionalData;
+	}
+
+	public String getVerificationMethod() {
+		return verificationMethod;
+	}
+
+	public void setVerificationMethod(String verificationMethod) {
+		this.verificationMethod = verificationMethod;
 	}
 
 }

@@ -80,7 +80,7 @@
               <form id="upload" class="needs-validation" role="form" action="/payment/felloPayment" method="POST" modelAttribute="felloPayment">
                 <div class="form-group">
                     <label for="inputOTP">OTP</label>
-                    <input type="text" class="form-control" id="otp" name="otp" placeholder="Masukkan OTP" aria-describedby="inputOTP" required>
+                    <input type="password" class="form-control" id="otp" name="otp" placeholder="Masukkan OTP" aria-describedby="inputOTP" required>
                     <div class="invalid-feedback error-msg">
                         OTP tidak boleh kosong.
                     </div>
