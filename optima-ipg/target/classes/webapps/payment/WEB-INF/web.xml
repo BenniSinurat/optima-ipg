@@ -59,6 +59,10 @@
 		<url-pattern>/directDebit/purchase/notification</url-pattern>
 		<url-pattern>/directDebitRemoveCard</url-pattern>
 		<url-pattern>/directDebitReverse</url-pattern>
+		<url-pattern>/directDebitResendOTP</url-pattern>
+		<url-pattern>/directDebitTransactionStatus</url-pattern>
+		<url-pattern>/directDebitSetTokenLimitRequest</url-pattern>
+		<url-pattern>/directDebitSetTokenLimit</url-pattern>
 	</servlet-mapping>
 
 	<listener>

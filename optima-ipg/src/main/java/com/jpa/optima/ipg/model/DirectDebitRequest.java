@@ -6,6 +6,8 @@ public class DirectDebitRequest {
 	private String otp;
 	private String otpReferenceNo;
 	private String referenceNo;
+	private String tokenLimit;
+	private String journeyID;
 
 	public String getTicketID() {
 		return ticketID;
@@ -45,6 +47,22 @@ public class DirectDebitRequest {
 
 	public void setReferenceNo(String referenceNo) {
 		this.referenceNo = referenceNo;
+	}
+
+	public String getTokenLimit() {
+		return tokenLimit;
+	}
+
+	public void setTokenLimit(String tokenLimit) {
+		this.tokenLimit = tokenLimit;
+	}
+
+	public String getJourneyID() {
+		return journeyID;
+	}
+
+	public void setJourneyID(String journeyID) {
+		this.journeyID = journeyID;
 	}
 
 }

@@ -19,6 +19,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.log4j.Logger;
 
 import com.google.common.io.BaseEncoding;
@@ -64,6 +65,10 @@ public class Utils {
 		Date date = new java.util.Date();
 		SimpleDateFormat format = new SimpleDateFormat(form);
 		return format.format(date);
+	}
+	
+	public static String formatDate(Date date, String form) {
+		return DateFormatUtils.format(date, form);
 	}
 
 	public static String GenerateTransactionNumber() {

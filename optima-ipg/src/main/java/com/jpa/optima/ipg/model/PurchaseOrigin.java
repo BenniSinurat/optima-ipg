@@ -2,6 +2,8 @@ package com.jpa.optima.ipg.model;
 
 import java.io.Serializable;
 
+import javax.xml.datatype.XMLGregorianCalendar;
+
 public class PurchaseOrigin implements Serializable {
 	/**
 	 * 
@@ -13,9 +15,49 @@ public class PurchaseOrigin implements Serializable {
 	private String approvalCode;
 	private Ticket ticket;
 	private String traceNumber;
+	private String transactionNumber;
+	private XMLGregorianCalendar transactionDate;
+	private String transactionAmount;
+	private String paymentCode;
 
 	public String getDate() {
 		return date;
+	}
+
+	public String getTransactionNumber() {
+		return transactionNumber;
+	}
+
+	public void setTransactionNumber(String transactionNumber) {
+		this.transactionNumber = transactionNumber;
+	}
+
+	public XMLGregorianCalendar getTransactionDate() {
+		return transactionDate;
+	}
+
+	public void setTransactionDate(XMLGregorianCalendar transactionDate) {
+		this.transactionDate = transactionDate;
+	}
+
+	public String getTransactionAmount() {
+		return transactionAmount;
+	}
+
+	public void setTransactionAmount(String transactionAmount) {
+		this.transactionAmount = transactionAmount;
+	}
+
+	public String getPaymentCode() {
+		return paymentCode;
+	}
+
+	public void setPaymentCode(String paymentCode) {
+		this.paymentCode = paymentCode;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 	public void setDate(String date) {

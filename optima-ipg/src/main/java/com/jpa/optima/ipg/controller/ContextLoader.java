@@ -68,30 +68,14 @@ public class ContextLoader {
 	private String LinkAjaDeepLinkEncryptKey;
 	@Value("${direct.debit.host.url}")
 	private String DirectDebitHost;
-	@Value("${direct.debit.username}")
-	private String DirectDebitUsername;
-	@Value("${direct.debit.password}")
-	private String DirectDebitPassword;
-	@Value("${direct.debit.token.requestor.id}")
-	private String DirectDebitTokenRequestorID;
-	@Value("${direct.debit.merchant.id}")
-	private String DirectDebitMerchantID;
-	@Value("${direct.debit.terminal.id}")
-	private String DirectDebitTerminalID;
-	@Value("${direct.debit.public.key}")
-	private String DirectDebitPublicKey;
-	@Value("${direct.debit.secret.key}")
-	private String DirectDebitSecretKey;
 	@Value("${direct.debit.host.registration}")
 	private String DirectDebitRegistrationURL;
-	@Value("${direct.debit.usrname}")
-	private String DirectDebitUsrname;
-	@Value("${direct.debit.transfer.type.id}")
-	private Integer DirectDebitTrfTypeID;
 	@Value("${direct.debit.purchase.url}")
 	private String DirectDebitPurchaseURL;
 	@Value("${direct.debit.redirect.url}")
 	private String DirectDebitPurchaseRedirect;
+	@Value("${direct.debit.resend.otp.url}")
+	private String DirectDebitResentOTP;
 
 	public String getPaymentPageURL() {
 		return PaymentPageURL;
@@ -330,22 +314,6 @@ public class ContextLoader {
 		DirectDebitHost = directDebitHost;
 	}
 
-	public String getDirectDebitUsername() {
-		return DirectDebitUsername;
-	}
-
-	public void setDirectDebitUsername(String directDebitUsername) {
-		DirectDebitUsername = directDebitUsername;
-	}
-
-	public String getDirectDebitPassword() {
-		return DirectDebitPassword;
-	}
-
-	public void setDirectDebitPassword(String directDebitPassword) {
-		DirectDebitPassword = directDebitPassword;
-	}
-
 	public String getDirectDebitHost() {
 		return DirectDebitHost;
 	}
@@ -354,68 +322,12 @@ public class ContextLoader {
 		DirectDebitHost = directDebitHost;
 	}
 
-	public String getDirectDebitTokenRequestorID() {
-		return DirectDebitTokenRequestorID;
-	}
-
-	public void setDirectDebitTokenRequestorID(String directDebitTokenRequestorID) {
-		DirectDebitTokenRequestorID = directDebitTokenRequestorID;
-	}
-
-	public String getDirectDebitMerchantID() {
-		return DirectDebitMerchantID;
-	}
-
-	public void setDirectDebitMerchantID(String directDebitMerchantID) {
-		DirectDebitMerchantID = directDebitMerchantID;
-	}
-
-	public String getDirectDebitTerminalID() {
-		return DirectDebitTerminalID;
-	}
-
-	public void setDirectDebitTerminalID(String directDebitTerminalID) {
-		DirectDebitTerminalID = directDebitTerminalID;
-	}
-
-	public String getDirectDebitPublicKey() {
-		return DirectDebitPublicKey;
-	}
-
-	public void setDirectDebitPublicKey(String directDebitPublicKey) {
-		DirectDebitPublicKey = directDebitPublicKey;
-	}
-
-	public String getDirectDebitSecretKey() {
-		return DirectDebitSecretKey;
-	}
-
-	public void setDirectDebitSecretKey(String directDebitSecretKey) {
-		DirectDebitSecretKey = directDebitSecretKey;
-	}
-
 	public String getDirectDebitRegistrationURL() {
 		return DirectDebitRegistrationURL;
 	}
 
 	public void setDirectDebitRegistrationURL(String directDebitRegistrationURL) {
 		DirectDebitRegistrationURL = directDebitRegistrationURL;
-	}
-
-	public String getDirectDebitUsrname() {
-		return DirectDebitUsrname;
-	}
-
-	public void setDirectDebitUsrname(String directDebitUsrname) {
-		DirectDebitUsrname = directDebitUsrname;
-	}
-
-	public Integer getDirectDebitTrfTypeID() {
-		return DirectDebitTrfTypeID;
-	}
-
-	public void setDirectDebitTrfTypeID(Integer directDebitTrfTypeID) {
-		DirectDebitTrfTypeID = directDebitTrfTypeID;
 	}
 
 	public String getDirectDebitPurchaseURL() {
@@ -432,6 +344,14 @@ public class ContextLoader {
 
 	public void setDirectDebitPurchaseRedirect(String directDebitPurchaseRedirect) {
 		DirectDebitPurchaseRedirect = directDebitPurchaseRedirect;
+	}
+
+	public String getDirectDebitResentOTP() {
+		return DirectDebitResentOTP;
+	}
+
+	public void setDirectDebitResentOTP(String directDebitResentOTP) {
+		DirectDebitResentOTP = directDebitResentOTP;
 	}
 
 }

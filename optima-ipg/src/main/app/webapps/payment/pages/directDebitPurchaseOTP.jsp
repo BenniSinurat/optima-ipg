@@ -85,12 +85,23 @@
                         OTP tidak boleh kosong.
                     </div>
                 </div>
+                <div class="justify-content-between">
+                		<table style="width:100%">
+                			<tr>
+                				<td><p class="mb-0">OTP akan berakhir dalam </p></td>
+                				<td><div class="timer justify-content-end"><span id="remainingTime">03 : 00</span></div></td>
+						</tr>
+					</table>
+                </div>
+                <div id="dv-kirim-ulang" style="display:none">
+					<a href="#" id="kirim_ulang"><p class="mb-0">Kirim Ulang</p></a>
+				</div>
                <div class="d-flex justify-content-end">
                	 <input id="ticketID" name="ticketID" class="form-control" type="hidden" value="${ticketID}">
                	 <input id="ticketVA" name="ticketVA" class="form-control" type="hidden" value="${ticketVA}">
                	 <input id="otpReferenceNo" name="otpReferenceNo" class="form-control" type="hidden" value="${otpReferenceNo}">
                	 <input id="referenceNo" name="referenceNo" class="form-control" type="hidden" value="${referenceNumber}">
-                 <a href="index.html" class="btn btn-light btn-batal">Batal</a>
+                 <a href="${redirectURL}?ticketID=${ticketID}&transactionNumber=&status='CANCELLED'&msisdn=${msisdn}" class="btn btn-light btn-batal">Batal</a>
                  <button type="submit" class="btn btn-info btn-submit">Lanjutkan</button>
                 </div>
               </form>
@@ -120,5 +131,58 @@
     <script src="assets/js/popper.min.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
     <script src="assets/js/script.js"></script>
+    
+    <script type="text/javascript">
+	    //   timer
+	    var timerItv;
+	    function Timer(duration, display) 
+	    {
+	        var timer = duration, minutes, seconds;
+	        
+	        timerItv = setInterval(function () {
+	            minutes = parseInt((timer / 60)%60, 10);
+	            seconds = parseInt(timer % 60, 10);
+	
+	            minutes = minutes < 10 ? "0" + minutes : minutes;
+	            seconds = seconds < 10 ? "0" + seconds : seconds;
+	            
+	            if (minutes == 0 && seconds == 0) {
+	            		clearInterval(timerItv);
+	            		$("#dv-kirim-ulang").show();
+	            }
+	
+	            display.text(minutes + " : " + seconds);
+	
+	                    --timer;
+	        }, 1000);
+	    }
+	
+	    startTimer();
+	    
+	    $('#kirim_ulang').on('click', function () {
+       	 	$.ajax({
+       	 	    type: "GET",
+            		url: '${resendOTPURL}?ticketID=${ticketID}&otpCode=02&otpReasonCode=97',
+            		success: function(responsedata){
+               		// Reset Time
+               		startTimer();
+	    				$("#dv-kirim-ulang").hide();
+        			},
+        			error: function(){
+        				alert("sial");	
+        			}
+        		});
+        });
+        
+        function startTimer() {
+        		jQuery(function ($) 
+	    		{
+	    			
+	        		var threeMinutes = 3 * 60;
+	        		var display = $('#remainingTime');
+		        	Timer(threeMinutes, display);
+		    });
+        }
+	</script>
   </body>
 </html>

@@ -9,12 +9,16 @@ import com.jpa.optima.ipg.model.DeepLinkRequest;
 import com.jpa.optima.ipg.model.DeepLinkResponse;
 import com.jpa.optima.ipg.model.DirectDebitCancelTrxRequest;
 import com.jpa.optima.ipg.model.DirectDebitCancelTrxResponse;
+import com.jpa.optima.ipg.model.DirectDebitInquiryStatusRequest;
+import com.jpa.optima.ipg.model.DirectDebitInquiryStatusResponse;
 import com.jpa.optima.ipg.model.DirectDebitPurchaseOTPRequest;
 import com.jpa.optima.ipg.model.DirectDebitPurchaseOTPResponse;
 import com.jpa.optima.ipg.model.DirectDebitPurchaseRequest;
 import com.jpa.optima.ipg.model.DirectDebitPurchaseResponse;
 import com.jpa.optima.ipg.model.DirectDebitRemoveCardRequest;
 import com.jpa.optima.ipg.model.DirectDebitRemoveCardResponse;
+import com.jpa.optima.ipg.model.DirectDebitSetTokenLimitRequest;
+import com.jpa.optima.ipg.model.DirectDebitSetTokenLimitResponse;
 import com.jpa.optima.ipg.model.QRCodeParam;
 import com.jpa.optima.ipg.model.QRCodeResponse;
 import com.jpa.optima.ipg.model.Ticket;
@@ -85,6 +89,8 @@ import org.bellatrix.services.ws.payments.PaymentResponse;
 import org.bellatrix.services.ws.payments.PaymentService;
 import org.bellatrix.services.ws.payments.ReversalRequest;
 import org.bellatrix.services.ws.payments.ReversalResponse;
+import org.bellatrix.services.ws.payments.TransactionStatusRequest;
+import org.bellatrix.services.ws.payments.TransactionStatusResponse;
 import org.bellatrix.services.ws.payments.ValidatePaymentTicketRequest;
 import org.bellatrix.services.ws.payments.ValidatePaymentTicketResponse;
 import org.bellatrix.services.ws.transfertypes.LoadFeesByTransferTypeRequest;
@@ -755,6 +761,25 @@ public class PaymentPageProcessor {
 		return inqRes;
 	}
 	
+	public TransactionStatusResponse transactionStatus(String traceNumber) throws MalformedURLException {
+		URL url = new URL(contextLoader.getHostWSUrl() + "payments?wsdl");
+		QName qName = new QName(contextLoader.getHostWSPort(), "PaymentService");
+		PaymentService service = new PaymentService(url, qName);
+		Payment client = service.getPaymentPort();
+		
+		org.bellatrix.services.ws.payments.Header headerPayment = new org.bellatrix.services.ws.payments.Header();
+		headerPayment.setToken(contextLoader.getHeaderToken());
+		Holder<org.bellatrix.services.ws.payments.Header> payHeaderAuth = new Holder<org.bellatrix.services.ws.payments.Header>();
+		payHeaderAuth.value = headerPayment;
+		
+		TransactionStatusRequest req = new TransactionStatusRequest();
+		req.setTraceNumber(traceNumber);
+		
+		TransactionStatusResponse res = client.transactionStatus(payHeaderAuth, req);
+		
+		return res;
+	}
+
 	public ReversalResponse reversePayment(ReversalRequest req) throws MalformedURLException {
 		URL url = new URL(contextLoader.getHostWSUrl() + "payments?wsdl");
 		QName qName = new QName(contextLoader.getHostWSPort(), "PaymentService");
@@ -1154,8 +1179,8 @@ public class PaymentPageProcessor {
 		return result;
 	}
 
-	public String purchaseRedirect(final String ticketID, final String transactionNumber, final String status, final String msisdn)
-			throws IOException {
+	public String purchaseRedirect(final String ticketID, final String transactionNumber, final String status,
+			final String msisdn) throws IOException {
 		String result = "";
 		HttpGet get = new HttpGet(contextLoader.getDirectDebitPurchaseRedirect() + "?ticketID=" + ticketID
 				+ "&transactionNumber=" + transactionNumber + "&status=" + status + "&msisdn=" + msisdn);
@@ -1212,7 +1237,7 @@ public class PaymentPageProcessor {
 		HttpPost post = new HttpPost(contextLoader.getDirectDebitHostURL() + "/directDebit/removeCard");
 		post.setHeader("Content-Type", "application/json");
 		post.setHeader("requestID", key);
-		post.setHeader("journeyID",key);
+		post.setHeader("journeyID", key);
 		post.setHeader("tokenRequestorID", t.getMerchants().getTokenRequestorID());
 		post.setHeader("Authorization", "Bearer " + getTokenDirectDebit(t));
 		post.setHeader("signature", signature);
@@ -1270,7 +1295,7 @@ public class PaymentPageProcessor {
 
 		return res;
 	}
-	
+
 	public DirectDebitCancelTrxResponse directDebitCancelTrx(Ticket t, String key, DirectDebitCancelTrxRequest req)
 			throws IOException, NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException,
 			InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
@@ -1285,7 +1310,7 @@ public class PaymentPageProcessor {
 		HttpPost post = new HttpPost(contextLoader.getDirectDebitHostURL() + "/directDebit/cancelTrx");
 		post.setHeader("Content-Type", "application/json");
 		post.setHeader("requestID", key);
-		post.setHeader("journeyID",key);
+		post.setHeader("journeyID", key);
 		post.setHeader("tokenRequestorID", t.getMerchants().getTokenRequestorID());
 		post.setHeader("Authorization", "Bearer " + getTokenDirectDebit(t));
 		post.setHeader("signature", signature);
@@ -1343,7 +1368,157 @@ public class PaymentPageProcessor {
 
 		return res;
 	}
-	
+
+	public DirectDebitSetTokenLimitResponse directDebitSetTokenLimit(Ticket t, String key, String journeyID,
+			DirectDebitSetTokenLimitRequest req) throws IOException, NoSuchAlgorithmException, InvalidKeyException,
+			NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+		DirectDebitSetTokenLimitResponse res = new DirectDebitSetTokenLimitResponse();
+		String result = "";
+
+		ObjectMapper mapper = new ObjectMapper();
+		String json = mapper.writeValueAsString(req);
+
+		String signature = Utils.hmacSHA512Encrypt(json, t.getMerchants().getSecretKey());
+
+		HttpPost post = new HttpPost(contextLoader.getDirectDebitHostURL() + "/directDebit/setTokenLimit");
+		post.setHeader("Content-Type", "application/json");
+		post.setHeader("requestID", key);
+		post.setHeader("journeyID", journeyID);
+		post.setHeader("tokenRequestorID", t.getMerchants().getTokenRequestorID());
+		post.setHeader("Authorization", "Bearer " + getTokenDirectDebit(t));
+		post.setHeader("signature", signature);
+		StringEntity entity = new StringEntity(json);
+		post.setEntity(entity);
+
+		logger.info("Request to Direct Debit Set Token Limit Body: " + json);
+
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		Throwable localThrowable6 = null;
+		try {
+			CloseableHttpResponse response = httpClient.execute(post);
+			Throwable localThrowable7 = null;
+			try {
+				result = EntityUtils.toString(response.getEntity());
+			} catch (Throwable localThrowable1) {
+				localThrowable7 = localThrowable1;
+				throw localThrowable1;
+			} finally {
+				if (response != null)
+					if (localThrowable7 != null)
+						try {
+							response.close();
+						} catch (Throwable localThrowable2) {
+							localThrowable7.addSuppressed(localThrowable2);
+						}
+					else
+						response.close();
+			}
+		} catch (Throwable localThrowable4) {
+			localThrowable6 = localThrowable4;
+			throw localThrowable4;
+		} finally {
+			if (httpClient != null)
+				if (localThrowable6 != null)
+					try {
+						httpClient.close();
+					} catch (Throwable localThrowable5) {
+						localThrowable6.addSuppressed(localThrowable5);
+					}
+				else
+					httpClient.close();
+		}
+		logger.info("Response from Direct Debit Set Token Limit: " + result);
+		JSONObject jsonResult = new JSONObject(result);
+		if (jsonResult.getString("responseCode").equalsIgnoreCase("00")) {
+			res.setResponseMessage(String.valueOf(jsonResult.getString("responseMessage")));
+			res.setResponseCode(String.valueOf(jsonResult.get("responseCode")));
+			res.setAuthorizationDate(String.valueOf(jsonResult.get("authorizationDate")));
+			res.setAuthorizationTime(String.valueOf(jsonResult.get("authorizationTime")));
+			res.setReferenceNumber(String.valueOf(jsonResult.get("referenceNumber")));
+		} else {
+			res.setResponseMessage(String.valueOf(jsonResult.getString("responseMessage")));
+			res.setResponseCode(String.valueOf(jsonResult.get("responseCode")));
+		}
+
+		return res;
+	}
+
+	public DirectDebitInquiryStatusResponse directDebitInquiryTransaction(Ticket t, String key,
+			DirectDebitInquiryStatusRequest req) throws IOException, NoSuchAlgorithmException, InvalidKeyException,
+			NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+		DirectDebitInquiryStatusResponse res = new DirectDebitInquiryStatusResponse();
+		String result = "";
+
+		ObjectMapper mapper = new ObjectMapper();
+		String json = mapper.writeValueAsString(req);
+
+		String signature = Utils.hmacSHA512Encrypt(json, t.getMerchants().getSecretKey());
+
+		HttpPost post = new HttpPost(contextLoader.getDirectDebitHostURL() + "/directDebit/inquiryTransactionStatus");
+		post.setHeader("Content-Type", "application/json");
+		post.setHeader("requestID", key);
+		post.setHeader("journeyID", key);
+		post.setHeader("tokenRequestorID", t.getMerchants().getTokenRequestorID());
+		post.setHeader("Authorization", "Bearer " + getTokenDirectDebit(t));
+		post.setHeader("signature", signature);
+		StringEntity entity = new StringEntity(json);
+		post.setEntity(entity);
+
+		logger.info("Request to Direct Debit Inquiry Transaction Status Body: " + json);
+
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		Throwable localThrowable6 = null;
+		try {
+			CloseableHttpResponse response = httpClient.execute(post);
+			Throwable localThrowable7 = null;
+			try {
+				result = EntityUtils.toString(response.getEntity());
+			} catch (Throwable localThrowable1) {
+				localThrowable7 = localThrowable1;
+				throw localThrowable1;
+			} finally {
+				if (response != null)
+					if (localThrowable7 != null)
+						try {
+							response.close();
+						} catch (Throwable localThrowable2) {
+							localThrowable7.addSuppressed(localThrowable2);
+						}
+					else
+						response.close();
+			}
+		} catch (Throwable localThrowable4) {
+			localThrowable6 = localThrowable4;
+			throw localThrowable4;
+		} finally {
+			if (httpClient != null)
+				if (localThrowable6 != null)
+					try {
+						httpClient.close();
+					} catch (Throwable localThrowable5) {
+						localThrowable6.addSuppressed(localThrowable5);
+					}
+				else
+					httpClient.close();
+		}
+		logger.info("Response from Direct Debit Inquiry Transaction Status: " + result);
+		JSONObject jsonResult = new JSONObject(result);
+		if (jsonResult.getString("responseCode").equalsIgnoreCase("00")) {
+			res.setResponseMessage(String.valueOf(jsonResult.get("responseCode")));
+			res.setResponseCode(String.valueOf(jsonResult.get("responseCode")));
+			res.setAuthorizationDate(String.valueOf(jsonResult.get("authorizationDate")));
+			res.setAuthorizationTime(String.valueOf(jsonResult.get("authorizationTime")));
+			res.setReferenceNumber(String.valueOf(jsonResult.get("referenceNumber")));
+			res.setOriginResponseCode(jsonResult.getJSONObject("origin").getString("responseCode"));
+			res.setOriginResponseMessage(jsonResult.getJSONObject("origin").getString("responseMessage"));
+		} else {
+			res.setResponseMessage(String.valueOf(jsonResult.getString("responseMessage")));
+			res.setResponseCode(String.valueOf(jsonResult.get("responseCode")));
+		}
+
+		return res;
+	}
+
 	public JmsTemplate getJmsTemplate() {
 		return jmsTemplate;
 	}

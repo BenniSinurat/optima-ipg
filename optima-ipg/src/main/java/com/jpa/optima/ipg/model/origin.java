@@ -1,17 +1,17 @@
 package com.jpa.optima.ipg.model;
 
 public class origin {
-	private String date;
+	private String transactionDate;
 	private String token;
 	private String billReferenceNumber;
 	private String approvalCode;
 
-	public String getDate() {
-		return date;
+	public String getTransactionDate() {
+		return transactionDate;
 	}
 
-	public void setDate(String date) {
-		this.date = date;
+	public void setTransactionDate(String transactionDate) {
+		this.transactionDate = transactionDate;
 	}
 
 	public String getToken() {

@@ -2,7 +2,9 @@ package com.jpa.optima.ipg.model;
 
 import java.io.Serializable;
 
-public class BillingSuccess implements Serializable{
+import javax.xml.datatype.XMLGregorianCalendar;
+
+public class BillingSuccess implements Serializable {
 	/**
 	 * 
 	 */
@@ -10,6 +12,38 @@ public class BillingSuccess implements Serializable{
 	private String ticketID;
 	private String traceNumber;
 	private String transactionNumber;
+	private XMLGregorianCalendar transactionDate;
+	private String transactionAmount;
+	private String paymentCode;
+
+	public XMLGregorianCalendar getTransactionDate() {
+		return transactionDate;
+	}
+
+	public void setTransactionDate(XMLGregorianCalendar xmlGregorianCalendar) {
+		this.transactionDate = xmlGregorianCalendar;
+	}
+
+	public String getTransactionAmount() {
+		return transactionAmount;
+	}
+
+	public void setTransactionAmount(String transactionAmount) {
+		this.transactionAmount = transactionAmount;
+	}
+
+	public String getPaymentCode() {
+		return paymentCode;
+	}
+
+	public void setPaymentCode(String paymentCode) {
+		this.paymentCode = paymentCode;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	private String date;
 	private String token;
 

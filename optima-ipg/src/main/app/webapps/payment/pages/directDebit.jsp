@@ -62,7 +62,7 @@
            <input type="hidden" name="ticketID" id="ticketID" value="${ticketID}" class="form-control validate">
           
            <div class="d-flex justify-content-center mt-5 mb-3 box-btn">
-               <button type="submit" class="btn btn-info btn-submit">Simpan</button>
+               <button type="submit" class="btn btn-info btn-submit">Simpan Kartu</button>
            </div>
           </form>
       </div>

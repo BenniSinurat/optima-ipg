@@ -52,7 +52,7 @@
           <!-- card kiri -->
           <div class="card card-1">
             <div class="card-body">
-              <h3 class="judul">${maskedCardNumber}</h3>
+              <h3 class="judul">**** **** **** ${maskedCardNumber}</h3>
               <hr class="my-4">
               <div class="row m-0 justify-content-between">
                 <p class="text-uppercase mb-0">Nama Bank</p>
