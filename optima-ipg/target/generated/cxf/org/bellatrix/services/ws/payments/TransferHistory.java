@@ -32,6 +32,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="parentID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="referenceNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="remark" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="reverseBy" type="{http://services.bellatrix.org/}memberView" minOccurs="0"/>
  *         &lt;element name="toMember" type="{http://services.bellatrix.org/}memberView" minOccurs="0"/>
  *         &lt;element name="traceNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -59,6 +60,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "id",
     "parentID",
     "referenceNumber",
+    "remark",
     "reverseBy",
     "toMember",
     "traceNumber",
@@ -80,6 +82,7 @@ public class TransferHistory {
     protected Integer id;
     protected String parentID;
     protected String referenceNumber;
+    protected String remark;
     protected MemberView reverseBy;
     protected MemberView toMember;
     protected String traceNumber;
@@ -324,6 +327,30 @@ public class TransferHistory {
      */
     public void setReferenceNumber(String value) {
         this.referenceNumber = value;
+    }
+
+    /**
+     * Gets the value of the remark property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getRemark() {
+        return remark;
+    }
+
+    /**
+     * Sets the value of the remark property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setRemark(String value) {
+        this.remark = value;
     }
 
     /**

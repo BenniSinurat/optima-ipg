@@ -26,6 +26,7 @@
 		<input type="hidden" name="transactionAmount" id="transactionAmount" value="${transactionAmount}" class="form-control validate">
 		<input type="hidden" name="totalFee" id="totalFee" value="${totalFee}" class="form-control validate">
 		<input type="hidden" name="finalAmount" id="finalAmount" value="${finalAmount}" class="form-control validate">
+		<input type="hidden" name="paymentChannel" id="paymentChannel" value="${paymentChannel}" class="form-control validate">
 		</form>
 	</div>		    
 </body>

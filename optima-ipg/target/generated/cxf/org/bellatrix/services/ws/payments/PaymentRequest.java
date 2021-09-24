@@ -33,6 +33,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="originator" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="paymentFields" type="{http://services.bellatrix.org/}paymentFields" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="referenceNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="remark" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="status" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="toMember" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="traceNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -59,6 +60,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "originator",
     "paymentFields",
     "referenceNumber",
+    "remark",
     "status",
     "toMember",
     "traceNumber",
@@ -79,6 +81,7 @@ public class PaymentRequest {
     @XmlElement(nillable = true)
     protected List<PaymentFields> paymentFields;
     protected String referenceNumber;
+    protected String remark;
     protected String status;
     protected String toMember;
     protected String traceNumber;
@@ -353,6 +356,30 @@ public class PaymentRequest {
      */
     public void setReferenceNumber(String value) {
         this.referenceNumber = value;
+    }
+
+    /**
+     * Gets the value of the remark property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getRemark() {
+        return remark;
+    }
+
+    /**
+     * Sets the value of the remark property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setRemark(String value) {
+        this.remark = value;
     }
 
     /**

@@ -99,6 +99,14 @@
 		        </div>
 		    </div>
          </c:when>
+         <c:when test = "${paymentChannel == 9}">
+            <div class="container mt-4">
+		        <div class="row m-0 justify-content-between">
+		          <h3 class="mb-0 judul" style="font-size: 16px;">Bank Transfer</h3>
+		          <img class="mt-n1" src="assets/img/permata.png" alt="Bank Transfer">
+		        </div>
+		    </div>
+         </c:when>
          <c:otherwise>
             <div class="container mt-4">
 		        <div class="row m-0 justify-content-between">

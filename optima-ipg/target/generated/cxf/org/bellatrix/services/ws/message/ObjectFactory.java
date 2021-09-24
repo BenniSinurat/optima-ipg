@@ -44,30 +44,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link UnreadMessage }
-     * 
-     */
-    public UnreadMessage createUnreadMessage() {
-        return new UnreadMessage();
-    }
-
-    /**
-     * Create an instance of {@link SendMessageRequest }
-     * 
-     */
-    public SendMessageRequest createSendMessageRequest() {
-        return new SendMessageRequest();
-    }
-
-    /**
-     * Create an instance of {@link Header }
-     * 
-     */
-    public Header createHeader() {
-        return new Header();
-    }
-
-    /**
      * Create an instance of {@link MessageRequest }
      * 
      */
@@ -76,35 +52,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LoadMessageByIDRequest }
+     * Create an instance of {@link NotificationMessage }
      * 
      */
-    public LoadMessageByIDRequest createLoadMessageByIDRequest() {
-        return new LoadMessageByIDRequest();
-    }
-
-    /**
-     * Create an instance of {@link LoadMessageResponse }
-     * 
-     */
-    public LoadMessageResponse createLoadMessageResponse() {
-        return new LoadMessageResponse();
-    }
-
-    /**
-     * Create an instance of {@link Exception }
-     * 
-     */
-    public Exception createException() {
-        return new Exception();
-    }
-
-    /**
-     * Create an instance of {@link ResponseStatus }
-     * 
-     */
-    public ResponseStatus createResponseStatus() {
-        return new ResponseStatus();
+    public NotificationMessage createNotificationMessage() {
+        return new NotificationMessage();
     }
 
     /**
@@ -116,11 +68,59 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link NotificationMessage }
+     * Create an instance of {@link LoadMessageResponse }
      * 
      */
-    public NotificationMessage createNotificationMessage() {
-        return new NotificationMessage();
+    public LoadMessageResponse createLoadMessageResponse() {
+        return new LoadMessageResponse();
+    }
+
+    /**
+     * Create an instance of {@link Header }
+     * 
+     */
+    public Header createHeader() {
+        return new Header();
+    }
+
+    /**
+     * Create an instance of {@link UnreadMessage }
+     * 
+     */
+    public UnreadMessage createUnreadMessage() {
+        return new UnreadMessage();
+    }
+
+    /**
+     * Create an instance of {@link LoadMessageByIDRequest }
+     * 
+     */
+    public LoadMessageByIDRequest createLoadMessageByIDRequest() {
+        return new LoadMessageByIDRequest();
+    }
+
+    /**
+     * Create an instance of {@link SendMessageRequest }
+     * 
+     */
+    public SendMessageRequest createSendMessageRequest() {
+        return new SendMessageRequest();
+    }
+
+    /**
+     * Create an instance of {@link ResponseStatus }
+     * 
+     */
+    public ResponseStatus createResponseStatus() {
+        return new ResponseStatus();
+    }
+
+    /**
+     * Create an instance of {@link Exception }
+     * 
+     */
+    public Exception createException() {
+        return new Exception();
     }
 
     /**

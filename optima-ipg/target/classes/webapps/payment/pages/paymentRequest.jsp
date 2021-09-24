@@ -13,7 +13,7 @@
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>  
  
-<script type="text/javascript">
+<!--script type="text/javascript">
 		var DYN = (new Date%9e6).toString(36);
 		
 		window['COUNTER' + DYN] = 10;
@@ -35,22 +35,22 @@
 			$('#TEXT-CONTINUE').hide();
 			$('#BTN-CONTINUE').hide();
 		});    						
-</script>
+</script-->
 
 </head>
 
 <body onload="document.formRedirect.submit()">
 	<div>
-		<div>
+		<!--div>
 			<div>
 				Please wait.<br />
 				Your request is being processed...<br />
 				<br />
 				<span id="TEXT-CONTINUE">Click button below if the page is not change</span>
 			</div>
-		</div>
+		</div-->
 		<form action="${paymentPageURL}?ticketID=${ticketID}" method="POST" id="formRedirect" name="formRedirect">
-		<input type="submit" id="BTN-CONTINUE" value="Continue">
+			<!--input type="submit" id="BTN-CONTINUE" value="Continue"-->
 		</form>				
 	</div>		    
 </body>

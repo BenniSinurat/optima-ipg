@@ -267,6 +267,30 @@
 				</form>
         		</div>
         		<br>
+            <div class="row m-0 justify-content-between">
+            		<form id="bankTransferPaymentPermata" name="bankTransferform" role="form" class="form-horizontal" action="/payment/transactionInquiry" method="POST" modelAttribute="transactionInquiry">								
+					          <input type="hidden" name="name" id="name" value="${name}" class="form-control validate">
+					          <input type="hidden" name="email" id="email" value="${email}" class="form-control validate">
+					          <input type="hidden" name="msisdn" id="msisdn" value="${msisdn}" class="form-control validate">
+					          <input type="hidden" name="ticketID" id="ticketID" value="${ticketID}" class="form-control validate">
+					          <input type="hidden" name="description" id="description" value="${description}" class="form-control validate">
+					          <input type="hidden" name="amount" id="amount" value="${amount}" class="form-control validate">
+					          <input type="hidden" name="paymentChannel" id="paymentChannel" value="9" class="form-control validate">
+					          <c:forEach var="paymentChannel" items="${paymentChannel.paymentChannel}">
+							  	<c:if test="${not empty paymentChannel.id}">
+									<c:if test="${paymentChannel.id eq 9}">
+										<input type="hidden" name="btp-channel" id="btp-channel" value="yes"  class="form-control validate">
+									</c:if>
+								</c:if>
+							  </c:forEach>
+							  <button type="submit" name="btp-submit" id="btp-submit" class="btn btn-default card card-pembayaran" style="height:55px;width:640px;display:none;"><p class="mb-0">Transfer Bank 
+							      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							      <span><img class="mr-2" src="assets/img/permata.png" alt="Bank Transfer">
+                    						<img src="assets/img/ic_arrow_right.png" alt="Arrow Right"></span></p>
+							  </button>
+				</form>
+            </div>
+            
       </div>
       <!-- modal detail pembayaran -->
       <div class="modal fade" id="modal-detail" tabindex="-1" role="dialog" aria-labelledby="modal-detail" aria-hidden="true">
@@ -399,6 +423,17 @@
 			document.getElementById("dd-submit").style.display = "block";
 		}else{
 			document.getElementById("dd-submit").style.display = "none";
+		}
+    </script>
+    
+    <script type="text/javascript">	
+		var b = document.getElementById("btp-channel").value;
+    		console.log(b);
+    		
+    		if(b == 'yes') {
+			document.getElementById("btp-submit").style.display = "block";
+		}else{
+			document.getElementById("btp-submit").style.display = "none";
 		}
     </script>
 

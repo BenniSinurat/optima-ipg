@@ -760,23 +760,23 @@ public class PaymentPageProcessor {
 
 		return inqRes;
 	}
-	
+
 	public TransactionStatusResponse transactionStatus(String traceNumber) throws MalformedURLException {
 		URL url = new URL(contextLoader.getHostWSUrl() + "payments?wsdl");
 		QName qName = new QName(contextLoader.getHostWSPort(), "PaymentService");
 		PaymentService service = new PaymentService(url, qName);
 		Payment client = service.getPaymentPort();
-		
+
 		org.bellatrix.services.ws.payments.Header headerPayment = new org.bellatrix.services.ws.payments.Header();
 		headerPayment.setToken(contextLoader.getHeaderToken());
 		Holder<org.bellatrix.services.ws.payments.Header> payHeaderAuth = new Holder<org.bellatrix.services.ws.payments.Header>();
 		payHeaderAuth.value = headerPayment;
-		
+
 		TransactionStatusRequest req = new TransactionStatusRequest();
 		req.setTraceNumber(traceNumber);
-		
+
 		TransactionStatusResponse res = client.transactionStatus(payHeaderAuth, req);
-		
+
 		return res;
 	}
 
@@ -1517,6 +1517,31 @@ public class PaymentPageProcessor {
 		}
 
 		return res;
+	}
+
+	public PaymentResponse doPayment(String from, String to, String invoiceID, String description,
+			Integer transferTypeID, String traceNumber, BigDecimal amount, String status) throws Exception {
+		URL url = new URL(contextLoader.getHostWSUrl() + "payments?wsdl");
+		QName qName = new QName(contextLoader.getHostWSPort(), "PaymentService");
+		PaymentService service = new PaymentService(url, qName);
+		Payment client = service.getPaymentPort();
+
+		org.bellatrix.services.ws.payments.Header headerPayment = new org.bellatrix.services.ws.payments.Header();
+		headerPayment.setToken(contextLoader.getHeaderToken());
+		Holder<org.bellatrix.services.ws.payments.Header> headerAuth = new Holder<org.bellatrix.services.ws.payments.Header>();
+		headerAuth.value = headerPayment;
+
+		PaymentRequest paymentRequest = new PaymentRequest();
+		paymentRequest.setFromMember(from);
+		paymentRequest.setToMember(to);
+		paymentRequest.setTraceNumber(traceNumber);
+		paymentRequest.setDescription("Invoice ID : " + invoiceID + " - " + description);
+		paymentRequest.setTransferTypeID(transferTypeID);
+		paymentRequest.setAmount(amount);
+		paymentRequest.setStatus(status);
+
+		PaymentResponse paymentResponse = client.doPayment(headerAuth, paymentRequest);
+		return paymentResponse;
 	}
 
 	public JmsTemplate getJmsTemplate() {

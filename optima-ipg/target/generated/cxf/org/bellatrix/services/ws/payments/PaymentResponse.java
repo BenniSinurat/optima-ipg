@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="fromMember" type="{http://services.bellatrix.org/}memberView" minOccurs="0"/>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="paymentFields" type="{http://services.bellatrix.org/}paymentFields" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="remark" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="status" type="{http://services.bellatrix.org/}responseStatus" minOccurs="0"/>
  *         &lt;element name="toMember" type="{http://services.bellatrix.org/}memberView" minOccurs="0"/>
  *         &lt;element name="totalFees" type="{http://www.w3.org/2001/XMLSchema}decimal" minOccurs="0"/>
@@ -48,6 +49,7 @@ import javax.xml.bind.annotation.XmlType;
     "fromMember",
     "id",
     "paymentFields",
+    "remark",
     "status",
     "toMember",
     "totalFees",
@@ -64,6 +66,7 @@ public class PaymentResponse {
     protected Integer id;
     @XmlElement(nillable = true)
     protected List<PaymentFields> paymentFields;
+    protected String remark;
     protected ResponseStatus status;
     protected MemberView toMember;
     protected BigDecimal totalFees;
@@ -218,6 +221,30 @@ public class PaymentResponse {
             paymentFields = new ArrayList<PaymentFields>();
         }
         return this.paymentFields;
+    }
+
+    /**
+     * Gets the value of the remark property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getRemark() {
+        return remark;
+    }
+
+    /**
+     * Sets the value of the remark property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setRemark(String value) {
+        this.remark = value;
     }
 
     /**

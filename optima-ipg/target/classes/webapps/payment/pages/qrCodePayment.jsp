@@ -68,7 +68,9 @@
         </div>  
       </div>
       <div class="container qris px-0">
-        <img id='barcode' style="display: block;margin-left: auto;margin-right: auto;width: 50%;" src="http://149.129.215.223/payment/qrcode?data=${qrcode}" alt="Scan QRIS" title="Pembayaran QRIS" />
+      	<a download="qrcode.png" href="${qrURL}?data=${qrcode}" title="qr">
+        		<img id='barcode' style="display: block;margin-left: auto;margin-right: auto;width: 50%;" src="${qrURL}?data=${qrcode}" alt="Scan QRIS" title="Pembayaran QRIS" />
+        	</a>
     </div>
           <!-- modal detail pembayaran -->
           <div class="modal fade" id="modal-detail" tabindex="-1" role="dialog" aria-labelledby="modal-detail" aria-hidden="true">
