@@ -44,19 +44,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link MessageRequest }
-     * 
-     */
-    public MessageRequest createMessageRequest() {
-        return new MessageRequest();
-    }
-
-    /**
      * Create an instance of {@link NotificationMessage }
      * 
      */
     public NotificationMessage createNotificationMessage() {
         return new NotificationMessage();
+    }
+
+    /**
+     * Create an instance of {@link Header }
+     * 
+     */
+    public Header createHeader() {
+        return new Header();
+    }
+
+    /**
+     * Create an instance of {@link Exception }
+     * 
+     */
+    public Exception createException() {
+        return new Exception();
     }
 
     /**
@@ -76,19 +84,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Header }
+     * Create an instance of {@link MessageRequest }
      * 
      */
-    public Header createHeader() {
-        return new Header();
-    }
-
-    /**
-     * Create an instance of {@link UnreadMessage }
-     * 
-     */
-    public UnreadMessage createUnreadMessage() {
-        return new UnreadMessage();
+    public MessageRequest createMessageRequest() {
+        return new MessageRequest();
     }
 
     /**
@@ -116,11 +116,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Exception }
+     * Create an instance of {@link UnreadMessage }
      * 
      */
-    public Exception createException() {
-        return new Exception();
+    public UnreadMessage createUnreadMessage() {
+        return new UnreadMessage();
     }
 
     /**

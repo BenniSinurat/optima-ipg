@@ -55,11 +55,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LoadFeesByTransferTypeRequest }
+     * Create an instance of {@link TransferTypePermissionRequest }
      * 
      */
-    public LoadFeesByTransferTypeRequest createLoadFeesByTransferTypeRequest() {
-        return new LoadFeesByTransferTypeRequest();
+    public TransferTypePermissionRequest createTransferTypePermissionRequest() {
+        return new TransferTypePermissionRequest();
+    }
+
+    /**
+     * Create an instance of {@link LoadTransferTypesByAccountIDRequest }
+     * 
+     */
+    public LoadTransferTypesByAccountIDRequest createLoadTransferTypesByAccountIDRequest() {
+        return new LoadTransferTypesByAccountIDRequest();
     }
 
     /**
@@ -71,11 +79,99 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TransferTypePermissionRequest }
+     * Create an instance of {@link Billers }
      * 
      */
-    public TransferTypePermissionRequest createTransferTypePermissionRequest() {
-        return new TransferTypePermissionRequest();
+    public Billers createBillers() {
+        return new Billers();
+    }
+
+    /**
+     * Create an instance of {@link TransferTypes }
+     * 
+     */
+    public TransferTypes createTransferTypes() {
+        return new TransferTypes();
+    }
+
+    /**
+     * Create an instance of {@link LoadPermissionByTransferTypesResponse }
+     * 
+     */
+    public LoadPermissionByTransferTypesResponse createLoadPermissionByTransferTypesResponse() {
+        return new LoadPermissionByTransferTypesResponse();
+    }
+
+    /**
+     * Create an instance of {@link LoadFeesByTransferTypeResponse }
+     * 
+     */
+    public LoadFeesByTransferTypeResponse createLoadFeesByTransferTypeResponse() {
+        return new LoadFeesByTransferTypeResponse();
+    }
+
+    /**
+     * Create an instance of {@link LoadTransferTypesByIDResponse }
+     * 
+     */
+    public LoadTransferTypesByIDResponse createLoadTransferTypesByIDResponse() {
+        return new LoadTransferTypesByIDResponse();
+    }
+
+    /**
+     * Create an instance of {@link MemberFields }
+     * 
+     */
+    public MemberFields createMemberFields() {
+        return new MemberFields();
+    }
+
+    /**
+     * Create an instance of {@link TransferTypeView }
+     * 
+     */
+    public TransferTypeView createTransferTypeView() {
+        return new TransferTypeView();
+    }
+
+    /**
+     * Create an instance of {@link Members }
+     * 
+     */
+    public Members createMembers() {
+        return new Members();
+    }
+
+    /**
+     * Create an instance of {@link ResponseStatus }
+     * 
+     */
+    public ResponseStatus createResponseStatus() {
+        return new ResponseStatus();
+    }
+
+    /**
+     * Create an instance of {@link LoadTransferTypesByUsernameRequest }
+     * 
+     */
+    public LoadTransferTypesByUsernameRequest createLoadTransferTypesByUsernameRequest() {
+        return new LoadTransferTypesByUsernameRequest();
+    }
+
+    /**
+     * Create an instance of {@link LoadTransferTypesResponse }
+     * 
+     */
+    public LoadTransferTypesResponse createLoadTransferTypesResponse() {
+        return new LoadTransferTypesResponse();
+    }
+
+    /**
+     * Create an instance of {@link ExternalMemberFields }
+     * 
+     */
+    public ExternalMemberFields createExternalMemberFields() {
+        return new ExternalMemberFields();
     }
 
     /**
@@ -103,51 +199,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LoadTransferTypesResponse }
+     * Create an instance of {@link LoadTransferTypesByIDRequest }
      * 
      */
-    public LoadTransferTypesResponse createLoadTransferTypesResponse() {
-        return new LoadTransferTypesResponse();
+    public LoadTransferTypesByIDRequest createLoadTransferTypesByIDRequest() {
+        return new LoadTransferTypesByIDRequest();
     }
 
     /**
-     * Create an instance of {@link LoadPermissionByTransferTypesResponse }
+     * Create an instance of {@link LoadFeesByTransferTypeRequest }
      * 
      */
-    public LoadPermissionByTransferTypesResponse createLoadPermissionByTransferTypesResponse() {
-        return new LoadPermissionByTransferTypesResponse();
+    public LoadFeesByTransferTypeRequest createLoadFeesByTransferTypeRequest() {
+        return new LoadFeesByTransferTypeRequest();
     }
 
     /**
-     * Create an instance of {@link Members }
+     * Create an instance of {@link TransferTypeRequest }
      * 
      */
-    public Members createMembers() {
-        return new Members();
-    }
-
-    /**
-     * Create an instance of {@link Billers }
-     * 
-     */
-    public Billers createBillers() {
-        return new Billers();
-    }
-
-    /**
-     * Create an instance of {@link ExternalMemberFields }
-     * 
-     */
-    public ExternalMemberFields createExternalMemberFields() {
-        return new ExternalMemberFields();
-    }
-
-    /**
-     * Create an instance of {@link Header }
-     * 
-     */
-    public Header createHeader() {
-        return new Header();
+    public TransferTypeRequest createTransferTypeRequest() {
+        return new TransferTypeRequest();
     }
 
     /**
@@ -167,22 +239,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TransferTypeView }
-     * 
-     */
-    public TransferTypeView createTransferTypeView() {
-        return new TransferTypeView();
-    }
-
-    /**
-     * Create an instance of {@link TransferTypeRequest }
-     * 
-     */
-    public TransferTypeRequest createTransferTypeRequest() {
-        return new TransferTypeRequest();
-    }
-
-    /**
      * Create an instance of {@link LoadTransferTypesByAccountIDResponse }
      * 
      */
@@ -191,59 +247,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TransferTypes }
+     * Create an instance of {@link Header }
      * 
      */
-    public TransferTypes createTransferTypes() {
-        return new TransferTypes();
-    }
-
-    /**
-     * Create an instance of {@link MemberFields }
-     * 
-     */
-    public MemberFields createMemberFields() {
-        return new MemberFields();
-    }
-
-    /**
-     * Create an instance of {@link LoadTransferTypesByUsernameRequest }
-     * 
-     */
-    public LoadTransferTypesByUsernameRequest createLoadTransferTypesByUsernameRequest() {
-        return new LoadTransferTypesByUsernameRequest();
-    }
-
-    /**
-     * Create an instance of {@link ResponseStatus }
-     * 
-     */
-    public ResponseStatus createResponseStatus() {
-        return new ResponseStatus();
-    }
-
-    /**
-     * Create an instance of {@link LoadTransferTypesByIDRequest }
-     * 
-     */
-    public LoadTransferTypesByIDRequest createLoadTransferTypesByIDRequest() {
-        return new LoadTransferTypesByIDRequest();
-    }
-
-    /**
-     * Create an instance of {@link LoadFeesByTransferTypeResponse }
-     * 
-     */
-    public LoadFeesByTransferTypeResponse createLoadFeesByTransferTypeResponse() {
-        return new LoadFeesByTransferTypeResponse();
-    }
-
-    /**
-     * Create an instance of {@link LoadTransferTypesByAccountIDRequest }
-     * 
-     */
-    public LoadTransferTypesByAccountIDRequest createLoadTransferTypesByAccountIDRequest() {
-        return new LoadTransferTypesByAccountIDRequest();
+    public Header createHeader() {
+        return new Header();
     }
 
     /**
@@ -252,14 +260,6 @@ public class ObjectFactory {
      */
     public LoadTransferTypesRequest createLoadTransferTypesRequest() {
         return new LoadTransferTypesRequest();
-    }
-
-    /**
-     * Create an instance of {@link LoadTransferTypesByIDResponse }
-     * 
-     */
-    public LoadTransferTypesByIDResponse createLoadTransferTypesByIDResponse() {
-        return new LoadTransferTypesByIDResponse();
     }
 
     /**

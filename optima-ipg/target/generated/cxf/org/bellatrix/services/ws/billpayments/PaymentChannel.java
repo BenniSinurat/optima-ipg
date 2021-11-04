@@ -17,7 +17,9 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="icon" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+ *         &lt;element name="link" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="transferTypeID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *       &lt;/sequence>
@@ -31,14 +33,18 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "paymentChannel", propOrder = {
     "description",
+    "icon",
     "id",
+    "link",
     "name",
     "transferTypeID"
 })
 public class PaymentChannel {
 
     protected String description;
+    protected String icon;
     protected Integer id;
+    protected String link;
     protected String name;
     protected Integer transferTypeID;
 
@@ -67,6 +73,30 @@ public class PaymentChannel {
     }
 
     /**
+     * Gets the value of the icon property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getIcon() {
+        return icon;
+    }
+
+    /**
+     * Sets the value of the icon property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setIcon(String value) {
+        this.icon = value;
+    }
+
+    /**
      * Gets the value of the id property.
      * 
      * @return
@@ -88,6 +118,30 @@ public class PaymentChannel {
      */
     public void setId(Integer value) {
         this.id = value;
+    }
+
+    /**
+     * Gets the value of the link property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getLink() {
+        return link;
+    }
+
+    /**
+     * Sets the value of the link property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setLink(String value) {
+        this.link = value;
     }
 
     /**

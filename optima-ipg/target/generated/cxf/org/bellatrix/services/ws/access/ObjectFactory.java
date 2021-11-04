@@ -50,11 +50,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CredentialStatusResponse }
+     * Create an instance of {@link AccessStatus }
      * 
      */
-    public CredentialStatusResponse createCredentialStatusResponse() {
-        return new CredentialStatusResponse();
+    public AccessStatus createAccessStatus() {
+        return new AccessStatus();
     }
 
     /**
@@ -66,91 +66,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AccessTypeRequest }
+     * Create an instance of {@link ResetCredentialRequest }
      * 
      */
-    public AccessTypeRequest createAccessTypeRequest() {
-        return new AccessTypeRequest();
-    }
-
-    /**
-     * Create an instance of {@link Exception }
-     * 
-     */
-    public Exception createException() {
-        return new Exception();
-    }
-
-    /**
-     * Create an instance of {@link LoadAccessTypeRequest }
-     * 
-     */
-    public LoadAccessTypeRequest createLoadAccessTypeRequest() {
-        return new LoadAccessTypeRequest();
-    }
-
-    /**
-     * Create an instance of {@link CredentialResponse }
-     * 
-     */
-    public CredentialResponse createCredentialResponse() {
-        return new CredentialResponse();
-    }
-
-    /**
-     * Create an instance of {@link UnblockCredentialRequest }
-     * 
-     */
-    public UnblockCredentialRequest createUnblockCredentialRequest() {
-        return new UnblockCredentialRequest();
-    }
-
-    /**
-     * Create an instance of {@link CreateCredentialRequest }
-     * 
-     */
-    public CreateCredentialRequest createCreateCredentialRequest() {
-        return new CreateCredentialRequest();
-    }
-
-    /**
-     * Create an instance of {@link CredentialRequest }
-     * 
-     */
-    public CredentialRequest createCredentialRequest() {
-        return new CredentialRequest();
-    }
-
-    /**
-     * Create an instance of {@link ChangeCredentialRequest }
-     * 
-     */
-    public ChangeCredentialRequest createChangeCredentialRequest() {
-        return new ChangeCredentialRequest();
-    }
-
-    /**
-     * Create an instance of {@link ValidateCredentialRequest }
-     * 
-     */
-    public ValidateCredentialRequest createValidateCredentialRequest() {
-        return new ValidateCredentialRequest();
-    }
-
-    /**
-     * Create an instance of {@link AccessStatus }
-     * 
-     */
-    public AccessStatus createAccessStatus() {
-        return new AccessStatus();
-    }
-
-    /**
-     * Create an instance of {@link ResetCredentialResponse }
-     * 
-     */
-    public ResetCredentialResponse createResetCredentialResponse() {
-        return new ResetCredentialResponse();
+    public ResetCredentialRequest createResetCredentialRequest() {
+        return new ResetCredentialRequest();
     }
 
     /**
@@ -162,11 +82,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LoadAccessTypeResponse }
+     * Create an instance of {@link Exception }
      * 
      */
-    public LoadAccessTypeResponse createLoadAccessTypeResponse() {
-        return new LoadAccessTypeResponse();
+    public Exception createException() {
+        return new Exception();
+    }
+
+    /**
+     * Create an instance of {@link CredentialRequest }
+     * 
+     */
+    public CredentialRequest createCredentialRequest() {
+        return new CredentialRequest();
+    }
+
+    /**
+     * Create an instance of {@link ValidateCredentialRequest }
+     * 
+     */
+    public ValidateCredentialRequest createValidateCredentialRequest() {
+        return new ValidateCredentialRequest();
     }
 
     /**
@@ -178,6 +114,70 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CredentialResponse }
+     * 
+     */
+    public CredentialResponse createCredentialResponse() {
+        return new CredentialResponse();
+    }
+
+    /**
+     * Create an instance of {@link AccessTypeRequest }
+     * 
+     */
+    public AccessTypeRequest createAccessTypeRequest() {
+        return new AccessTypeRequest();
+    }
+
+    /**
+     * Create an instance of {@link ResetCredentialResponse }
+     * 
+     */
+    public ResetCredentialResponse createResetCredentialResponse() {
+        return new ResetCredentialResponse();
+    }
+
+    /**
+     * Create an instance of {@link LoadAccessTypeRequest }
+     * 
+     */
+    public LoadAccessTypeRequest createLoadAccessTypeRequest() {
+        return new LoadAccessTypeRequest();
+    }
+
+    /**
+     * Create an instance of {@link CredentialStatusResponse }
+     * 
+     */
+    public CredentialStatusResponse createCredentialStatusResponse() {
+        return new CredentialStatusResponse();
+    }
+
+    /**
+     * Create an instance of {@link LoadAccessTypeResponse }
+     * 
+     */
+    public LoadAccessTypeResponse createLoadAccessTypeResponse() {
+        return new LoadAccessTypeResponse();
+    }
+
+    /**
+     * Create an instance of {@link CreateCredentialRequest }
+     * 
+     */
+    public CreateCredentialRequest createCreateCredentialRequest() {
+        return new CreateCredentialRequest();
+    }
+
+    /**
+     * Create an instance of {@link ChangeCredentialRequest }
+     * 
+     */
+    public ChangeCredentialRequest createChangeCredentialRequest() {
+        return new ChangeCredentialRequest();
+    }
+
+    /**
      * Create an instance of {@link Header }
      * 
      */
@@ -186,19 +186,19 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link UnblockCredentialRequest }
+     * 
+     */
+    public UnblockCredentialRequest createUnblockCredentialRequest() {
+        return new UnblockCredentialRequest();
+    }
+
+    /**
      * Create an instance of {@link ResponseStatus }
      * 
      */
     public ResponseStatus createResponseStatus() {
         return new ResponseStatus();
-    }
-
-    /**
-     * Create an instance of {@link ResetCredentialRequest }
-     * 
-     */
-    public ResetCredentialRequest createResetCredentialRequest() {
-        return new ResetCredentialRequest();
     }
 
     /**

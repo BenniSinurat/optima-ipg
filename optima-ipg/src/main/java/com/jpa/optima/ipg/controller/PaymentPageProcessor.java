@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -69,6 +70,8 @@ import org.bellatrix.services.ws.access.ValidateCredentialRequest;
 import org.bellatrix.services.ws.access.ValidateCredentialResponse;
 import org.bellatrix.services.ws.billpayments.BillPayment;
 import org.bellatrix.services.ws.billpayments.BillPaymentService;
+import org.bellatrix.services.ws.billpayments.LoadPaymentChannelByIDRequest;
+import org.bellatrix.services.ws.billpayments.LoadPaymentChannelByIDResponse;
 import org.bellatrix.services.ws.billpayments.LoadPaymentChannelByMemberIDRequest;
 import org.bellatrix.services.ws.billpayments.LoadPaymentChannelByMemberIDResponse;
 import org.bellatrix.services.ws.members.LoadMembersByUsernameRequest;
@@ -940,7 +943,7 @@ public class PaymentPageProcessor {
 		get.setHeader("X-MTI-Key", t.getMerchants().getUsername());
 		get.setHeader("X-SIGNATURE", sha512Hex);
 
-		logger.info("Request to Direct Debit Host: " + get.getURI());
+		logger.info("Request JWT to Direct Debit Host: " + get.getURI());
 
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		Throwable localThrowable6 = null;
@@ -978,7 +981,7 @@ public class PaymentPageProcessor {
 					httpClient.close();
 		}
 		JSONObject jsonResult = new JSONObject(result);
-		logger.info("Response from Direct Debit: " + jsonResult.toString());
+		logger.info("Response JWT from Direct Debit: " + jsonResult.toString());
 
 		return String.valueOf(jsonResult.getString("jwt"));
 	}
@@ -1004,7 +1007,7 @@ public class PaymentPageProcessor {
 		StringEntity entity = new StringEntity(json);
 		post.setEntity(entity);
 
-		logger.info("Request to Direct Debit OTP Body: " + json);
+		logger.info("Request Request OTP to Direct Debit OTP Body: " + json);
 
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		Throwable localThrowable6 = null;
@@ -1041,7 +1044,7 @@ public class PaymentPageProcessor {
 				else
 					httpClient.close();
 		}
-		logger.info("Response from Direct Debit OTP: " + result);
+		logger.info("Response Request OTP from Direct Debit OTP: " + result);
 		JSONObject jsonResult = new JSONObject(result);
 		if (jsonResult.getString("responseCode").equalsIgnoreCase("00")) {
 			res.setResponseMessage(String.valueOf(jsonResult.getString("responseMessage")));
@@ -1080,7 +1083,7 @@ public class PaymentPageProcessor {
 		StringEntity entity = new StringEntity(json);
 		post.setEntity(entity);
 
-		logger.info("Request to Direct Debit Body: " + json);
+		logger.info("Request Purchase to Direct Debit Body: " + json);
 
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		Throwable localThrowable6 = null;
@@ -1117,8 +1120,9 @@ public class PaymentPageProcessor {
 				else
 					httpClient.close();
 		}
+		logger.info("Response Purchase from Direct Debit: " + result);
 		JSONObject jsonResult = new JSONObject(result);
-		logger.info("Response from Direct Debit: " + jsonResult.toString());
+		logger.info("Response Purchase from Direct Debit: " + jsonResult.toString());
 		if (jsonResult.getString("responseCode").equalsIgnoreCase("00")) {
 			res.setResponseMessage(String.valueOf(jsonResult.getString("responseMessage")));
 			res.setResponseCode(String.valueOf(jsonResult.get("responseCode")));
@@ -1244,7 +1248,7 @@ public class PaymentPageProcessor {
 		StringEntity entity = new StringEntity(json);
 		post.setEntity(entity);
 
-		logger.info("Request to Direct Debit Remove Card Body: " + json);
+		logger.info("Request Remove Card to Direct Debit Remove Card Body: " + json);
 
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		Throwable localThrowable6 = null;
@@ -1281,7 +1285,7 @@ public class PaymentPageProcessor {
 				else
 					httpClient.close();
 		}
-		logger.info("Response from Direct Debit Remove Card: " + result);
+		logger.info("Response Remove Card from Direct Debit Remove Card: " + result);
 		JSONObject jsonResult = new JSONObject(result);
 		if (jsonResult.getString("responseCode").equalsIgnoreCase("00")) {
 			res.setResponseMessage(String.valueOf(jsonResult.getString("responseMessage")));
@@ -1317,7 +1321,7 @@ public class PaymentPageProcessor {
 		StringEntity entity = new StringEntity(json);
 		post.setEntity(entity);
 
-		logger.info("Request to Direct Debit Cancel Trx Body: " + json);
+		logger.info("Request Cancel Trx to Direct Debit Cancel Trx Body: " + json);
 
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		Throwable localThrowable6 = null;
@@ -1354,7 +1358,7 @@ public class PaymentPageProcessor {
 				else
 					httpClient.close();
 		}
-		logger.info("Response from Direct Debit Cancel Trx: " + result);
+		logger.info("Response Cancel Trx from Direct Debit Cancel Trx: " + result);
 		JSONObject jsonResult = new JSONObject(result);
 		if (jsonResult.getString("responseCode").equalsIgnoreCase("00")) {
 			res.setResponseMessage(String.valueOf(jsonResult.getString("responseMessage")));
@@ -1390,7 +1394,7 @@ public class PaymentPageProcessor {
 		StringEntity entity = new StringEntity(json);
 		post.setEntity(entity);
 
-		logger.info("Request to Direct Debit Set Token Limit Body: " + json);
+		logger.info("Request Set Token Limit to Direct Debit Set Token Limit Body: " + json);
 
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		Throwable localThrowable6 = null;
@@ -1427,7 +1431,7 @@ public class PaymentPageProcessor {
 				else
 					httpClient.close();
 		}
-		logger.info("Response from Direct Debit Set Token Limit: " + result);
+		logger.info("Response Set Token Limit from Direct Debit Set Token Limit: " + result);
 		JSONObject jsonResult = new JSONObject(result);
 		if (jsonResult.getString("responseCode").equalsIgnoreCase("00")) {
 			res.setResponseMessage(String.valueOf(jsonResult.getString("responseMessage")));
@@ -1464,7 +1468,7 @@ public class PaymentPageProcessor {
 		StringEntity entity = new StringEntity(json);
 		post.setEntity(entity);
 
-		logger.info("Request to Direct Debit Inquiry Transaction Status Body: " + json);
+		logger.info("Request Trx Status to Direct Debit Inquiry Transaction Status Body: " + json);
 
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		Throwable localThrowable6 = null;
@@ -1501,7 +1505,7 @@ public class PaymentPageProcessor {
 				else
 					httpClient.close();
 		}
-		logger.info("Response from Direct Debit Inquiry Transaction Status: " + result);
+		logger.info("Response Trx Status from Direct Debit Inquiry Transaction Status: " + result);
 		JSONObject jsonResult = new JSONObject(result);
 		if (jsonResult.getString("responseCode").equalsIgnoreCase("00")) {
 			res.setResponseMessage(String.valueOf(jsonResult.get("responseCode")));
@@ -1542,6 +1546,63 @@ public class PaymentPageProcessor {
 
 		PaymentResponse paymentResponse = client.doPayment(headerAuth, paymentRequest);
 		return paymentResponse;
+	}
+
+	public List<String> loadPaymentChannelByMember(String username, BigDecimal amount, String email, String name, String ticketID) throws MalformedURLException {
+		URL url = new URL(contextLoader.getHostWSUrl() + "billpayments?wsdl");
+		QName qName = new QName(contextLoader.getHostWSPort(), "BillPaymentService");
+		BillPaymentService service = new BillPaymentService(url, qName);
+		BillPayment client = service.getBillPaymentPort();
+
+		org.bellatrix.services.ws.billpayments.Header headerPayment = new org.bellatrix.services.ws.billpayments.Header();
+		headerPayment.setToken(contextLoader.getHeaderToken());
+		Holder<org.bellatrix.services.ws.billpayments.Header> payHeaderAuth = new Holder<org.bellatrix.services.ws.billpayments.Header>();
+		payHeaderAuth.value = headerPayment;
+
+		LoadPaymentChannelByMemberIDRequest req = new LoadPaymentChannelByMemberIDRequest();
+		req.setMemberID(((Members) loadMember(username).getMembers().get(0)).getId());
+
+		LoadPaymentChannelByMemberIDResponse res = client.loadPaymentChannelByMemberID(payHeaderAuth, req);
+
+		List<String> menu = new LinkedList<String>();
+		for (int i = 0; i < res.getPaymentChannel().size(); i++) {
+			String pm = "<div class=\"row m-0 justify-content-between\">\n"
+					+ "<form id=\"bankTransferPayment\" name=\"bankTransferform\" role=\"form\" class=\"form-horizontal\" action=\"/payment/transactionInquiry\" method=\"POST\" modelAttribute=\"transactionInquiry\">"
+					+ "<input type=\"hidden\" name=\"amount\" id=\"amount\" value=\"" + amount + "\" class=\"form-control validate\">"
+					+ "<input type=\"hidden\" name=\"email\" id=\"email\" value=\"" + email + "\" class=\"form-control validate\">"
+					+ "<input type=\"hidden\" name=\"name\" id=\"name\" value=\"" + name + "\" class=\"form-control validate\">"
+					+ "<input type=\"hidden\" name=\"paymentChannel\" id=\"paymentChannel\" value=\""
+					+ res.getPaymentChannel().get(i).getId() + "\" class=\"form-control validate\">"
+					+ "<input type=\"hidden\" name=\"ticketID\" id=\"ticketID\" value=\"" + ticketID + "\" class=\"form-control validate\">"
+					+ "<button type=\"submit\" name=\"submit\" id=\"submit\" class=\"btn btn-default card card-pembayaran\" data-toggle=\"modal\" style=\"height:55px;width:640px;\"><p class=\"mb-0\">"
+					+ res.getPaymentChannel().get(i).getName()
+					+ "<span> <img class=\"mr-1\" src=\"assets/img/" + res.getPaymentChannel().get(i).getIcon() + ".png\" alt=\"Visa\">"
+					+ "<img src=\"assets/img/ic_arrow_right.png\" alt=\"Arrow Right\">	</span></p> </button>"
+					+ "</form> </div> <br>";
+			menu.add(pm);
+		}
+
+		return menu;
+	}
+	
+	public LoadPaymentChannelByIDResponse loadPaymentChannelByID(Integer channelID)
+			throws MalformedURLException {
+		URL url = new URL(contextLoader.getHostWSUrl() + "billpayments?wsdl");
+		QName qName = new QName(contextLoader.getHostWSPort(), "BillPaymentService");
+		BillPaymentService service = new BillPaymentService(url, qName);
+		BillPayment client = service.getBillPaymentPort();
+
+		org.bellatrix.services.ws.billpayments.Header headerPayment = new org.bellatrix.services.ws.billpayments.Header();
+		headerPayment.setToken(contextLoader.getHeaderToken());
+		Holder<org.bellatrix.services.ws.billpayments.Header> payHeaderAuth = new Holder<org.bellatrix.services.ws.billpayments.Header>();
+		payHeaderAuth.value = headerPayment;
+
+		LoadPaymentChannelByIDRequest req = new LoadPaymentChannelByIDRequest();
+		req.setChannelID(channelID);
+
+		LoadPaymentChannelByIDResponse res = client.loadPaymentChannelByID(payHeaderAuth, req);
+
+		return res;
 	}
 
 	public JmsTemplate getJmsTemplate() {

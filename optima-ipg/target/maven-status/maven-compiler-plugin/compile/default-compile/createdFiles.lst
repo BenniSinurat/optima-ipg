@@ -69,6 +69,7 @@ org/bellatrix/services/ws/virtualaccount/ObjectFactory.class
 org/bellatrix/services/ws/members/LoadMerchantBusinessScaleRequest.class
 org/bellatrix/services/ws/payments/package-info.class
 org/bellatrix/services/ws/members/LoadMembersByExternalIDRequest.class
+org/bellatrix/services/ws/billpayments/LoadPaymentChannelByIDResponse.class
 com/jpa/optima/ipg/model/TransactionInquiryResponse.class
 org/bellatrix/services/ws/virtualaccount/LoadVAByIDRequest.class
 org/bellatrix/services/ws/transfertypes/ExternalMemberFields.class
@@ -179,6 +180,7 @@ org/bellatrix/services/ws/members/Header.class
 org/bellatrix/services/ws/billpayments/PaymentChannelPermissions.class
 org/bellatrix/services/ws/access/CredentialStatusRequest.class
 com/jpa/optima/ipg/model/origin.class
+org/bellatrix/services/ws/billpayments/LoadPaymentChannelByIDRequest.class
 org/bellatrix/services/ws/billpayments/BillInquiryRequest.class
 org/bellatrix/services/ws/members/RegisterMemberRequest.class
 org/bellatrix/services/ws/members/ConfirmKYCRequest.class

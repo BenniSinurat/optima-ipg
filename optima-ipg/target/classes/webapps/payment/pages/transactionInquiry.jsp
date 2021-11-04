@@ -130,6 +130,16 @@
             <p>Berikut ini adalah detail pembayaran anda.</p> 
         </div>
         <form id="transactionInquiry" name="transactionInquiryForm" class="needs-validation" action="/payment/transactionRedirect" method="POST" modelAttribute="transactionInquiry">
+            <c:choose>
+	            <c:when test = "${paymentChannel == 8}">
+		            <div class="form-group">
+		                <div class="row m-0 justify-content-between">
+				            <p class="text-uppercase">Isi saldo ke</p>
+				            <p style="color: #333;">${msisdn}</p>
+				        </div>
+		            </div>
+	            </c:when>
+            </c:choose>
             <div class="form-group">
                 <div class="row m-0 justify-content-between">
 		            <p class="text-uppercase">Tagihan</p>
