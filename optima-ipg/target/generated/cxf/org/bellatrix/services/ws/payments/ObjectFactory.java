@@ -70,51 +70,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RequestPaymentConfirmationResponse }
-     * 
-     */
-    public RequestPaymentConfirmationResponse createRequestPaymentConfirmationResponse() {
-        return new RequestPaymentConfirmationResponse();
-    }
-
-    /**
-     * Create an instance of {@link TransactionStatusResponse }
-     * 
-     */
-    public TransactionStatusResponse createTransactionStatusResponse() {
-        return new TransactionStatusResponse();
-    }
-
-    /**
      * Create an instance of {@link ReversalResponse }
      * 
      */
     public ReversalResponse createReversalResponse() {
         return new ReversalResponse();
-    }
-
-    /**
-     * Create an instance of {@link TransferTypeFields }
-     * 
-     */
-    public TransferTypeFields createTransferTypeFields() {
-        return new TransferTypeFields();
-    }
-
-    /**
-     * Create an instance of {@link PaymentFields }
-     * 
-     */
-    public PaymentFields createPaymentFields() {
-        return new PaymentFields();
-    }
-
-    /**
-     * Create an instance of {@link AgentCashoutRequest }
-     * 
-     */
-    public AgentCashoutRequest createAgentCashoutRequest() {
-        return new AgentCashoutRequest();
     }
 
     /**
@@ -126,27 +86,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link InquiryResponse }
+     * Create an instance of {@link ConfirmAgentCashoutResponse }
      * 
      */
-    public InquiryResponse createInquiryResponse() {
-        return new InquiryResponse();
-    }
-
-    /**
-     * Create an instance of {@link PaymentRequest }
-     * 
-     */
-    public PaymentRequest createPaymentRequest() {
-        return new PaymentRequest();
-    }
-
-    /**
-     * Create an instance of {@link Exception }
-     * 
-     */
-    public Exception createException() {
-        return new Exception();
+    public ConfirmAgentCashoutResponse createConfirmAgentCashoutResponse() {
+        return new ConfirmAgentCashoutResponse();
     }
 
     /**
@@ -158,51 +102,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PaymentResponse }
+     * Create an instance of {@link TransferHistory }
      * 
      */
-    public PaymentResponse createPaymentResponse() {
-        return new PaymentResponse();
-    }
-
-    /**
-     * Create an instance of {@link ConfirmPaymentRequest }
-     * 
-     */
-    public ConfirmPaymentRequest createConfirmPaymentRequest() {
-        return new ConfirmPaymentRequest();
-    }
-
-    /**
-     * Create an instance of {@link ResponseStatus }
-     * 
-     */
-    public ResponseStatus createResponseStatus() {
-        return new ResponseStatus();
-    }
-
-    /**
-     * Create an instance of {@link ReversalRequest }
-     * 
-     */
-    public ReversalRequest createReversalRequest() {
-        return new ReversalRequest();
-    }
-
-    /**
-     * Create an instance of {@link ValidatePaymentTicketRequest }
-     * 
-     */
-    public ValidatePaymentTicketRequest createValidatePaymentTicketRequest() {
-        return new ValidatePaymentTicketRequest();
-    }
-
-    /**
-     * Create an instance of {@link ConfirmAgentCashoutRequest }
-     * 
-     */
-    public ConfirmAgentCashoutRequest createConfirmAgentCashoutRequest() {
-        return new ConfirmAgentCashoutRequest();
+    public TransferHistory createTransferHistory() {
+        return new TransferHistory();
     }
 
     /**
@@ -214,27 +118,51 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GeneratePaymentTicketResponse }
+     * Create an instance of {@link ConfirmPaymentRequest }
      * 
      */
-    public GeneratePaymentTicketResponse createGeneratePaymentTicketResponse() {
-        return new GeneratePaymentTicketResponse();
+    public ConfirmPaymentRequest createConfirmPaymentRequest() {
+        return new ConfirmPaymentRequest();
     }
 
     /**
-     * Create an instance of {@link TransactionStatusRequest }
+     * Create an instance of {@link PaymentResponse }
      * 
      */
-    public TransactionStatusRequest createTransactionStatusRequest() {
-        return new TransactionStatusRequest();
+    public PaymentResponse createPaymentResponse() {
+        return new PaymentResponse();
     }
 
     /**
-     * Create an instance of {@link InquiryRequest }
+     * Create an instance of {@link InquiryResponse }
      * 
      */
-    public InquiryRequest createInquiryRequest() {
-        return new InquiryRequest();
+    public InquiryResponse createInquiryResponse() {
+        return new InquiryResponse();
+    }
+
+    /**
+     * Create an instance of {@link AgentCashoutRequest }
+     * 
+     */
+    public AgentCashoutRequest createAgentCashoutRequest() {
+        return new AgentCashoutRequest();
+    }
+
+    /**
+     * Create an instance of {@link Exception }
+     * 
+     */
+    public Exception createException() {
+        return new Exception();
+    }
+
+    /**
+     * Create an instance of {@link RequestPaymentConfirmationResponse }
+     * 
+     */
+    public RequestPaymentConfirmationResponse createRequestPaymentConfirmationResponse() {
+        return new RequestPaymentConfirmationResponse();
     }
 
     /**
@@ -246,6 +174,46 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link InquiryRequest }
+     * 
+     */
+    public InquiryRequest createInquiryRequest() {
+        return new InquiryRequest();
+    }
+
+    /**
+     * Create an instance of {@link PaymentFields }
+     * 
+     */
+    public PaymentFields createPaymentFields() {
+        return new PaymentFields();
+    }
+
+    /**
+     * Create an instance of {@link ResponseStatus }
+     * 
+     */
+    public ResponseStatus createResponseStatus() {
+        return new ResponseStatus();
+    }
+
+    /**
+     * Create an instance of {@link GeneratePaymentTicketResponse }
+     * 
+     */
+    public GeneratePaymentTicketResponse createGeneratePaymentTicketResponse() {
+        return new GeneratePaymentTicketResponse();
+    }
+
+    /**
+     * Create an instance of {@link ReversalRequest }
+     * 
+     */
+    public ReversalRequest createReversalRequest() {
+        return new ReversalRequest();
+    }
+
+    /**
      * Create an instance of {@link UpdateTransferRequest }
      * 
      */
@@ -254,11 +222,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TransferHistory }
+     * Create an instance of {@link TransactionStatusRequest }
      * 
      */
-    public TransferHistory createTransferHistory() {
-        return new TransferHistory();
+    public TransactionStatusRequest createTransactionStatusRequest() {
+        return new TransactionStatusRequest();
+    }
+
+    /**
+     * Create an instance of {@link PaymentRequest }
+     * 
+     */
+    public PaymentRequest createPaymentRequest() {
+        return new PaymentRequest();
+    }
+
+    /**
+     * Create an instance of {@link ConfirmAgentCashoutRequest }
+     * 
+     */
+    public ConfirmAgentCashoutRequest createConfirmAgentCashoutRequest() {
+        return new ConfirmAgentCashoutRequest();
+    }
+
+    /**
+     * Create an instance of {@link TransferTypeFields }
+     * 
+     */
+    public TransferTypeFields createTransferTypeFields() {
+        return new TransferTypeFields();
     }
 
     /**
@@ -270,11 +262,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ConfirmAgentCashoutResponse }
+     * Create an instance of {@link ValidatePaymentTicketRequest }
      * 
      */
-    public ConfirmAgentCashoutResponse createConfirmAgentCashoutResponse() {
-        return new ConfirmAgentCashoutResponse();
+    public ValidatePaymentTicketRequest createValidatePaymentTicketRequest() {
+        return new ValidatePaymentTicketRequest();
+    }
+
+    /**
+     * Create an instance of {@link TransactionStatusResponse }
+     * 
+     */
+    public TransactionStatusResponse createTransactionStatusResponse() {
+        return new TransactionStatusResponse();
     }
 
     /**

@@ -94,6 +94,7 @@ import org.bellatrix.services.ws.payments.ReversalRequest;
 import org.bellatrix.services.ws.payments.ReversalResponse;
 import org.bellatrix.services.ws.payments.TransactionStatusRequest;
 import org.bellatrix.services.ws.payments.TransactionStatusResponse;
+import org.bellatrix.services.ws.payments.UpdateTransferRequest;
 import org.bellatrix.services.ws.payments.ValidatePaymentTicketRequest;
 import org.bellatrix.services.ws.payments.ValidatePaymentTicketResponse;
 import org.bellatrix.services.ws.transfertypes.LoadFeesByTransferTypeRequest;
@@ -1548,7 +1549,8 @@ public class PaymentPageProcessor {
 		return paymentResponse;
 	}
 
-	public List<String> loadPaymentChannelByMember(String username, BigDecimal amount, String email, String name, String ticketID) throws MalformedURLException {
+	public List<String> loadPaymentChannelByMember(String username, BigDecimal amount, String email, String name,
+			String ticketID) throws MalformedURLException {
 		URL url = new URL(contextLoader.getHostWSUrl() + "billpayments?wsdl");
 		QName qName = new QName(contextLoader.getHostWSPort(), "BillPaymentService");
 		BillPaymentService service = new BillPaymentService(url, qName);
@@ -1568,15 +1570,19 @@ public class PaymentPageProcessor {
 		for (int i = 0; i < res.getPaymentChannel().size(); i++) {
 			String pm = "<div class=\"row m-0 justify-content-between\">\n"
 					+ "<form id=\"bankTransferPayment\" name=\"bankTransferform\" role=\"form\" class=\"form-horizontal\" action=\"/payment/transactionInquiry\" method=\"POST\" modelAttribute=\"transactionInquiry\">"
-					+ "<input type=\"hidden\" name=\"amount\" id=\"amount\" value=\"" + amount + "\" class=\"form-control validate\">"
-					+ "<input type=\"hidden\" name=\"email\" id=\"email\" value=\"" + email + "\" class=\"form-control validate\">"
-					+ "<input type=\"hidden\" name=\"name\" id=\"name\" value=\"" + name + "\" class=\"form-control validate\">"
+					+ "<input type=\"hidden\" name=\"amount\" id=\"amount\" value=\"" + amount
+					+ "\" class=\"form-control validate\">"
+					+ "<input type=\"hidden\" name=\"email\" id=\"email\" value=\"" + email
+					+ "\" class=\"form-control validate\">"
+					+ "<input type=\"hidden\" name=\"name\" id=\"name\" value=\"" + name
+					+ "\" class=\"form-control validate\">"
 					+ "<input type=\"hidden\" name=\"paymentChannel\" id=\"paymentChannel\" value=\""
 					+ res.getPaymentChannel().get(i).getId() + "\" class=\"form-control validate\">"
-					+ "<input type=\"hidden\" name=\"ticketID\" id=\"ticketID\" value=\"" + ticketID + "\" class=\"form-control validate\">"
+					+ "<input type=\"hidden\" name=\"ticketID\" id=\"ticketID\" value=\"" + ticketID
+					+ "\" class=\"form-control validate\">"
 					+ "<button type=\"submit\" name=\"submit\" id=\"submit\" class=\"btn btn-default card card-pembayaran\" data-toggle=\"modal\" style=\"height:55px;width:640px;\"><p class=\"mb-0\">"
-					+ res.getPaymentChannel().get(i).getName()
-					+ "<span> <img class=\"mr-1\" src=\"assets/img/" + res.getPaymentChannel().get(i).getIcon() + ".png\" alt=\"Visa\">"
+					+ res.getPaymentChannel().get(i).getName() + "<span> <img class=\"mr-1\" src=\"assets/img/"
+					+ res.getPaymentChannel().get(i).getIcon() + ".png\" alt=\"Visa\">"
 					+ "<img src=\"assets/img/ic_arrow_right.png\" alt=\"Arrow Right\">	</span></p> </button>"
 					+ "</form> </div> <br>";
 			menu.add(pm);
@@ -1584,9 +1590,8 @@ public class PaymentPageProcessor {
 
 		return menu;
 	}
-	
-	public LoadPaymentChannelByIDResponse loadPaymentChannelByID(Integer channelID)
-			throws MalformedURLException {
+
+	public LoadPaymentChannelByIDResponse loadPaymentChannelByID(Integer channelID) throws MalformedURLException {
 		URL url = new URL(contextLoader.getHostWSUrl() + "billpayments?wsdl");
 		QName qName = new QName(contextLoader.getHostWSPort(), "BillPaymentService");
 		BillPaymentService service = new BillPaymentService(url, qName);
@@ -1603,6 +1608,90 @@ public class PaymentPageProcessor {
 		LoadPaymentChannelByIDResponse res = client.loadPaymentChannelByID(payHeaderAuth, req);
 
 		return res;
+	}
+
+	public void updateTransfer(String transactionNumber)
+			throws MalformedURLException, org.bellatrix.services.ws.payments.Exception_Exception {
+		URL url = new URL(contextLoader.getHostWSUrl() + "payments?wsdl");
+		QName qName = new QName(contextLoader.getHostWSPort(), "PaymentService");
+		PaymentService service = new PaymentService(url, qName);
+		Payment client = service.getPaymentPort();
+
+		org.bellatrix.services.ws.payments.Header headerPayment = new org.bellatrix.services.ws.payments.Header();
+		headerPayment.setToken(contextLoader.getHeaderToken());
+		Holder<org.bellatrix.services.ws.payments.Header> payHeaderAuth = new Holder<org.bellatrix.services.ws.payments.Header>();
+		payHeaderAuth.value = headerPayment;
+
+		UpdateTransferRequest upR = new UpdateTransferRequest();
+		upR.setTransactionNumber(transactionNumber);
+
+		client.updateTransfer(payHeaderAuth, upR);
+	}
+
+	public String directDebitPurchaseCallback(String merchantID, String invoiceID, BigDecimal amount, String sessionID,
+			String currency, Integer paymentChannel, String ticketID, String transactionNumber,
+			String name, String email, String msisdn, String description, String words, String status, BigDecimal fee,
+			String city, String postalCode, String callbackURL) throws IOException {
+		String result = "";
+		HttpPost post = new HttpPost(callbackURL);
+
+		List<NameValuePair> urlParameters = new ArrayList<>();
+		urlParameters.add(new BasicNameValuePair("merchantID", merchantID));
+		urlParameters.add(new BasicNameValuePair("invoiceID", invoiceID));
+		urlParameters.add(new BasicNameValuePair("amount", amount.toString()));
+		urlParameters.add(new BasicNameValuePair("sessionID", sessionID));
+		urlParameters.add(new BasicNameValuePair("currency", currency));
+		urlParameters.add(new BasicNameValuePair("paymentChannel", paymentChannel.toString()));
+		urlParameters.add(new BasicNameValuePair("ticketID", ticketID));
+		urlParameters.add(new BasicNameValuePair("transactionNumber", transactionNumber));
+		urlParameters.add(new BasicNameValuePair("name", name));
+		urlParameters.add(new BasicNameValuePair("email", email));
+		urlParameters.add(new BasicNameValuePair("msisdn", msisdn));
+		urlParameters.add(new BasicNameValuePair("description", description));
+		urlParameters.add(new BasicNameValuePair("words", words));
+		urlParameters.add(new BasicNameValuePair("status", status));
+		urlParameters.add(new BasicNameValuePair("fee", fee.toString()));
+		urlParameters.add(new BasicNameValuePair("city", city));
+		urlParameters.add(new BasicNameValuePair("postalCode", postalCode));
+
+		post.setEntity(new UrlEncodedFormEntity(urlParameters));
+
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		Throwable localThrowable6 = null;
+		try {
+			CloseableHttpResponse response = httpClient.execute(post);
+			Throwable localThrowable7 = null;
+			try {
+				result = EntityUtils.toString(response.getEntity());
+			} catch (Throwable localThrowable1) {
+				localThrowable7 = localThrowable1;
+				throw localThrowable1;
+			} finally {
+				if (response != null)
+					if (localThrowable7 != null)
+						try {
+							response.close();
+						} catch (Throwable localThrowable2) {
+							localThrowable7.addSuppressed(localThrowable2);
+						}
+					else
+						response.close();
+			}
+		} catch (Throwable localThrowable4) {
+			localThrowable6 = localThrowable4;
+			throw localThrowable4;
+		} finally {
+			if (httpClient != null)
+				if (localThrowable6 != null)
+					try {
+						httpClient.close();
+					} catch (Throwable localThrowable5) {
+						localThrowable6.addSuppressed(localThrowable5);
+					}
+				else
+					httpClient.close();
+		}
+		return result;
 	}
 
 	public JmsTemplate getJmsTemplate() {

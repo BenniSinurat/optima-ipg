@@ -499,7 +499,7 @@ public class IPGController {
 
 			IMap<String, Ticket> vaMap = instance.getMap("PaymentVAMap");
 			vaMap.put(loadVAByIDResponse.getVaRecord().get(0).getId(), t);
-			
+
 			model.addAttribute("paymentCode", loadVAByIDResponse.getVaRecord().get(0).getId());
 			model.addAttribute("amount", loadVAByIDResponse.getVaRecord().get(0).getAmount());
 			model.addAttribute("formattedAmount",
@@ -1087,7 +1087,7 @@ public class IPGController {
 			if (resp.getStatus().equalsIgnoreCase("00")) {
 				IMap<String, Ticket> vaMap = instance.getMap("PaymentVAMap");
 				vaMap.put(loadVAByIDResponse.getVaRecord().get(0).getId(), t);
-				
+
 				model.addAttribute("paymentCode", loadVAByIDResponse.getVaRecord().get(0).getId());
 				model.addAttribute("amount", loadVAByIDResponse.getVaRecord().get(0).getAmount());
 				model.addAttribute("formattedAmount",
@@ -1328,7 +1328,7 @@ public class IPGController {
 		return "TICKET_NOT_FOUND";
 	}
 
-	// Fello, Direct Debit Redirection
+	// Fello
 	@RequestMapping(value = { "/paymentRedirect" }, method = RequestMethod.GET)
 	public String paymentRedirect(@RequestParam(value = "ticketID", required = true) String ticketID,
 			@RequestParam(value = "msisdn", required = true) String msisdn,
@@ -1343,13 +1343,14 @@ public class IPGController {
 			Ticket ti = (Ticket) vaMap.get(ticketID);
 
 			logger.info("[Payment IP Address : " + req.getRemoteAddr() + "]");
-			/*
-			 * if (!t.getIpAddress().equalsIgnoreCase(req.getRemoteAddr())) {
-			 * logger.error("[IP Address Violation]");
-			 * model.addAttribute("httpResponseCode", "403"); model.addAttribute("status",
-			 * "Forbidden"); model.addAttribute("description", "Invalid RemoteAddress");
-			 * return "page_exception"; }
-			 */
+
+			if (!t.getIpAddress().equalsIgnoreCase(req.getRemoteAddr())) {
+				logger.error("[IP Address Violation]");
+				model.addAttribute("httpResponseCode", "403");
+				model.addAttribute("status", "Forbidden");
+				model.addAttribute("description", "Invalid RemoteAddress");
+				return "page_exception";
+			}
 
 			CredentialResponse cr = paymentPageProcessor.loadCredential(t.getMerchantID(), Integer.valueOf(2));
 			String rawhashing = "";
@@ -1381,11 +1382,12 @@ public class IPGController {
 				paymentPageProcessor.sendMessage(msisdn, t.getMerchantID(), "Payment Received " + t.getDescription(),
 						"You have received a payment "
 								+ Utils.formatAmount(ti.getFinalAmount(), ".", ",", "#,##0.00", "Rp.", ",-")
-								+ " using Credit Card from " + t.getName() + " (" + t.getEmail() + ") with Invoice ID "
+								+ " using Fello from " + t.getName() + " (" + t.getEmail() + ") with Invoice ID "
 								+ t.getInvoiceID());
 			} else {
 				logger.info("[VOID Status ResponseCode : FAILED ]");
 				t.setStatus("FAILED");
+				t.setPaymentChannel(t.getPaymentChannel());
 				model.addAttribute("merchantID", t.getMerchantID());
 				model.addAttribute("invoiceID", t.getInvoiceID());
 				model.addAttribute("amount", ti.getFinalAmount());
@@ -1397,7 +1399,6 @@ public class IPGController {
 				model.addAttribute("status", "FAILED");
 				model.addAttribute("description", "Something isn't quite right, We were reversing your payment...");
 			}
-
 			IMap<String, Ticket> sMap = instance.getMap("PaymentSessionMap");
 			sMap.put(sessionMap, t);
 			return "merchantRedirect";
@@ -2015,9 +2016,6 @@ public class IPGController {
 				logger.info("[Debit Registration Success : " + req.getMaskedCardNumber() + "]");
 				ipgValidation.createDebitCards(t.getMsisdn(), req.getToken(), 1);
 
-				// res = paymentPageProcessor.purchaseRequest(ticketID);
-				// logger.info("[Debit Purchase Process : " + res + "]");
-
 				resNotif.setResponseMessage("Success");
 				resNotif.setResponseCode("00");
 				logger.info("[" + mapper.writeValueAsString(resNotif) + "]");
@@ -2294,7 +2292,7 @@ public class IPGController {
 			if (req.getResponseCode().equalsIgnoreCase("00")) {
 				logger.info("[Direct Debit Purchase Callback Success : " + req.getReferenceNumber() + "]");
 
-				paymentPageProcessor.updateBillingStatus(billing, t.getMerchantID());
+				paymentPageProcessor.updateTransfer(billing.getTransactionNumber());
 
 				PurchaseOrigin o = new PurchaseOrigin();
 				o.setBillReferenceNumber(t.getInvoiceID());
@@ -2313,7 +2311,7 @@ public class IPGController {
 				res = paymentPageProcessor.purchaseRedirect(billing.getTicketID(), billing.getTransactionNumber(),
 						"PROCESSED", t.getMsisdn());
 
-				logger.info("[Direct Debit Payment Notification Response : " + res + "]");
+				logger.info("[Direct Debit Purchase Notification Response : " + res + "]");
 				dtmap.delete(hreq.getHeader("journeyID"));
 
 				resNotif.setResponseMessage("Success");
@@ -2321,9 +2319,8 @@ public class IPGController {
 				logger.info("[" + mapper.writeValueAsString(resNotif) + "]");
 				return resNotif;
 			} else {
-
-				dtmap.delete(hreq.getHeader("journeyID"));
-
+				logger.error("Direct Debit Purchase Callback Failed Response : " + req.getResponseCode() + " - "
+						+ req.getResponseMessage());
 				ReversalRequest rreq = new ReversalRequest();
 				rreq.setUsername(t.getMerchantID());
 				rreq.setTraceNumber(billing.getTraceNumber());
@@ -2334,10 +2331,11 @@ public class IPGController {
 				res = paymentPageProcessor.purchaseRedirect(billing.getTicketID(), billing.getTransactionNumber(),
 						"FAILED", t.getMsisdn());
 
-				logger.info("Direct Debit Payment " + rreq.getTraceNumber() + " Response : "
+				logger.info("Direct Debit Payment Reverse " + rreq.getTraceNumber() + " Response : "
 						+ rres.getStatus().getDescription() + "]");
+				dtmap.delete(hreq.getHeader("journeyID"));
 
-				logger.error("RC " + req.getResponseCode() + " : " + req.getResponseMessage());
+				logger.error("Direct Debit Purchase Notification Response: " + res);
 				resNotif.setResponseMessage("Success");
 				resNotif.setResponseCode("00");
 				logger.info("[" + mapper.writeValueAsString(resNotif) + "]");
@@ -2351,6 +2349,61 @@ public class IPGController {
 			logger.info("[" + mapper.writeValueAsString(resNotif) + "]");
 		}
 		return resNotif;
+	}
+
+	// Direct Debit Redirection
+	@RequestMapping(value = { "/directDebitPurchaseRedirect" }, method = RequestMethod.GET)
+	public void directDebitPurchaseRedirect(@RequestParam(value = "ticketID", required = true) String ticketID,
+			@RequestParam(value = "msisdn", required = true) String msisdn,
+			@RequestParam(value = "transactionNumber", required = false) String transactionNumber,
+			@RequestParam(value = "status", required = true) String status, ModelMap model, HttpServletRequest req)
+			throws Exception {
+		try {
+			IMap<String, Ticket> tMap = instance.getMap("PaymentRequestMap");
+			Ticket t = (Ticket) tMap.get(ticketID);
+
+			IMap<String, Ticket> vaMap = instance.getMap("PaymentAmountMap");
+			Ticket ti = (Ticket) vaMap.get(ticketID);
+
+			logger.info("[Payment IP Address : " + req.getRemoteAddr() + "]");
+
+			CredentialResponse cr = paymentPageProcessor.loadCredential(t.getMerchantID(), Integer.valueOf(2));
+			String rawhashing = "";
+			rawhashing = t.getMerchantID() + t.getInvoiceID() + ti.getFinalAmount() + t.getCallback()
+					+ cr.getCredential();
+
+			String sha256hex = DigestUtils.sha256Hex(rawhashing);
+
+			logger.info("Words: " + sha256hex);
+
+			String sessionMap = t.getMerchantID() + t.getInvoiceID() + t.getSessionID();
+			String stat, desc = "";
+			if (status.equalsIgnoreCase("PROCESSED")) {
+				t.setPaymentChannel(t.getPaymentChannel());
+				t.setStatus("PROCESSED");
+				
+				stat = "PROCESSED";
+				desc = t.getDescription();
+
+			} else {
+				logger.info("[VOID Status ResponseCode : FAILED ]");
+				t.setStatus("FAILED");
+				t.setPaymentChannel(t.getPaymentChannel());
+				
+				stat = "FAILED";
+				desc = "Something isn't quite right, We were reversing your payment...";
+			}
+			IMap<String, Ticket> sMap = instance.getMap("PaymentSessionMap");
+			sMap.put(sessionMap, t);
+			String res = paymentPageProcessor.directDebitPurchaseCallback(t.getMerchantID(), t.getInvoiceID(), ti.getFinalAmount(),
+					t.getSessionID(), t.getCurrency(), t.getPaymentChannel(), ticketID, transactionNumber, t.getName(),
+					t.getEmail(), t.getMsisdn(), desc, sha256hex, stat, BigDecimal.ZERO, t.getCity(),
+					t.getPostalCode(), t.getCallback());
+			logger.info("Direct Debit callback response: " + res);
+		} catch (NullPointerException ex) {
+			ex.printStackTrace();
+			logger.error("[Ticket Not Found/Expired]");
+		}
 	}
 
 	@RequestMapping(value = { "/directDebitReverse" }, method = RequestMethod.POST)

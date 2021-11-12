@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="referenceNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="remark" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="transactionNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="transactionState" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="transferID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *       &lt;/sequence>
@@ -34,6 +35,7 @@ import javax.xml.bind.annotation.XmlType;
     "description",
     "referenceNumber",
     "remark",
+    "transactionNumber",
     "transactionState",
     "transferID"
 })
@@ -42,6 +44,7 @@ public class UpdateTransferRequest {
     protected String description;
     protected String referenceNumber;
     protected String remark;
+    protected String transactionNumber;
     protected String transactionState;
     protected Integer transferID;
 
@@ -115,6 +118,30 @@ public class UpdateTransferRequest {
      */
     public void setRemark(String value) {
         this.remark = value;
+    }
+
+    /**
+     * Gets the value of the transactionNumber property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getTransactionNumber() {
+        return transactionNumber;
+    }
+
+    /**
+     * Sets the value of the transactionNumber property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setTransactionNumber(String value) {
+        this.transactionNumber = value;
     }
 
     /**
