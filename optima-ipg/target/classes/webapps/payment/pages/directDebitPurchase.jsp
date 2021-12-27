@@ -49,7 +49,7 @@
       
       <div class="container container-data">
         <div class="alert alert-warning" role="alert">
-            <p>Transaksi berhasil, berikut detail transaksi anda.</p> 
+            <p>Transaksi sedang di proses, berikut detail transaksi anda.</p> 
         </div>
         <h3 class="judul" style="font-size: 16px; font-weight: 600;">${eventName}</h3>
         <div class="row m-0 justify-content-between">

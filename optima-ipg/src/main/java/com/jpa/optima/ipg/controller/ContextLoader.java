@@ -78,6 +78,8 @@ public class ContextLoader {
 	private String DirectDebitResentOTP;
 	@Value("${direct.debit.username}")
 	private String DirectDebitUsername;
+	@Value("${direct.debit.purchase.redirect.url}")
+	private String DirectDebitPurchaseRedirectURL;
 	@Value("${linkaja.qr.url}")
 	private String LinkAjaQRURL;
 	@Value("${linkaja.qr.trf.type.id}")
@@ -366,6 +368,14 @@ public class ContextLoader {
 
 	public void setDirectDebitUsername(String directDebitUsername) {
 		DirectDebitUsername = directDebitUsername;
+	}
+
+	public String getDirectDebitPurchaseRedirectURL() {
+		return DirectDebitPurchaseRedirectURL;
+	}
+
+	public void setDirectDebitPurchaseRedirectURL(String directDebitPurchaseRedirectURL) {
+		DirectDebitPurchaseRedirectURL = directDebitPurchaseRedirectURL;
 	}
 
 	public String getLinkAjaQRURL() {

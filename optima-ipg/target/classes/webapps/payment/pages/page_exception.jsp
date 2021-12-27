@@ -8,7 +8,7 @@
 	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
 	<title>Jatelindo PaymentPage</title>
-
+	<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
 	<!-- Google font -->
 	<link href="https://fonts.googleapis.com/css?family=Maven+Pro:400,900" rel="stylesheet">
 

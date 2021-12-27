@@ -56,43 +56,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LoadPermissionByPaymentChannelResponse }
+     * Create an instance of {@link PaymentChannel }
      * 
      */
-    public LoadPermissionByPaymentChannelResponse createLoadPermissionByPaymentChannelResponse() {
-        return new LoadPermissionByPaymentChannelResponse();
-    }
-
-    /**
-     * Create an instance of {@link BillInquiryResponse }
-     * 
-     */
-    public BillInquiryResponse createBillInquiryResponse() {
-        return new BillInquiryResponse();
-    }
-
-    /**
-     * Create an instance of {@link BillPaymentRequest }
-     * 
-     */
-    public BillPaymentRequest createBillPaymentRequest() {
-        return new BillPaymentRequest();
-    }
-
-    /**
-     * Create an instance of {@link BillerDetailsRequest }
-     * 
-     */
-    public BillerDetailsRequest createBillerDetailsRequest() {
-        return new BillerDetailsRequest();
-    }
-
-    /**
-     * Create an instance of {@link Billers }
-     * 
-     */
-    public Billers createBillers() {
-        return new Billers();
+    public PaymentChannel createPaymentChannel() {
+        return new PaymentChannel();
     }
 
     /**
@@ -104,51 +72,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PaymentChannelRequest }
+     * Create an instance of {@link BillerRegisterRequest }
      * 
      */
-    public PaymentChannelRequest createPaymentChannelRequest() {
-        return new PaymentChannelRequest();
+    public BillerRegisterRequest createBillerRegisterRequest() {
+        return new BillerRegisterRequest();
     }
 
     /**
-     * Create an instance of {@link PaymentChannelResponse }
+     * Create an instance of {@link BillInquiryResponse }
      * 
      */
-    public PaymentChannelResponse createPaymentChannelResponse() {
-        return new PaymentChannelResponse();
-    }
-
-    /**
-     * Create an instance of {@link BillInquiryRequest }
-     * 
-     */
-    public BillInquiryRequest createBillInquiryRequest() {
-        return new BillInquiryRequest();
-    }
-
-    /**
-     * Create an instance of {@link LoadPaymentChannelByMemberIDRequest }
-     * 
-     */
-    public LoadPaymentChannelByMemberIDRequest createLoadPaymentChannelByMemberIDRequest() {
-        return new LoadPaymentChannelByMemberIDRequest();
-    }
-
-    /**
-     * Create an instance of {@link Exception }
-     * 
-     */
-    public Exception createException() {
-        return new Exception();
-    }
-
-    /**
-     * Create an instance of {@link LoadPaymentChannelByMemberIDResponse }
-     * 
-     */
-    public LoadPaymentChannelByMemberIDResponse createLoadPaymentChannelByMemberIDResponse() {
-        return new LoadPaymentChannelByMemberIDResponse();
+    public BillInquiryResponse createBillInquiryResponse() {
+        return new BillInquiryResponse();
     }
 
     /**
@@ -160,11 +96,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PaymentChannel }
+     * Create an instance of {@link PaymentChannelResponse }
      * 
      */
-    public PaymentChannel createPaymentChannel() {
-        return new PaymentChannel();
+    public PaymentChannelResponse createPaymentChannelResponse() {
+        return new PaymentChannelResponse();
+    }
+
+    /**
+     * Create an instance of {@link BillPaymentRequest }
+     * 
+     */
+    public BillPaymentRequest createBillPaymentRequest() {
+        return new BillPaymentRequest();
     }
 
     /**
@@ -176,35 +120,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PaymentChannelPermissionRequest }
+     * Create an instance of {@link Header }
      * 
      */
-    public PaymentChannelPermissionRequest createPaymentChannelPermissionRequest() {
-        return new PaymentChannelPermissionRequest();
+    public Header createHeader() {
+        return new Header();
     }
 
     /**
-     * Create an instance of {@link LoadPermissionByPaymentChannelRequest }
+     * Create an instance of {@link LoadPaymentChannelByMemberIDResponse }
      * 
      */
-    public LoadPermissionByPaymentChannelRequest createLoadPermissionByPaymentChannelRequest() {
-        return new LoadPermissionByPaymentChannelRequest();
+    public LoadPaymentChannelByMemberIDResponse createLoadPaymentChannelByMemberIDResponse() {
+        return new LoadPaymentChannelByMemberIDResponse();
     }
 
     /**
-     * Create an instance of {@link LoadPaymentChannelByIDRequest }
+     * Create an instance of {@link LoadPermissionByPaymentChannelResponse }
      * 
      */
-    public LoadPaymentChannelByIDRequest createLoadPaymentChannelByIDRequest() {
-        return new LoadPaymentChannelByIDRequest();
+    public LoadPermissionByPaymentChannelResponse createLoadPermissionByPaymentChannelResponse() {
+        return new LoadPermissionByPaymentChannelResponse();
     }
 
     /**
-     * Create an instance of {@link BillerListResponse }
+     * Create an instance of {@link BillInquiryRequest }
      * 
      */
-    public BillerListResponse createBillerListResponse() {
-        return new BillerListResponse();
+    public BillInquiryRequest createBillInquiryRequest() {
+        return new BillInquiryRequest();
     }
 
     /**
@@ -216,19 +160,75 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link BillerRegisterRequest }
+     * Create an instance of {@link PaymentChannelPermissionRequest }
      * 
      */
-    public BillerRegisterRequest createBillerRegisterRequest() {
-        return new BillerRegisterRequest();
+    public PaymentChannelPermissionRequest createPaymentChannelPermissionRequest() {
+        return new PaymentChannelPermissionRequest();
     }
 
     /**
-     * Create an instance of {@link Header }
+     * Create an instance of {@link Exception }
      * 
      */
-    public Header createHeader() {
-        return new Header();
+    public Exception createException() {
+        return new Exception();
+    }
+
+    /**
+     * Create an instance of {@link Billers }
+     * 
+     */
+    public Billers createBillers() {
+        return new Billers();
+    }
+
+    /**
+     * Create an instance of {@link LoadPaymentChannelByIDRequest }
+     * 
+     */
+    public LoadPaymentChannelByIDRequest createLoadPaymentChannelByIDRequest() {
+        return new LoadPaymentChannelByIDRequest();
+    }
+
+    /**
+     * Create an instance of {@link PaymentChannelRequest }
+     * 
+     */
+    public PaymentChannelRequest createPaymentChannelRequest() {
+        return new PaymentChannelRequest();
+    }
+
+    /**
+     * Create an instance of {@link LoadPaymentChannelByMemberIDRequest }
+     * 
+     */
+    public LoadPaymentChannelByMemberIDRequest createLoadPaymentChannelByMemberIDRequest() {
+        return new LoadPaymentChannelByMemberIDRequest();
+    }
+
+    /**
+     * Create an instance of {@link BillerListResponse }
+     * 
+     */
+    public BillerListResponse createBillerListResponse() {
+        return new BillerListResponse();
+    }
+
+    /**
+     * Create an instance of {@link LoadPermissionByPaymentChannelRequest }
+     * 
+     */
+    public LoadPermissionByPaymentChannelRequest createLoadPermissionByPaymentChannelRequest() {
+        return new LoadPermissionByPaymentChannelRequest();
+    }
+
+    /**
+     * Create an instance of {@link BillerDetailsRequest }
+     * 
+     */
+    public BillerDetailsRequest createBillerDetailsRequest() {
+        return new BillerDetailsRequest();
     }
 
     /**

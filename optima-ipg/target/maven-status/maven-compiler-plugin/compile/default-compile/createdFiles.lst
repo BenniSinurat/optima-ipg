@@ -12,6 +12,8 @@ org/bellatrix/services/ws/members/package-info.class
 com/jpa/optima/ipg/model/additionalData.class
 com/jpa/optima/ipg/model/ValidateMandiriEncryptData.class
 org/bellatrix/services/ws/virtualaccount/LoadVAByEventRequest.class
+com/jpa/optima/ipg/process/IPGRepository$2.class
+com/jpa/optima/ipg/model/DebitCardDetailsResponse.class
 com/jpa/optima/ipg/model/DirectDebitInquiryStatusRequest.class
 org/bellatrix/services/ws/members/ValidateKYCRequest.class
 com/jpa/optima/ipg/model/DirectDebitRemoveCardResponse.class
@@ -186,6 +188,7 @@ org/bellatrix/services/ws/members/RegisterMemberRequest.class
 org/bellatrix/services/ws/members/ConfirmKYCRequest.class
 com/jpa/optima/ipg/model/DirectDebit.class
 com/jpa/optima/ipg/model/DirectDebitPurchaseRequest.class
+com/jpa/optima/ipg/model/DebitCard.class
 org/bellatrix/services/ws/message/UnreadMessage.class
 org/bellatrix/services/ws/transfertypes/MemberFields.class
 org/bellatrix/services/ws/virtualaccount/CreateVAEventRequest.class

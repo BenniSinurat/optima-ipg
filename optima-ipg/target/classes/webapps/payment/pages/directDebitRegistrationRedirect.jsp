@@ -7,6 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
 <!--[if lt IE 9]>
 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
@@ -14,7 +15,7 @@
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>   
 </head>
 
-<body onload="document.frm_request.submit();">
+<body onload="document.getElementById('frm_request').submit();">
 	<div>
 		<form name="frm_request" id="frm_request" role="form" class="form-horizontal" action="${url}/MTIDDPortal/registration" method="post">								
 			<input type="hidden" name="jwt" value="${jwt}">

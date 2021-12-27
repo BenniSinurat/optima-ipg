@@ -1,1 +1,13 @@
+/.DS_Store
+/com/
+/org/
+/development.properties
+/drc.properties
+/hazelcast.xsd
+/log4j2.xml
+/mule-app.properties
+/mule-deploy.properties
+/optima-ipg.xml
+/production.properties
+/staging.properties
 /webapps/

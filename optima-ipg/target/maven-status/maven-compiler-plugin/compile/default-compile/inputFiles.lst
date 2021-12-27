@@ -31,6 +31,7 @@
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/members/Billers.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/billpayments/BillInquiryRequest.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/members/LoadMerchantCategoryResponse.java
+/Users/bennisinurat/git/optima-ipg/optima-ipg/src/main/java/com/jpa/optima/ipg/model/DebitCard.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/members/MemberFields.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/access/Exception.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/payments/Header.java
@@ -108,6 +109,7 @@
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/payments/PaymentFields.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/members/ConfirmMerchantRequest.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/members/Exception_Exception.java
+/Users/bennisinurat/git/optima-ipg/optima-ipg/src/main/java/com/jpa/optima/ipg/model/DebitCardDetailsResponse.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/members/ExternalMemberFields.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/virtualaccount/MemberFields.java
 /Users/bennisinurat/git/optima-ipg/optima-ipg/target/generated/cxf/org/bellatrix/services/ws/billpayments/BillInquiryResponse.java

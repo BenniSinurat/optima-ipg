@@ -9,6 +9,8 @@ import com.jpa.optima.ipg.helper.QRCodeHelper;
 import com.jpa.optima.ipg.helper.Utils;
 import com.jpa.optima.ipg.model.BillingSuccess;
 import com.jpa.optima.ipg.model.CreditCardParam;
+import com.jpa.optima.ipg.model.DebitCard;
+import com.jpa.optima.ipg.model.DebitCardDetailsResponse;
 import com.jpa.optima.ipg.model.DeepLinkPaymentRequest;
 import com.jpa.optima.ipg.model.DeepLinkRequest;
 import com.jpa.optima.ipg.model.DeepLinkResponse;
@@ -246,6 +248,7 @@ public class IPGController {
 			logger.info("[Request IP Address : " + req.getRemoteAddr() + "]");
 			logger.info("[EventID : " + eventId + " SessionID : " + sessionID + "]");
 
+			// Direct Debit
 			MerchantDetails merchants = ipgValidation.merchantDetails(mid);
 
 			IMap<String, Ticket> tMap = instance.getMap("PaymentRequestMap");
@@ -1754,6 +1757,17 @@ public class IPGController {
 			} else {
 				logger.info("Channel Payment : " + ti.getPaymentChannel().intValue());
 				logger.info("--" + ch.getPaymentChannel().getName() + "--");
+				if (ch.getPaymentChannel().getId() == 1) {
+					PaymentResponse pr = paymentPageProcessor.doPayment(response.getSessionID(), t.getMerchantID(), t.getInvoiceID(),
+							t.getDescription(), ti.getFinalAmount());
+					if(!pr.getStatus().getMessage().equals("PROCESSED")) {
+						logger.error("[Payment Failed]");
+						model.addAttribute("httpResponseCode", "500");
+						model.addAttribute("status", "Oops !");
+						model.addAttribute("description",
+								"We are experiencing some trouble here, but don't worry our team are OTW to solve this");
+					}
+				}
 				return ch.getPaymentChannel().getLink();
 			}
 		} catch (NullPointerException ex) {
@@ -1870,7 +1884,9 @@ public class IPGController {
 				model.addAttribute("eventOrganizer", t.getMerchantName());
 				return "directDebit";
 			} else {
+				model.addAttribute("msisdn", t.getMsisdn());
 				model.addAttribute("ticketID", directDebit.getTicketID());
+				model.addAttribute("merchantID", t.getMerchantID());
 
 				return "directDebitPurchaseForm";
 			}
@@ -1922,14 +1938,29 @@ public class IPGController {
 			model.addAttribute("url", contextLoader.getDirectDebitRegistrationURL());
 
 			return "directDebitRegistrationRedirect";
-
 		} catch (NullPointerException ex) {
 			logger.error("[Ticket Not Found/Expired]");
 			model.addAttribute("httpResponseCode", "404");
 			model.addAttribute("status", "TicketID Not Found");
 			model.addAttribute("description", "Expired/Invalid TicketID");
 			return "page_exception";
+		} catch (JSONException ex) {
+			logger.error("[JSON Exception]");
+			model.addAttribute("httpResponseCode", "500");
+			model.addAttribute("status", "Oops !");
+			model.addAttribute("description",
+					"We are experiencing some trouble here, but don't worry our team are OTW to solve this");
+			return "page_exception";
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("[" + e.getCause() + "]");
+			model.addAttribute("httpResponseCode", "500");
+			model.addAttribute("status", "Oops !");
+			model.addAttribute("description",
+					"We are experiencing some trouble here, but don't worry our team are OTW to solve this");
+			return "page_exception";
 		}
+
 	}
 
 	// Direct Debit Registration Redirect
@@ -2014,7 +2045,8 @@ public class IPGController {
 
 			if (req.getResponseCode().equalsIgnoreCase("00")) {
 				logger.info("[Debit Registration Success : " + req.getMaskedCardNumber() + "]");
-				ipgValidation.createDebitCards(t.getMsisdn(), req.getToken(), 1);
+				ipgValidation.createDebitCards(t.getMsisdn(), req.getToken(), 1, req.getMaskedCardNumber(),
+						req.getExpiredDate(), req.getBankCode(), req.getBankName());
 
 				resNotif.setResponseMessage("Success");
 				resNotif.setResponseCode("00");
@@ -2106,7 +2138,7 @@ public class IPGController {
 			model.addAttribute("status", "TicketID Not Found");
 			model.addAttribute("description", "Expired/Invalid TicketID");
 			return "page_exception";
-		} catch (MalformedURLException | DatatypeConfigurationException | ParseException ex) {
+		} catch (MalformedURLException | DatatypeConfigurationException | ParseException | JSONException ex) {
 			ex.printStackTrace();
 			logger.error("[" + ex.getCause() + "]");
 			model.addAttribute("httpResponseCode", "500");
@@ -2119,7 +2151,7 @@ public class IPGController {
 
 	@RequestMapping(value = { "/directDebitPurchase" }, method = RequestMethod.POST)
 	public String DirectDebitPurchaseRedirection(@Valid @ModelAttribute("directdebit") DirectDebitRequest directDebit,
-			BindingResult result, ModelMap model) {
+			BindingResult result, ModelMap model) throws JSONException {
 		try {
 			IMap<String, Ticket> tMap = instance.getMap("PaymentRequestMap");
 			Ticket t = tMap.get(directDebit.getTicketID());
@@ -2199,14 +2231,17 @@ public class IPGController {
 								paymentPageProcessor.loadVAEvent(t.getEventID()).getEvent().get(0).getDescription());
 					}
 
-					model.addAttribute("username", t.getMerchantID());
+					model.addAttribute("merchantID", t.getMerchantID());
 					model.addAttribute("eventOrganizer", t.getMerchantName());
-					model.addAttribute("description", t.getDescription());
+					model.addAttribute("transactionDescription", t.getDescription());
 					model.addAttribute("transactionDate", trxDate2);
 					model.addAttribute("transactionNumber", payRes.getTransactionNumber());
 					model.addAttribute("msisdn", t.getMsisdn());
+					model.addAttribute("status", "Pending");
+					model.addAttribute("description", "Transaction in process");
+					model.addAttribute("redirectURL", contextLoader.getDirectDebitPurchaseRedirectURL());
 
-					return "directDebitPurchase";
+					return "directDebitPurchaseRedirect";
 				} else {
 					ReversalRequest rreq = new ReversalRequest();
 					rreq.setUsername(t.getMerchantID());
@@ -2216,34 +2251,35 @@ public class IPGController {
 					ReversalResponse rres = paymentPageProcessor.reversePayment(rreq);
 
 					logger.error("[Reverse Status: ]" + rres.getStatus().getDescription());
-					model.addAttribute("httpResponseCode", "404");
 					model.addAttribute("status", resp.getResponseMessage());
 					model.addAttribute("description", resp.getResponseMessage());
-					return "page_exception";
+					model.addAttribute("redirectURL", contextLoader.getDirectDebitPurchaseRedirectURL());
+
+					return "directDebitPurchaseRedirect";
 				}
 			}
 
 			logger.error("[Direct Debit Payment Failed : " + payRes.getStatus().getDescription() + "]");
-			model.addAttribute("httpResponseCode", "404");
 			model.addAttribute("status", payRes.getStatus().getMessage());
 			model.addAttribute("description", payRes.getStatus().getDescription());
-			return "page_exception";
+			model.addAttribute("redirectURL", contextLoader.getDirectDebitPurchaseRedirectURL());
+			return "directDebitPurchaseRedirect";
 		} catch (NullPointerException ex) {
 			ex.printStackTrace();
 			logger.error("[Ticket Not Found/Expired]");
-			model.addAttribute("httpResponseCode", "404");
 			model.addAttribute("status", "TicketID Not Found");
 			model.addAttribute("description", "Expired/Invalid TicketID");
-			return "page_exception";
+			model.addAttribute("redirectURL", contextLoader.getDirectDebitPurchaseRedirectURL());
+			return "directDebitPurchaseRedirect";
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			logger.error("[" + ex.getCause() + "]");
-			model.addAttribute("httpResponseCode", "500");
-			model.addAttribute("status", "Oops !");
+			model.addAttribute("status", "Failed");
 			model.addAttribute("description",
 					"We are experiencing some trouble here, but don't worry our team are OTW to solve this");
+			model.addAttribute("redirectURL", contextLoader.getDirectDebitPurchaseRedirectURL());
 		}
-		return "page_exception";
+		return "directDebitPurchaseRedirect";
 	}
 
 	// Direct Debit Purchase Callback
@@ -2329,7 +2365,7 @@ public class IPGController {
 				ReversalResponse rres = paymentPageProcessor.reversePayment(rreq);
 
 				res = paymentPageProcessor.purchaseRedirect(billing.getTicketID(), billing.getTransactionNumber(),
-						"FAILED", t.getMsisdn());
+						req.getResponseMessage(), t.getMsisdn());
 
 				logger.info("Direct Debit Payment Reverse " + rreq.getTraceNumber() + " Response : "
 						+ rres.getStatus().getDescription() + "]");
@@ -2351,7 +2387,7 @@ public class IPGController {
 		return resNotif;
 	}
 
-	// Direct Debit Redirection
+	// Direct Debit PurchaseCallback
 	@RequestMapping(value = { "/directDebitPurchaseRedirect" }, method = RequestMethod.GET)
 	public void directDebitPurchaseRedirect(@RequestParam(value = "ticketID", required = true) String ticketID,
 			@RequestParam(value = "msisdn", required = true) String msisdn,
@@ -2366,6 +2402,7 @@ public class IPGController {
 			Ticket ti = (Ticket) vaMap.get(ticketID);
 
 			logger.info("[Payment IP Address : " + req.getRemoteAddr() + "]");
+			logger.info("[Callback URL : " + t.getCallback() + "]");
 
 			CredentialResponse cr = paymentPageProcessor.loadCredential(t.getMerchantID(), Integer.valueOf(2));
 			String rawhashing = "";
@@ -2381,24 +2418,24 @@ public class IPGController {
 			if (status.equalsIgnoreCase("PROCESSED")) {
 				t.setPaymentChannel(t.getPaymentChannel());
 				t.setStatus("PROCESSED");
-				
+
 				stat = "PROCESSED";
 				desc = t.getDescription();
 
 			} else {
-				logger.info("[VOID Status ResponseCode : FAILED ]");
+				logger.info("[VOID Status ResponseCode : " + status + " ]");
 				t.setStatus("FAILED");
 				t.setPaymentChannel(t.getPaymentChannel());
-				
+
 				stat = "FAILED";
-				desc = "Something isn't quite right, We were reversing your payment...";
+				desc = status;
 			}
 			IMap<String, Ticket> sMap = instance.getMap("PaymentSessionMap");
 			sMap.put(sessionMap, t);
-			String res = paymentPageProcessor.directDebitPurchaseCallback(t.getMerchantID(), t.getInvoiceID(), ti.getFinalAmount(),
-					t.getSessionID(), t.getCurrency(), t.getPaymentChannel(), ticketID, transactionNumber, t.getName(),
-					t.getEmail(), t.getMsisdn(), desc, sha256hex, stat, BigDecimal.ZERO, t.getCity(),
-					t.getPostalCode(), t.getCallback());
+			String res = paymentPageProcessor.directDebitPurchaseCallback(t.getMerchantID(), t.getInvoiceID(),
+					ti.getFinalAmount(), t.getSessionID(), t.getCurrency(), t.getPaymentChannel(), ticketID,
+					transactionNumber, t.getName(), t.getEmail(), t.getMsisdn(), desc, sha256hex, stat, BigDecimal.ZERO,
+					t.getCity(), t.getPostalCode(), t.getCallback());
 			logger.info("Direct Debit callback response: " + res);
 		} catch (NullPointerException ex) {
 			ex.printStackTrace();
@@ -2660,6 +2697,7 @@ public class IPGController {
 			model.addAttribute("description", "Insufficient Mandatory Parameter : words");
 			return "page_exception";
 		}
+
 		if (msisdn == "") {
 			model.addAttribute("httpResponseCode", "400");
 			model.addAttribute("status", "Bad Request");
@@ -2675,6 +2713,7 @@ public class IPGController {
 		logger.info(
 				"[Direct Debit Remove Card : Merchant ID : " + mid + " Msisdn : " + msisdn + " Words : " + words + "]");
 		try {
+
 			CredentialResponse cr = paymentPageProcessor.loadCredential(mid, Integer.valueOf(2));
 			String rawhashing = "";
 			rawhashing = mid + msisdn + cr.getCredential();
@@ -2768,12 +2807,14 @@ public class IPGController {
 			@RequestParam(value = "merchantID", required = true) String mid,
 			@RequestParam(value = "words", required = true) String words, Model model, HttpServletRequest reqh)
 			throws Exception {
+
 		if (words == "") {
 			model.addAttribute("httpResponseCode", "400");
 			model.addAttribute("status", "Bad Request");
 			model.addAttribute("description", "Insufficient Mandatory Parameter : words");
 			return "page_exception";
 		}
+
 		if (msisdn == "") {
 			model.addAttribute("httpResponseCode", "400");
 			model.addAttribute("status", "Bad Request");
@@ -2789,6 +2830,7 @@ public class IPGController {
 		logger.info("[Direct Debit Set Token Limit Request : Merchant ID : " + mid + " Msisdn : " + msisdn + " Words : "
 				+ words + "]");
 		try {
+
 			CredentialResponse cr = paymentPageProcessor.loadCredential(mid, Integer.valueOf(2));
 			String rawhashing = "";
 			rawhashing = mid + msisdn + cr.getCredential();
@@ -2958,6 +3000,87 @@ public class IPGController {
 
 		DirectDebitPurchaseOTPResponse otpRes = paymentPageProcessor.directDebitRequestOTP(t, key, otpReq);
 		logger.info("[Direct Debit Resend OTP : " + otpRes.getResponseMessage() + "]");
+	}
+
+	@ResponseBody
+	@RequestMapping(value = { "/directDebitCardDetails" }, method = RequestMethod.POST)
+	public DebitCardDetailsResponse directDebitCardDetails(
+			@RequestParam(value = "msisdn", required = true) String msisdn,
+			@RequestParam(value = "merchantID", required = true) String mid,
+			@RequestParam(value = "words", required = true) String words, Model model, HttpServletRequest reqh)
+			throws Exception {
+		DebitCardDetailsResponse dcRp = new DebitCardDetailsResponse();
+		if (words == "") {
+			dcRp.setStatus("Bad Request");
+			dcRp.setDescription("Insufficient Mandatory Parameter : words");
+			return dcRp;
+		}
+
+		if (msisdn == "") {
+			dcRp.setStatus("Bad Request");
+			dcRp.setDescription("Insufficient Mandatory Parameter : msisdn");
+			return dcRp;
+		}
+		if (mid == "") {
+			dcRp.setStatus("Bad Request");
+			dcRp.setDescription("Insufficient Mandatory Parameter : merchantID");
+			return dcRp;
+		}
+		logger.info("[Direct Debit Set Token Limit Request : Merchant ID : " + mid + " Msisdn : " + msisdn + " Words : "
+				+ words + "]");
+		try {
+
+			CredentialResponse cr = paymentPageProcessor.loadCredential(mid, Integer.valueOf(2));
+			String rawhashing = "";
+			rawhashing = mid + msisdn + cr.getCredential();
+
+			String sha256hex = DigestUtils.sha256Hex(rawhashing);
+			logger.info("[Request WORDS : " + words + ", Before Hash : " + rawhashing + ", Hashed WORDS : " + sha256hex
+					+ "]");
+			if (sha256hex.compareTo(words) != 0) {
+				logger.info("[INVALID Words = [Request :" + words + "] [Calculated :" + sha256hex + "]");
+				dcRp.setStatus("Unauthorized");
+				dcRp.setDescription("You have invalid WORDS");
+
+				return dcRp;
+			}
+
+			MerchantDetails merchants = ipgValidation.merchantDetails(mid);
+			if (merchants == null) {
+				logger.error("[Merchant Not Found]");
+				dcRp.setStatus("Failed");
+				dcRp.setDescription("Merchant Not Found");
+
+				return dcRp;
+			}
+
+			DebitCard dc = ipgValidation.debitCardDetails(msisdn, 1);
+			if (dc == null) {
+				logger.error("[Debit Card Not Found]");
+				dcRp.setStatus("Failed");
+				dcRp.setDescription("Debit Card Not Found");
+
+				return dcRp;
+			}
+
+			dcRp.setDebitCards(dc);
+			dcRp.setStatus("Processed");
+			dcRp.setDescription("Get debit card details success!");
+
+		} catch (NullPointerException ex) {
+			logger.error("[Ticket Not Found/Expired]");
+			dcRp.setStatus("TicketID Not Found");
+			dcRp.setDescription("Expired/Invalid TicketID");
+			return dcRp;
+		} catch (MalformedURLException ex) {
+			ex.printStackTrace();
+			logger.error("[" + ex.getCause() + "]");
+			dcRp.setStatus("Oops !");
+			dcRp.setDescription(
+					"We are experiencing some trouble here, but don't worry our team are OTW to solve this");
+		}
+		return dcRp;
+
 	}
 
 }

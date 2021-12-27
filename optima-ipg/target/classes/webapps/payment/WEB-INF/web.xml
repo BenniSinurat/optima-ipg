@@ -64,6 +64,7 @@
 		<url-pattern>/directDebitSetTokenLimitRequest</url-pattern>
 		<url-pattern>/directDebitSetTokenLimit</url-pattern>
 		<url-pattern>/directDebitPurchaseRedirect</url-pattern>
+		<url-pattern>/directDebitCardDetails</url-pattern>
 	</servlet-mapping>
 
 	<listener>

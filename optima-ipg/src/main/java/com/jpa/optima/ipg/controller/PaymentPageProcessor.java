@@ -115,6 +115,7 @@ import org.bellatrix.services.ws.virtualaccount.VaRegisterRequest;
 import org.bellatrix.services.ws.virtualaccount.VaRegisterResponse;
 import org.bellatrix.services.ws.virtualaccount.VirtualAccount;
 import org.bellatrix.services.ws.virtualaccount.VirtualAccountService;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
@@ -931,7 +932,8 @@ public class PaymentPageProcessor {
 	}
 
 	public String getTokenDirectDebit(Ticket t) throws IOException, NoSuchAlgorithmException, InvalidKeyException,
-			NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+			NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException,
+			JSONException {
 		String result = "";
 		String timestamp = Utils.GetDate("yyyy-MM-dd HH:mm:ss");
 
