@@ -18,6 +18,8 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="referenceNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="remark" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="transactionNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="transactionState" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="transferID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *       &lt;/sequence>
@@ -32,6 +34,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "updateTransferRequest", propOrder = {
     "description",
     "referenceNumber",
+    "remark",
+    "transactionNumber",
     "transactionState",
     "transferID"
 })
@@ -39,6 +43,8 @@ public class UpdateTransferRequest {
 
     protected String description;
     protected String referenceNumber;
+    protected String remark;
+    protected String transactionNumber;
     protected String transactionState;
     protected Integer transferID;
 
@@ -88,6 +94,54 @@ public class UpdateTransferRequest {
      */
     public void setReferenceNumber(String value) {
         this.referenceNumber = value;
+    }
+
+    /**
+     * Gets the value of the remark property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getRemark() {
+        return remark;
+    }
+
+    /**
+     * Sets the value of the remark property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setRemark(String value) {
+        this.remark = value;
+    }
+
+    /**
+     * Gets the value of the transactionNumber property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getTransactionNumber() {
+        return transactionNumber;
+    }
+
+    /**
+     * Sets the value of the transactionNumber property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setTransactionNumber(String value) {
+        this.transactionNumber = value;
     }
 
     /**

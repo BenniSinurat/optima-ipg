@@ -30,8 +30,10 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="formattedTransactionDate" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="fromMember" type="{http://services.bellatrix.org/}memberView" minOccurs="0"/>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+ *         &lt;element name="originator" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="parentID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="referenceNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="remark" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="reverseBy" type="{http://services.bellatrix.org/}memberView" minOccurs="0"/>
  *         &lt;element name="toMember" type="{http://services.bellatrix.org/}memberView" minOccurs="0"/>
  *         &lt;element name="traceNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -57,8 +59,10 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "formattedTransactionDate",
     "fromMember",
     "id",
+    "originator",
     "parentID",
     "referenceNumber",
+    "remark",
     "reverseBy",
     "toMember",
     "traceNumber",
@@ -78,8 +82,10 @@ public class TransferHistory {
     protected String formattedTransactionDate;
     protected MemberView fromMember;
     protected Integer id;
+    protected String originator;
     protected String parentID;
     protected String referenceNumber;
+    protected String remark;
     protected MemberView reverseBy;
     protected MemberView toMember;
     protected String traceNumber;
@@ -279,6 +285,30 @@ public class TransferHistory {
     }
 
     /**
+     * Gets the value of the originator property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getOriginator() {
+        return originator;
+    }
+
+    /**
+     * Sets the value of the originator property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setOriginator(String value) {
+        this.originator = value;
+    }
+
+    /**
      * Gets the value of the parentID property.
      * 
      * @return
@@ -324,6 +354,30 @@ public class TransferHistory {
      */
     public void setReferenceNumber(String value) {
         this.referenceNumber = value;
+    }
+
+    /**
+     * Gets the value of the remark property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getRemark() {
+        return remark;
+    }
+
+    /**
+     * Sets the value of the remark property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setRemark(String value) {
+        this.remark = value;
     }
 
     /**

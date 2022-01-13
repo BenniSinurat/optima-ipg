@@ -33,7 +33,9 @@ public class ObjectFactory {
     private final static QName _CreatePaymentChannelPermissions_QNAME = new QName("http://services.bellatrix.org/", "createPaymentChannelPermissions");
     private final static QName _RegisterBiller_QNAME = new QName("http://services.bellatrix.org/", "registerBiller");
     private final static QName _HeaderAuth_QNAME = new QName("http://services.bellatrix.org/", "headerAuth");
+    private final static QName _LoadPaymentChannelByID_QNAME = new QName("http://services.bellatrix.org/", "loadPaymentChannelByID");
     private final static QName _LoadBillersFromUsername_QNAME = new QName("http://services.bellatrix.org/", "loadBillersFromUsername");
+    private final static QName _LoadPaymentChannelByIDResponse_QNAME = new QName("http://services.bellatrix.org/", "loadPaymentChannelByIDResponse");
     private final static QName _LoadPaymentChannelByMemberIDResponse_QNAME = new QName("http://services.bellatrix.org/", "loadPaymentChannelByMemberIDResponse");
     private final static QName _LoadBillersFromUsernameResponse_QNAME = new QName("http://services.bellatrix.org/", "loadBillersFromUsernameResponse");
     private final static QName _UpdatePaymentChannelPermissions_QNAME = new QName("http://services.bellatrix.org/", "updatePaymentChannelPermissions");
@@ -54,19 +56,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link BillerRegisterRequest }
+     * Create an instance of {@link Header }
      * 
      */
-    public BillerRegisterRequest createBillerRegisterRequest() {
-        return new BillerRegisterRequest();
+    public Header createHeader() {
+        return new Header();
     }
 
     /**
-     * Create an instance of {@link PaymentChannelRequest }
+     * Create an instance of {@link BillInquiryRequest }
      * 
      */
-    public PaymentChannelRequest createPaymentChannelRequest() {
-        return new PaymentChannelRequest();
+    public BillInquiryRequest createBillInquiryRequest() {
+        return new BillInquiryRequest();
     }
 
     /**
@@ -78,11 +80,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link BillerListResponse }
+     * Create an instance of {@link PaymentChannelRequest }
      * 
      */
-    public BillerListResponse createBillerListResponse() {
-        return new BillerListResponse();
+    public PaymentChannelRequest createPaymentChannelRequest() {
+        return new PaymentChannelRequest();
     }
 
     /**
@@ -94,11 +96,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LoadPermissionByPaymentChannelResponse }
+     * Create an instance of {@link BillerDetailsRequest }
      * 
      */
-    public LoadPermissionByPaymentChannelResponse createLoadPermissionByPaymentChannelResponse() {
-        return new LoadPermissionByPaymentChannelResponse();
+    public BillerDetailsRequest createBillerDetailsRequest() {
+        return new BillerDetailsRequest();
     }
 
     /**
@@ -110,11 +112,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LoadPaymentChannelByMemberIDRequest }
+     * Create an instance of {@link BillPaymentResponse }
      * 
      */
-    public LoadPaymentChannelByMemberIDRequest createLoadPaymentChannelByMemberIDRequest() {
-        return new LoadPaymentChannelByMemberIDRequest();
+    public BillPaymentResponse createBillPaymentResponse() {
+        return new BillPaymentResponse();
     }
 
     /**
@@ -126,19 +128,59 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link BillPaymentRequest }
+     * Create an instance of {@link LoadPaymentChannelByIDResponse }
      * 
      */
-    public BillPaymentRequest createBillPaymentRequest() {
-        return new BillPaymentRequest();
+    public LoadPaymentChannelByIDResponse createLoadPaymentChannelByIDResponse() {
+        return new LoadPaymentChannelByIDResponse();
     }
 
     /**
-     * Create an instance of {@link PaymentChannelResponse }
+     * Create an instance of {@link LoadPaymentChannelByIDRequest }
      * 
      */
-    public PaymentChannelResponse createPaymentChannelResponse() {
-        return new PaymentChannelResponse();
+    public LoadPaymentChannelByIDRequest createLoadPaymentChannelByIDRequest() {
+        return new LoadPaymentChannelByIDRequest();
+    }
+
+    /**
+     * Create an instance of {@link ResponseStatus }
+     * 
+     */
+    public ResponseStatus createResponseStatus() {
+        return new ResponseStatus();
+    }
+
+    /**
+     * Create an instance of {@link LoadPermissionByPaymentChannelRequest }
+     * 
+     */
+    public LoadPermissionByPaymentChannelRequest createLoadPermissionByPaymentChannelRequest() {
+        return new LoadPermissionByPaymentChannelRequest();
+    }
+
+    /**
+     * Create an instance of {@link PaymentChannel }
+     * 
+     */
+    public PaymentChannel createPaymentChannel() {
+        return new PaymentChannel();
+    }
+
+    /**
+     * Create an instance of {@link LoadPaymentChannelByMemberIDRequest }
+     * 
+     */
+    public LoadPaymentChannelByMemberIDRequest createLoadPaymentChannelByMemberIDRequest() {
+        return new LoadPaymentChannelByMemberIDRequest();
+    }
+
+    /**
+     * Create an instance of {@link LoadPermissionByPaymentChannelResponse }
+     * 
+     */
+    public LoadPermissionByPaymentChannelResponse createLoadPermissionByPaymentChannelResponse() {
+        return new LoadPermissionByPaymentChannelResponse();
     }
 
     /**
@@ -158,59 +200,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Header }
+     * Create an instance of {@link BillerListResponse }
      * 
      */
-    public Header createHeader() {
-        return new Header();
+    public BillerListResponse createBillerListResponse() {
+        return new BillerListResponse();
     }
 
     /**
-     * Create an instance of {@link BillPaymentResponse }
+     * Create an instance of {@link PaymentChannelResponse }
      * 
      */
-    public BillPaymentResponse createBillPaymentResponse() {
-        return new BillPaymentResponse();
+    public PaymentChannelResponse createPaymentChannelResponse() {
+        return new PaymentChannelResponse();
     }
 
     /**
-     * Create an instance of {@link BillerDetailsRequest }
+     * Create an instance of {@link BillPaymentRequest }
      * 
      */
-    public BillerDetailsRequest createBillerDetailsRequest() {
-        return new BillerDetailsRequest();
+    public BillPaymentRequest createBillPaymentRequest() {
+        return new BillPaymentRequest();
     }
 
     /**
-     * Create an instance of {@link ResponseStatus }
+     * Create an instance of {@link BillerRegisterRequest }
      * 
      */
-    public ResponseStatus createResponseStatus() {
-        return new ResponseStatus();
-    }
-
-    /**
-     * Create an instance of {@link PaymentChannel }
-     * 
-     */
-    public PaymentChannel createPaymentChannel() {
-        return new PaymentChannel();
-    }
-
-    /**
-     * Create an instance of {@link BillInquiryRequest }
-     * 
-     */
-    public BillInquiryRequest createBillInquiryRequest() {
-        return new BillInquiryRequest();
-    }
-
-    /**
-     * Create an instance of {@link LoadPermissionByPaymentChannelRequest }
-     * 
-     */
-    public LoadPermissionByPaymentChannelRequest createLoadPermissionByPaymentChannelRequest() {
-        return new LoadPermissionByPaymentChannelRequest();
+    public BillerRegisterRequest createBillerRegisterRequest() {
+        return new BillerRegisterRequest();
     }
 
     /**
@@ -295,12 +313,30 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link LoadPaymentChannelByIDRequest }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services.bellatrix.org/", name = "loadPaymentChannelByID")
+    public JAXBElement<LoadPaymentChannelByIDRequest> createLoadPaymentChannelByID(LoadPaymentChannelByIDRequest value) {
+        return new JAXBElement<LoadPaymentChannelByIDRequest>(_LoadPaymentChannelByID_QNAME, LoadPaymentChannelByIDRequest.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link BillerDetailsRequest }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://services.bellatrix.org/", name = "loadBillersFromUsername")
     public JAXBElement<BillerDetailsRequest> createLoadBillersFromUsername(BillerDetailsRequest value) {
         return new JAXBElement<BillerDetailsRequest>(_LoadBillersFromUsername_QNAME, BillerDetailsRequest.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link LoadPaymentChannelByIDResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services.bellatrix.org/", name = "loadPaymentChannelByIDResponse")
+    public JAXBElement<LoadPaymentChannelByIDResponse> createLoadPaymentChannelByIDResponse(LoadPaymentChannelByIDResponse value) {
+        return new JAXBElement<LoadPaymentChannelByIDResponse>(_LoadPaymentChannelByIDResponse_QNAME, LoadPaymentChannelByIDResponse.class, null, value);
     }
 
     /**

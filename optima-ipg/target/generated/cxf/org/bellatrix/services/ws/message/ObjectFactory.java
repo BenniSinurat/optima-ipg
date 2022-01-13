@@ -44,19 +44,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link UnreadMessage }
+     * Create an instance of {@link Exception }
      * 
      */
-    public UnreadMessage createUnreadMessage() {
-        return new UnreadMessage();
-    }
-
-    /**
-     * Create an instance of {@link SendMessageRequest }
-     * 
-     */
-    public SendMessageRequest createSendMessageRequest() {
-        return new SendMessageRequest();
+    public Exception createException() {
+        return new Exception();
     }
 
     /**
@@ -65,14 +57,6 @@ public class ObjectFactory {
      */
     public Header createHeader() {
         return new Header();
-    }
-
-    /**
-     * Create an instance of {@link MessageRequest }
-     * 
-     */
-    public MessageRequest createMessageRequest() {
-        return new MessageRequest();
     }
 
     /**
@@ -92,11 +76,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Exception }
+     * Create an instance of {@link LoadMessageByUsernameRequest }
      * 
      */
-    public Exception createException() {
-        return new Exception();
+    public LoadMessageByUsernameRequest createLoadMessageByUsernameRequest() {
+        return new LoadMessageByUsernameRequest();
+    }
+
+    /**
+     * Create an instance of {@link SendMessageRequest }
+     * 
+     */
+    public SendMessageRequest createSendMessageRequest() {
+        return new SendMessageRequest();
+    }
+
+    /**
+     * Create an instance of {@link NotificationMessage }
+     * 
+     */
+    public NotificationMessage createNotificationMessage() {
+        return new NotificationMessage();
+    }
+
+    /**
+     * Create an instance of {@link UnreadMessage }
+     * 
+     */
+    public UnreadMessage createUnreadMessage() {
+        return new UnreadMessage();
     }
 
     /**
@@ -108,19 +116,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LoadMessageByUsernameRequest }
+     * Create an instance of {@link MessageRequest }
      * 
      */
-    public LoadMessageByUsernameRequest createLoadMessageByUsernameRequest() {
-        return new LoadMessageByUsernameRequest();
-    }
-
-    /**
-     * Create an instance of {@link NotificationMessage }
-     * 
-     */
-    public NotificationMessage createNotificationMessage() {
-        return new NotificationMessage();
+    public MessageRequest createMessageRequest() {
+        return new MessageRequest();
     }
 
     /**
