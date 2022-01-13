@@ -47,6 +47,7 @@ import com.jpa.optima.ipg.model.Transfer;
 import com.jpa.optima.ipg.model.additionalData;
 import com.jpa.optima.ipg.model.origin;
 import com.jpa.optima.ipg.model.originTrxStatus;
+import com.jpa.optima.ipg.model.topupPaymentResponse;
 import com.jpa.optima.ipg.process.IPGValidation;
 
 import java.io.IOException;
@@ -1250,7 +1251,7 @@ public class IPGController {
 		LinkAjaNotificationResponse resNotif = new LinkAjaNotificationResponse();
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			logger.info("Req: " + mapper.writeValueAsString(req));
+			logger.info("Request LinkAja Callback Notification: " + mapper.writeValueAsString(req));
 			if (!req.getMerchant().equalsIgnoreCase(contextLoader.getLinkAjaMerchantID())) {
 				logger.error("[Authentication Failed]");
 				resNotif.setNotificationMessage("Unauthorized Access");
@@ -1270,10 +1271,12 @@ public class IPGController {
 				logger.info("[" + mapper.writeValueAsString(resNotif) + "]");
 				return resNotif;
 			}
+			
+			String remark = "";
 
-			PaymentResponse payRes = paymentPageProcessor.doPayment(contextLoader.getIPGUsername(), t.getMerchantID(),
-					t.getInvoiceID(), t.getDescription(), contextLoader.getLinkAjaQRTransferTypeID(), req.getMsg(),
-					new BigDecimal(req.getAmount().toString()), null);
+			PaymentResponse payRes = paymentPageProcessor.doPayment(contextLoader.getLinkAjaUsername(),
+					t.getMerchantID(), t.getInvoiceID(), t.getDescription(), contextLoader.getLinkAjaQRTransferTypeID(),
+					req.getMsg(), new BigDecimal(req.getAmount().toString()), "PENDING", t.getMerchantID(), remark);
 			if (payRes.getStatus().getMessage().equalsIgnoreCase("PROCESSED")) {
 				String res = paymentPageProcessor.sendVALinkAjaNotification(t, req.getMsg());
 				logger.info("[VA Notification Response : " + res + "]");
@@ -1450,13 +1453,25 @@ public class IPGController {
 			logger.info("Words: " + sha256hex + "Request Words: " + words);
 
 			String sessionMap = t.getMerchantID() + t.getInvoiceID() + t.getSessionID();
+			// validate transaction
+			TransactionStatusResponse tr = paymentPageProcessor.transactionStatus(t.getInvoiceID());
+
 			if (status.equalsIgnoreCase("0000")) {
 				// add code to create billing va di table billing_va
-				PaymentResponse pr = paymentPageProcessor.doPayment(sessionID, t.getMerchantID(), t.getInvoiceID(),
-						t.getDescription(), ti.getFinalAmount());
-				if (pr.getStatus().getMessage().equalsIgnoreCase("PROCESSED")) {
+				// PaymentResponse pr = paymentPageProcessor.doPayment(sessionID,
+				// t.getMerchantID(), t.getInvoiceID(),
+				// t.getDescription(), ti.getFinalAmount());
+				PaymentResponse pr = new PaymentResponse();
+				pr.setId(tr.getTransfers().get(0).getId());
+				pr.setTransferType(tr.getTransfers().get(0).getTransferType());
+				pr.setTransactionNumber(tr.getTransfers().get(0).getTransactionNumber());
+				pr.setTraceNumber(tr.getTransfers().get(0).getTraceNumber());
+				pr.setFromMember(tr.getTransfers().get(0).getFromMember());
+				pr.setToMember(tr.getTransfers().get(0).getToMember());
+
+				if (tr.getStatus().getMessage().equalsIgnoreCase("PROCESSED")) {
 					t.setPaymentChannel(Integer.valueOf(1));
-					t.setStatus(pr.getStatus().getMessage());
+					t.setStatus(tr.getStatus().getMessage());
 					model.addAttribute("merchantID", t.getMerchantID());
 					model.addAttribute("invoiceID", t.getInvoiceID());
 					model.addAttribute("amount", ti.getFinalAmount());
@@ -1470,7 +1485,7 @@ public class IPGController {
 					model.addAttribute("paymentChannel", t.getPaymentChannel());
 					model.addAttribute("ticketID", sessionID);
 					model.addAttribute("words", sha256hex);
-					model.addAttribute("status", pr.getStatus().getMessage());
+					model.addAttribute("status", tr.getStatus().getMessage());
 					paymentPageProcessor.sendToSettlement(pr, ti.getFinalAmount());
 					paymentPageProcessor.sendMessage(pr.getFromMember().getUsername(), pr.getToMember().getUsername(),
 							"Payment Received " + t.getDescription(),
@@ -1498,6 +1513,12 @@ public class IPGController {
 			} else {
 				logger.info("[Debit to Customer Failed, VOIDING Transaction For MID : " + t.getMerchantID()
 						+ " With Invoice : " + transID + "]");
+				ReversalRequest req = new ReversalRequest();
+				req.setTraceNumber(t.getInvoiceID());
+				req.setTransactionNumber(tr.getTransfers().get(0).getTransactionNumber());
+				req.setUsername(t.getMerchantID());
+				ReversalResponse res = paymentPageProcessor.reversePayment(req);
+				logger.info("[VOID REVERSED Status ResponseCode : " + res.getStatus() + "]");
 				String responseVoid = paymentPageProcessor.sendVoid(transID, sessionID);
 				logger.info("[VOID Status ResponseCode : " + responseVoid + "]");
 				t.setStatus("FAILED");
@@ -1758,9 +1779,9 @@ public class IPGController {
 				logger.info("Channel Payment : " + ti.getPaymentChannel().intValue());
 				logger.info("--" + ch.getPaymentChannel().getName() + "--");
 				if (ch.getPaymentChannel().getId() == 1) {
-					PaymentResponse pr = paymentPageProcessor.doPayment(response.getSessionID(), t.getMerchantID(), t.getInvoiceID(),
-							t.getDescription(), ti.getFinalAmount());
-					if(!pr.getStatus().getMessage().equals("PROCESSED")) {
+					PaymentResponse pr = paymentPageProcessor.doPayment(response.getSessionID(), t.getMerchantID(),
+							t.getInvoiceID(), t.getDescription(), ti.getFinalAmount());
+					if (!pr.getStatus().getMessage().equals("PROCESSED")) {
 						logger.error("[Payment Failed]");
 						model.addAttribute("httpResponseCode", "500");
 						model.addAttribute("status", "Oops !");
@@ -2165,9 +2186,20 @@ public class IPGController {
 			IMap<String, Ticket> vaMap = instance.getMap("PaymentVAMap");
 			vaMap.put(directDebit.getTicketID(), t);
 
+			DebitCard dc = ipgValidation.debitCardDetails(t.getMsisdn(), 1);
+
+			topupPaymentResponse tRes = new topupPaymentResponse();
+			tRes.setBankCode(dc.getBankCode());
+			tRes.setBankName(dc.getBankName());
+			tRes.setDebitNo(dc.getMaskedCardNumber());
+			tRes.setExpiry(dc.getExpiredDate());
+
+			ObjectMapper mapper = new ObjectMapper();
+			String remark = mapper.writeValueAsString(tRes);
+
 			PaymentResponse payRes = paymentPageProcessor.doPayment(contextLoader.getDirectDebitUsername(),
 					t.getMsisdn(), t.getInvoiceID(), t.getDescription(), t.getMerchants().getTransferTypeID(),
-					t.getInvoiceID(), ti.getFinalAmount(), "PENDING");
+					t.getInvoiceID(), ti.getFinalAmount(), "PENDING", t.getMerchantID(), remark);
 
 			if (payRes.getStatus().getMessage().equalsIgnoreCase("PROCESSED")) {
 				String token = ipgValidation.validateCards(t.getMsisdn(), 1);

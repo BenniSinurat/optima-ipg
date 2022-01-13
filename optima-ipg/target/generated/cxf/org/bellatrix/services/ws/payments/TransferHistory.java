@@ -30,6 +30,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="formattedTransactionDate" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="fromMember" type="{http://services.bellatrix.org/}memberView" minOccurs="0"/>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+ *         &lt;element name="originator" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="parentID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="referenceNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="remark" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -58,6 +59,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "formattedTransactionDate",
     "fromMember",
     "id",
+    "originator",
     "parentID",
     "referenceNumber",
     "remark",
@@ -80,6 +82,7 @@ public class TransferHistory {
     protected String formattedTransactionDate;
     protected MemberView fromMember;
     protected Integer id;
+    protected String originator;
     protected String parentID;
     protected String referenceNumber;
     protected String remark;
@@ -279,6 +282,30 @@ public class TransferHistory {
      */
     public void setId(Integer value) {
         this.id = value;
+    }
+
+    /**
+     * Gets the value of the originator property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getOriginator() {
+        return originator;
+    }
+
+    /**
+     * Sets the value of the originator property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setOriginator(String value) {
+        this.originator = value;
     }
 
     /**

@@ -52,14 +52,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link NotificationMessage }
-     * 
-     */
-    public NotificationMessage createNotificationMessage() {
-        return new NotificationMessage();
-    }
-
-    /**
      * Create an instance of {@link SendMessageRequest }
      * 
      */
@@ -76,11 +68,35 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link MessageRequest }
+     * 
+     */
+    public MessageRequest createMessageRequest() {
+        return new MessageRequest();
+    }
+
+    /**
      * Create an instance of {@link LoadMessageByIDRequest }
      * 
      */
     public LoadMessageByIDRequest createLoadMessageByIDRequest() {
         return new LoadMessageByIDRequest();
+    }
+
+    /**
+     * Create an instance of {@link LoadMessageResponse }
+     * 
+     */
+    public LoadMessageResponse createLoadMessageResponse() {
+        return new LoadMessageResponse();
+    }
+
+    /**
+     * Create an instance of {@link Exception }
+     * 
+     */
+    public Exception createException() {
+        return new Exception();
     }
 
     /**
@@ -100,27 +116,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link MessageRequest }
+     * Create an instance of {@link NotificationMessage }
      * 
      */
-    public MessageRequest createMessageRequest() {
-        return new MessageRequest();
-    }
-
-    /**
-     * Create an instance of {@link LoadMessageResponse }
-     * 
-     */
-    public LoadMessageResponse createLoadMessageResponse() {
-        return new LoadMessageResponse();
-    }
-
-    /**
-     * Create an instance of {@link Exception }
-     * 
-     */
-    public Exception createException() {
-        return new Exception();
+    public NotificationMessage createNotificationMessage() {
+        return new NotificationMessage();
     }
 
     /**

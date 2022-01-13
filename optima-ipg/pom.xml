@@ -90,6 +90,14 @@
 										<extraarg>org.bellatrix.services.ws.billpayments</extraarg>
 									</extraargs>
 								</wsdlOption>
+								<wsdlOption>
+									<wsdl>http://149.129.215.223:8081/bellatrix/host/services/ws/pos?wsdl
+									</wsdl>
+									<extraargs>
+										<extraarg>-p</extraarg>
+										<extraarg>org.bellatrix.services.ws.pos</extraarg>
+									</extraargs>
+								</wsdlOption>
 							</wsdlOptions>
 						</configuration>
 						<goals>

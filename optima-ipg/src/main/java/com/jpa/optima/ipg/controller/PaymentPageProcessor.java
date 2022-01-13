@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -97,6 +98,11 @@ import org.bellatrix.services.ws.payments.TransactionStatusResponse;
 import org.bellatrix.services.ws.payments.UpdateTransferRequest;
 import org.bellatrix.services.ws.payments.ValidatePaymentTicketRequest;
 import org.bellatrix.services.ws.payments.ValidatePaymentTicketResponse;
+import org.bellatrix.services.ws.pos.Header;
+import org.bellatrix.services.ws.pos.LoadTerminalByUsernameRequest;
+import org.bellatrix.services.ws.pos.Pos;
+import org.bellatrix.services.ws.pos.PosService;
+import org.bellatrix.services.ws.pos.TerminalInquiryResponse;
 import org.bellatrix.services.ws.transfertypes.LoadFeesByTransferTypeRequest;
 import org.bellatrix.services.ws.transfertypes.LoadFeesByTransferTypeResponse;
 import org.bellatrix.services.ws.transfertypes.TransferType;
@@ -606,7 +612,7 @@ public class PaymentPageProcessor {
 		}
 		return result;
 	}
-
+	
 	public QRCodeResponse forwardQRPayment(QRCodeParam param)
 			throws IOException, NoSuchAlgorithmException, InvalidKeyException {
 		QRCodeResponse qrRes = new QRCodeResponse();
@@ -1189,8 +1195,8 @@ public class PaymentPageProcessor {
 	public String purchaseRedirect(final String ticketID, final String transactionNumber, final String status,
 			final String msisdn) throws IOException {
 		String result = "";
-		HttpGet get = new HttpGet(contextLoader.getDirectDebitPurchaseRedirect() + "?ticketID=" + ticketID
-				+ "&transactionNumber=" + transactionNumber + "&status=" + status + "&msisdn=" + msisdn);
+		HttpGet get = new HttpGet(URLEncoder.encode(contextLoader.getDirectDebitPurchaseRedirect() + "?ticketID=" + ticketID
+				+ "&transactionNumber=" + transactionNumber + "&status=" + status + "&msisdn=" + msisdn, "UTF-8"));
 
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		Throwable localThrowable6 = null;
@@ -1527,7 +1533,7 @@ public class PaymentPageProcessor {
 	}
 
 	public PaymentResponse doPayment(String from, String to, String invoiceID, String description,
-			Integer transferTypeID, String traceNumber, BigDecimal amount, String status) throws Exception {
+			Integer transferTypeID, String traceNumber, BigDecimal amount, String status, String originator, String remark) throws Exception {
 		URL url = new URL(contextLoader.getHostWSUrl() + "payments?wsdl");
 		QName qName = new QName(contextLoader.getHostWSPort(), "PaymentService");
 		PaymentService service = new PaymentService(url, qName);
@@ -1546,6 +1552,9 @@ public class PaymentPageProcessor {
 		paymentRequest.setTransferTypeID(transferTypeID);
 		paymentRequest.setAmount(amount);
 		paymentRequest.setStatus(status);
+		paymentRequest.setRemark(remark);
+		paymentRequest.setOriginator(originator);
+		paymentRequest.setReferenceNumber(invoiceID);
 
 		PaymentResponse paymentResponse = client.doPayment(headerAuth, paymentRequest);
 		return paymentResponse;
@@ -1609,6 +1618,28 @@ public class PaymentPageProcessor {
 
 		LoadPaymentChannelByIDResponse res = client.loadPaymentChannelByID(payHeaderAuth, req);
 
+		return res;
+	}
+	
+	public TerminalInquiryResponse loadTerminalByUsername(String merchantUsername)
+			throws org.bellatrix.services.ws.pos.Exception_Exception, MalformedURLException {
+		URL url = new URL(contextLoader.getHostWSUrl() + "pos?wsdl");
+		QName qName = new QName(contextLoader.getHostWSPort(), "PosService");
+		PosService service = new PosService(url, qName);
+		Pos client = service.getPosPort();
+		
+		org.bellatrix.services.ws.pos.Header headerPos = new org.bellatrix.services.ws.pos.Header();
+		headerPos.setToken(contextLoader.getHeaderToken());
+		Holder<Header> posHeaderAuth = new Holder<Header>();
+		posHeaderAuth.value = headerPos;
+		
+		LoadTerminalByUsernameRequest req = new LoadTerminalByUsernameRequest();
+		req.setUsername(merchantUsername);
+		req.setCurrentPage(0);
+		req.setPageSize(1);
+		
+		TerminalInquiryResponse res = client.loadTerminalByUsername(posHeaderAuth, req);		
+		
 		return res;
 	}
 
