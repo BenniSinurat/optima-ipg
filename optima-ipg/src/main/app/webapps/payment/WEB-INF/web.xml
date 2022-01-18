@@ -63,6 +63,9 @@
 		<url-pattern>/directDebitTransactionStatus</url-pattern>
 		<url-pattern>/directDebitSetTokenLimitRequest</url-pattern>
 		<url-pattern>/directDebitSetTokenLimit</url-pattern>
+		<url-pattern>/qrisPaymentForm</url-pattern>
+		<url-pattern>/qrisPayment</url-pattern>
+		<url-pattern>/qris/paymentNotification</url-pattern>
 	</servlet-mapping>
 
 	<listener>

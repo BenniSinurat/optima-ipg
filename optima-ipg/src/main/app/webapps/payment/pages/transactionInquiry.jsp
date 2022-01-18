@@ -67,7 +67,7 @@
 		        </div>
 		    </div>
          </c:when>
-         <c:when test = "${paymentChannel == 4}">
+         <c:when test = "${paymentChannel == 4 || paymentChannel == 11}">
             <div class="container mt-4">
 		        <div class="row m-0 justify-content-between">
 		          <h3 class="mb-0 judul" style="font-size: 16px;">QRIS</h3>
@@ -99,6 +99,14 @@
 		        </div>
 		    </div>
          </c:when>
+         <c:when test = "${paymentChannel == 9}">
+            <div class="container mt-4">
+		        <div class="row m-0 justify-content-between">
+		          <h3 class="mb-0 judul" style="font-size: 16px;">Bank Transfer</h3>
+		          <img class="mt-n1" src="assets/img/permata.png" alt="Bank Transfer">
+		        </div>
+		    </div>
+         </c:when>
          <c:otherwise>
             <div class="container mt-4">
 		        <div class="row m-0 justify-content-between">
@@ -122,6 +130,16 @@
             <p>Berikut ini adalah detail pembayaran anda.</p> 
         </div>
         <form id="transactionInquiry" name="transactionInquiryForm" class="needs-validation" action="/payment/transactionRedirect" method="POST" modelAttribute="transactionInquiry">
+            <c:choose>
+	            <c:when test = "${paymentChannel == 8}">
+		            <div class="form-group">
+		                <div class="row m-0 justify-content-between">
+				            <p class="text-uppercase">Isi saldo ke</p>
+				            <p style="color: #333;">${msisdn}</p>
+				        </div>
+		            </div>
+	            </c:when>
+            </c:choose>
             <div class="form-group">
                 <div class="row m-0 justify-content-between">
 		            <p class="text-uppercase">Tagihan</p>

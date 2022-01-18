@@ -44,35 +44,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Exception }
-     * 
-     */
-    public Exception createException() {
-        return new Exception();
-    }
-
-    /**
      * Create an instance of {@link Header }
      * 
      */
     public Header createHeader() {
         return new Header();
-    }
-
-    /**
-     * Create an instance of {@link LoadMessageByIDRequest }
-     * 
-     */
-    public LoadMessageByIDRequest createLoadMessageByIDRequest() {
-        return new LoadMessageByIDRequest();
-    }
-
-    /**
-     * Create an instance of {@link LoadMessageResponse }
-     * 
-     */
-    public LoadMessageResponse createLoadMessageResponse() {
-        return new LoadMessageResponse();
     }
 
     /**
@@ -84,11 +60,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SendMessageRequest }
+     * Create an instance of {@link MessageRequest }
      * 
      */
-    public SendMessageRequest createSendMessageRequest() {
-        return new SendMessageRequest();
+    public MessageRequest createMessageRequest() {
+        return new MessageRequest();
+    }
+
+    /**
+     * Create an instance of {@link Exception }
+     * 
+     */
+    public Exception createException() {
+        return new Exception();
+    }
+
+    /**
+     * Create an instance of {@link LoadMessageByIDRequest }
+     * 
+     */
+    public LoadMessageByIDRequest createLoadMessageByIDRequest() {
+        return new LoadMessageByIDRequest();
     }
 
     /**
@@ -100,11 +92,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link UnreadMessage }
+     * Create an instance of {@link SendMessageRequest }
      * 
      */
-    public UnreadMessage createUnreadMessage() {
-        return new UnreadMessage();
+    public SendMessageRequest createSendMessageRequest() {
+        return new SendMessageRequest();
     }
 
     /**
@@ -116,11 +108,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link MessageRequest }
+     * Create an instance of {@link LoadMessageResponse }
      * 
      */
-    public MessageRequest createMessageRequest() {
-        return new MessageRequest();
+    public LoadMessageResponse createLoadMessageResponse() {
+        return new LoadMessageResponse();
+    }
+
+    /**
+     * Create an instance of {@link UnreadMessage }
+     * 
+     */
+    public UnreadMessage createUnreadMessage() {
+        return new UnreadMessage();
     }
 
     /**

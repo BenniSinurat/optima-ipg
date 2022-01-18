@@ -40,7 +40,7 @@
 				time-to-live-seconds="3600">
 			</hz:map>
 			<hz:map name="TicketIDMap" read-backup-data="true"
-				time-to-live-seconds="1800">
+				time-to-live-seconds="86400">
 			</hz:map>
 			<hz:map name="PurchaseMap" read-backup-data="true"
 				time-to-live-seconds="86400">

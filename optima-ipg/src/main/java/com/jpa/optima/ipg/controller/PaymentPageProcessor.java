@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -69,6 +71,8 @@ import org.bellatrix.services.ws.access.ValidateCredentialRequest;
 import org.bellatrix.services.ws.access.ValidateCredentialResponse;
 import org.bellatrix.services.ws.billpayments.BillPayment;
 import org.bellatrix.services.ws.billpayments.BillPaymentService;
+import org.bellatrix.services.ws.billpayments.LoadPaymentChannelByIDRequest;
+import org.bellatrix.services.ws.billpayments.LoadPaymentChannelByIDResponse;
 import org.bellatrix.services.ws.billpayments.LoadPaymentChannelByMemberIDRequest;
 import org.bellatrix.services.ws.billpayments.LoadPaymentChannelByMemberIDResponse;
 import org.bellatrix.services.ws.members.LoadMembersByUsernameRequest;
@@ -91,8 +95,14 @@ import org.bellatrix.services.ws.payments.ReversalRequest;
 import org.bellatrix.services.ws.payments.ReversalResponse;
 import org.bellatrix.services.ws.payments.TransactionStatusRequest;
 import org.bellatrix.services.ws.payments.TransactionStatusResponse;
+import org.bellatrix.services.ws.payments.UpdateTransferRequest;
 import org.bellatrix.services.ws.payments.ValidatePaymentTicketRequest;
 import org.bellatrix.services.ws.payments.ValidatePaymentTicketResponse;
+import org.bellatrix.services.ws.pos.Header;
+import org.bellatrix.services.ws.pos.LoadTerminalByUsernameRequest;
+import org.bellatrix.services.ws.pos.Pos;
+import org.bellatrix.services.ws.pos.PosService;
+import org.bellatrix.services.ws.pos.TerminalInquiryResponse;
 import org.bellatrix.services.ws.transfertypes.LoadFeesByTransferTypeRequest;
 import org.bellatrix.services.ws.transfertypes.LoadFeesByTransferTypeResponse;
 import org.bellatrix.services.ws.transfertypes.TransferType;
@@ -111,6 +121,7 @@ import org.bellatrix.services.ws.virtualaccount.VaRegisterRequest;
 import org.bellatrix.services.ws.virtualaccount.VaRegisterResponse;
 import org.bellatrix.services.ws.virtualaccount.VirtualAccount;
 import org.bellatrix.services.ws.virtualaccount.VirtualAccountService;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
@@ -490,7 +501,7 @@ public class PaymentPageProcessor {
 		return result;
 	}
 
-	public String sendVALinkAjaNotification(Ticket t, String trxNumber) throws IOException {
+	public String sendVALinkAjaNotification(Ticket t, String trxNumber, String status) throws IOException {
 		String result = "";
 		HttpPost post = new HttpPost(t.getCallback());
 
@@ -508,7 +519,7 @@ public class PaymentPageProcessor {
 		urlParameters.add(new BasicNameValuePair("description", t.getDescription()));
 		urlParameters.add(new BasicNameValuePair("paymentChannel", String.valueOf(t.getPaymentChannel())));
 		urlParameters.add(new BasicNameValuePair("words", t.getWords()));
-		urlParameters.add(new BasicNameValuePair("status", "PROCESSED"));
+		urlParameters.add(new BasicNameValuePair("status", status));
 
 		post.setEntity(new UrlEncodedFormEntity(urlParameters));
 
@@ -760,23 +771,23 @@ public class PaymentPageProcessor {
 
 		return inqRes;
 	}
-	
+
 	public TransactionStatusResponse transactionStatus(String traceNumber) throws MalformedURLException {
 		URL url = new URL(contextLoader.getHostWSUrl() + "payments?wsdl");
 		QName qName = new QName(contextLoader.getHostWSPort(), "PaymentService");
 		PaymentService service = new PaymentService(url, qName);
 		Payment client = service.getPaymentPort();
-		
+
 		org.bellatrix.services.ws.payments.Header headerPayment = new org.bellatrix.services.ws.payments.Header();
 		headerPayment.setToken(contextLoader.getHeaderToken());
 		Holder<org.bellatrix.services.ws.payments.Header> payHeaderAuth = new Holder<org.bellatrix.services.ws.payments.Header>();
 		payHeaderAuth.value = headerPayment;
-		
+
 		TransactionStatusRequest req = new TransactionStatusRequest();
 		req.setTraceNumber(traceNumber);
-		
+
 		TransactionStatusResponse res = client.transactionStatus(payHeaderAuth, req);
-		
+
 		return res;
 	}
 
@@ -926,8 +937,9 @@ public class PaymentPageProcessor {
 		return qrRes;
 	}
 
-	public String getTokenDirectDebit(Ticket t) throws IOException, NoSuchAlgorithmException, InvalidKeyException,
-			NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+	public String getTokenDirectDebit(Ticket t)
+			throws IOException, NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException,
+			InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, JSONException {
 		String result = "";
 		String timestamp = Utils.GetDate("yyyy-MM-dd HH:mm:ss");
 
@@ -940,7 +952,7 @@ public class PaymentPageProcessor {
 		get.setHeader("X-MTI-Key", t.getMerchants().getUsername());
 		get.setHeader("X-SIGNATURE", sha512Hex);
 
-		logger.info("Request to Direct Debit Host: " + get.getURI());
+		logger.info("Request JWT to Direct Debit Host: " + get.getURI());
 
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		Throwable localThrowable6 = null;
@@ -978,7 +990,7 @@ public class PaymentPageProcessor {
 					httpClient.close();
 		}
 		JSONObject jsonResult = new JSONObject(result);
-		logger.info("Response from Direct Debit: " + jsonResult.toString());
+		logger.info("Response JWT from Direct Debit: " + jsonResult.toString());
 
 		return String.valueOf(jsonResult.getString("jwt"));
 	}
@@ -1004,7 +1016,7 @@ public class PaymentPageProcessor {
 		StringEntity entity = new StringEntity(json);
 		post.setEntity(entity);
 
-		logger.info("Request to Direct Debit OTP Body: " + json);
+		logger.info("Request Request OTP to Direct Debit OTP Body: " + json);
 
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		Throwable localThrowable6 = null;
@@ -1041,7 +1053,7 @@ public class PaymentPageProcessor {
 				else
 					httpClient.close();
 		}
-		logger.info("Response from Direct Debit OTP: " + result);
+		logger.info("Response Request OTP from Direct Debit OTP: " + result);
 		JSONObject jsonResult = new JSONObject(result);
 		if (jsonResult.getString("responseCode").equalsIgnoreCase("00")) {
 			res.setResponseMessage(String.valueOf(jsonResult.getString("responseMessage")));
@@ -1080,7 +1092,7 @@ public class PaymentPageProcessor {
 		StringEntity entity = new StringEntity(json);
 		post.setEntity(entity);
 
-		logger.info("Request to Direct Debit Body: " + json);
+		logger.info("Request Purchase to Direct Debit Body: " + json);
 
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		Throwable localThrowable6 = null;
@@ -1117,8 +1129,9 @@ public class PaymentPageProcessor {
 				else
 					httpClient.close();
 		}
+		logger.info("Response Purchase from Direct Debit: " + result);
 		JSONObject jsonResult = new JSONObject(result);
-		logger.info("Response from Direct Debit: " + jsonResult.toString());
+		logger.info("Response Purchase from Direct Debit: " + jsonResult.toString());
 		if (jsonResult.getString("responseCode").equalsIgnoreCase("00")) {
 			res.setResponseMessage(String.valueOf(jsonResult.getString("responseMessage")));
 			res.setResponseCode(String.valueOf(jsonResult.get("responseCode")));
@@ -1182,8 +1195,9 @@ public class PaymentPageProcessor {
 	public String purchaseRedirect(final String ticketID, final String transactionNumber, final String status,
 			final String msisdn) throws IOException {
 		String result = "";
-		HttpGet get = new HttpGet(contextLoader.getDirectDebitPurchaseRedirect() + "?ticketID=" + ticketID
-				+ "&transactionNumber=" + transactionNumber + "&status=" + status + "&msisdn=" + msisdn);
+		HttpGet get = new HttpGet(URLEncoder.encode(contextLoader.getDirectDebitPurchaseRedirect() + "?ticketID="
+				+ ticketID + "&transactionNumber=" + transactionNumber + "&status=" + status + "&msisdn=" + msisdn,
+				"UTF-8"));
 
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		Throwable localThrowable6 = null;
@@ -1244,7 +1258,7 @@ public class PaymentPageProcessor {
 		StringEntity entity = new StringEntity(json);
 		post.setEntity(entity);
 
-		logger.info("Request to Direct Debit Remove Card Body: " + json);
+		logger.info("Request Remove Card to Direct Debit Remove Card Body: " + json);
 
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		Throwable localThrowable6 = null;
@@ -1281,7 +1295,7 @@ public class PaymentPageProcessor {
 				else
 					httpClient.close();
 		}
-		logger.info("Response from Direct Debit Remove Card: " + result);
+		logger.info("Response Remove Card from Direct Debit Remove Card: " + result);
 		JSONObject jsonResult = new JSONObject(result);
 		if (jsonResult.getString("responseCode").equalsIgnoreCase("00")) {
 			res.setResponseMessage(String.valueOf(jsonResult.getString("responseMessage")));
@@ -1317,7 +1331,7 @@ public class PaymentPageProcessor {
 		StringEntity entity = new StringEntity(json);
 		post.setEntity(entity);
 
-		logger.info("Request to Direct Debit Cancel Trx Body: " + json);
+		logger.info("Request Cancel Trx to Direct Debit Cancel Trx Body: " + json);
 
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		Throwable localThrowable6 = null;
@@ -1354,7 +1368,7 @@ public class PaymentPageProcessor {
 				else
 					httpClient.close();
 		}
-		logger.info("Response from Direct Debit Cancel Trx: " + result);
+		logger.info("Response Cancel Trx from Direct Debit Cancel Trx: " + result);
 		JSONObject jsonResult = new JSONObject(result);
 		if (jsonResult.getString("responseCode").equalsIgnoreCase("00")) {
 			res.setResponseMessage(String.valueOf(jsonResult.getString("responseMessage")));
@@ -1390,7 +1404,7 @@ public class PaymentPageProcessor {
 		StringEntity entity = new StringEntity(json);
 		post.setEntity(entity);
 
-		logger.info("Request to Direct Debit Set Token Limit Body: " + json);
+		logger.info("Request Set Token Limit to Direct Debit Set Token Limit Body: " + json);
 
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		Throwable localThrowable6 = null;
@@ -1427,7 +1441,7 @@ public class PaymentPageProcessor {
 				else
 					httpClient.close();
 		}
-		logger.info("Response from Direct Debit Set Token Limit: " + result);
+		logger.info("Response Set Token Limit from Direct Debit Set Token Limit: " + result);
 		JSONObject jsonResult = new JSONObject(result);
 		if (jsonResult.getString("responseCode").equalsIgnoreCase("00")) {
 			res.setResponseMessage(String.valueOf(jsonResult.getString("responseMessage")));
@@ -1464,7 +1478,7 @@ public class PaymentPageProcessor {
 		StringEntity entity = new StringEntity(json);
 		post.setEntity(entity);
 
-		logger.info("Request to Direct Debit Inquiry Transaction Status Body: " + json);
+		logger.info("Request Trx Status to Direct Debit Inquiry Transaction Status Body: " + json);
 
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		Throwable localThrowable6 = null;
@@ -1501,7 +1515,7 @@ public class PaymentPageProcessor {
 				else
 					httpClient.close();
 		}
-		logger.info("Response from Direct Debit Inquiry Transaction Status: " + result);
+		logger.info("Response Trx Status from Direct Debit Inquiry Transaction Status: " + result);
 		JSONObject jsonResult = new JSONObject(result);
 		if (jsonResult.getString("responseCode").equalsIgnoreCase("00")) {
 			res.setResponseMessage(String.valueOf(jsonResult.get("responseCode")));
@@ -1517,6 +1531,262 @@ public class PaymentPageProcessor {
 		}
 
 		return res;
+	}
+
+	public PaymentResponse doPayment(String from, String to, String invoiceID, String description,
+			Integer transferTypeID, String traceNumber, BigDecimal amount, String status, String originator,
+			String remark) throws Exception {
+		URL url = new URL(contextLoader.getHostWSUrl() + "payments?wsdl");
+		QName qName = new QName(contextLoader.getHostWSPort(), "PaymentService");
+		PaymentService service = new PaymentService(url, qName);
+		Payment client = service.getPaymentPort();
+
+		org.bellatrix.services.ws.payments.Header headerPayment = new org.bellatrix.services.ws.payments.Header();
+		headerPayment.setToken(contextLoader.getHeaderToken());
+		Holder<org.bellatrix.services.ws.payments.Header> headerAuth = new Holder<org.bellatrix.services.ws.payments.Header>();
+		headerAuth.value = headerPayment;
+
+		PaymentRequest paymentRequest = new PaymentRequest();
+		paymentRequest.setFromMember(from);
+		paymentRequest.setToMember(to);
+		paymentRequest.setTraceNumber(traceNumber);
+		paymentRequest.setDescription("Invoice ID : " + invoiceID + " - " + description);
+		paymentRequest.setTransferTypeID(transferTypeID);
+		paymentRequest.setAmount(amount);
+		paymentRequest.setStatus(status);
+		paymentRequest.setOriginator(originator);
+		paymentRequest.setReferenceNumber(invoiceID);
+		paymentRequest.setRemark(remark);
+
+		PaymentResponse paymentResponse = client.doPayment(headerAuth, paymentRequest);
+		return paymentResponse;
+	}
+
+	public List<String> loadPaymentChannelByMember(String username, BigDecimal amount, String email, String name,
+			String ticketID) throws MalformedURLException {
+		URL url = new URL(contextLoader.getHostWSUrl() + "billpayments?wsdl");
+		QName qName = new QName(contextLoader.getHostWSPort(), "BillPaymentService");
+		BillPaymentService service = new BillPaymentService(url, qName);
+		BillPayment client = service.getBillPaymentPort();
+
+		org.bellatrix.services.ws.billpayments.Header headerPayment = new org.bellatrix.services.ws.billpayments.Header();
+		headerPayment.setToken(contextLoader.getHeaderToken());
+		Holder<org.bellatrix.services.ws.billpayments.Header> payHeaderAuth = new Holder<org.bellatrix.services.ws.billpayments.Header>();
+		payHeaderAuth.value = headerPayment;
+
+		LoadPaymentChannelByMemberIDRequest req = new LoadPaymentChannelByMemberIDRequest();
+		req.setMemberID(((Members) loadMember(username).getMembers().get(0)).getId());
+
+		LoadPaymentChannelByMemberIDResponse res = client.loadPaymentChannelByMemberID(payHeaderAuth, req);
+
+		List<String> menu = new LinkedList<String>();
+		for (int i = 0; i < res.getPaymentChannel().size(); i++) {
+			String pm = "<div class=\"row m-0 justify-content-between\">\n"
+					+ "<form id=\"bankTransferPayment\" name=\"bankTransferform\" role=\"form\" class=\"form-horizontal\" action=\"/payment/transactionInquiry\" method=\"POST\" modelAttribute=\"transactionInquiry\">"
+					+ "<input type=\"hidden\" name=\"amount\" id=\"amount\" value=\"" + amount
+					+ "\" class=\"form-control validate\">"
+					+ "<input type=\"hidden\" name=\"email\" id=\"email\" value=\"" + email
+					+ "\" class=\"form-control validate\">"
+					+ "<input type=\"hidden\" name=\"name\" id=\"name\" value=\"" + name
+					+ "\" class=\"form-control validate\">"
+					+ "<input type=\"hidden\" name=\"paymentChannel\" id=\"paymentChannel\" value=\""
+					+ res.getPaymentChannel().get(i).getId() + "\" class=\"form-control validate\">"
+					+ "<input type=\"hidden\" name=\"ticketID\" id=\"ticketID\" value=\"" + ticketID
+					+ "\" class=\"form-control validate\">"
+					+ "<button type=\"submit\" name=\"submit\" id=\"submit\" class=\"btn btn-default card card-pembayaran\" data-toggle=\"modal\" style=\"height:55px;width:640px;\"><p class=\"mb-0\">"
+					+ res.getPaymentChannel().get(i).getName() + "<span> <img class=\"mr-1\" src=\"assets/img/"
+					+ res.getPaymentChannel().get(i).getIcon() + ".png\" alt=\"Visa\">"
+					+ "<img src=\"assets/img/ic_arrow_right.png\" alt=\"Arrow Right\">	</span></p> </button>"
+					+ "</form> </div> <br>";
+			menu.add(pm);
+		}
+
+		return menu;
+	}
+
+	public LoadPaymentChannelByIDResponse loadPaymentChannelByID(Integer channelID) throws MalformedURLException {
+		URL url = new URL(contextLoader.getHostWSUrl() + "billpayments?wsdl");
+		QName qName = new QName(contextLoader.getHostWSPort(), "BillPaymentService");
+		BillPaymentService service = new BillPaymentService(url, qName);
+		BillPayment client = service.getBillPaymentPort();
+
+		org.bellatrix.services.ws.billpayments.Header headerPayment = new org.bellatrix.services.ws.billpayments.Header();
+		headerPayment.setToken(contextLoader.getHeaderToken());
+		Holder<org.bellatrix.services.ws.billpayments.Header> payHeaderAuth = new Holder<org.bellatrix.services.ws.billpayments.Header>();
+		payHeaderAuth.value = headerPayment;
+
+		LoadPaymentChannelByIDRequest req = new LoadPaymentChannelByIDRequest();
+		req.setChannelID(channelID);
+
+		LoadPaymentChannelByIDResponse res = client.loadPaymentChannelByID(payHeaderAuth, req);
+
+		return res;
+	}
+
+	public void updateTransfer(String transactionNumber)
+			throws MalformedURLException, org.bellatrix.services.ws.payments.Exception_Exception {
+		URL url = new URL(contextLoader.getHostWSUrl() + "payments?wsdl");
+		QName qName = new QName(contextLoader.getHostWSPort(), "PaymentService");
+		PaymentService service = new PaymentService(url, qName);
+		Payment client = service.getPaymentPort();
+
+		org.bellatrix.services.ws.payments.Header headerPayment = new org.bellatrix.services.ws.payments.Header();
+		headerPayment.setToken(contextLoader.getHeaderToken());
+		Holder<org.bellatrix.services.ws.payments.Header> payHeaderAuth = new Holder<org.bellatrix.services.ws.payments.Header>();
+		payHeaderAuth.value = headerPayment;
+
+		UpdateTransferRequest upR = new UpdateTransferRequest();
+		upR.setTransactionNumber(transactionNumber);
+
+		client.updateTransfer(payHeaderAuth, upR);
+	}
+
+	public String directDebitPurchaseCallback(String merchantID, String invoiceID, BigDecimal amount, String sessionID,
+			String currency, Integer paymentChannel, String ticketID, String transactionNumber, String name,
+			String email, String msisdn, String description, String words, String status, BigDecimal fee, String city,
+			String postalCode, String callbackURL) throws IOException {
+		String result = "";
+		HttpPost post = new HttpPost(callbackURL);
+
+		List<NameValuePair> urlParameters = new ArrayList<>();
+		urlParameters.add(new BasicNameValuePair("merchantID", merchantID));
+		urlParameters.add(new BasicNameValuePair("invoiceID", invoiceID));
+		urlParameters.add(new BasicNameValuePair("amount", amount.toString()));
+		urlParameters.add(new BasicNameValuePair("sessionID", sessionID));
+		urlParameters.add(new BasicNameValuePair("currency", currency));
+		urlParameters.add(new BasicNameValuePair("paymentChannel", paymentChannel.toString()));
+		urlParameters.add(new BasicNameValuePair("ticketID", ticketID));
+		urlParameters.add(new BasicNameValuePair("transactionNumber", transactionNumber));
+		urlParameters.add(new BasicNameValuePair("name", name));
+		urlParameters.add(new BasicNameValuePair("email", email));
+		urlParameters.add(new BasicNameValuePair("msisdn", msisdn));
+		urlParameters.add(new BasicNameValuePair("description", description));
+		urlParameters.add(new BasicNameValuePair("words", words));
+		urlParameters.add(new BasicNameValuePair("status", status));
+		urlParameters.add(new BasicNameValuePair("fee", fee.toString()));
+		urlParameters.add(new BasicNameValuePair("city", city));
+		urlParameters.add(new BasicNameValuePair("postalCode", postalCode));
+
+		post.setEntity(new UrlEncodedFormEntity(urlParameters));
+
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		Throwable localThrowable6 = null;
+		try {
+			CloseableHttpResponse response = httpClient.execute(post);
+			Throwable localThrowable7 = null;
+			try {
+				result = EntityUtils.toString(response.getEntity());
+			} catch (Throwable localThrowable1) {
+				localThrowable7 = localThrowable1;
+				throw localThrowable1;
+			} finally {
+				if (response != null)
+					if (localThrowable7 != null)
+						try {
+							response.close();
+						} catch (Throwable localThrowable2) {
+							localThrowable7.addSuppressed(localThrowable2);
+						}
+					else
+						response.close();
+			}
+		} catch (Throwable localThrowable4) {
+			localThrowable6 = localThrowable4;
+			throw localThrowable4;
+		} finally {
+			if (httpClient != null)
+				if (localThrowable6 != null)
+					try {
+						httpClient.close();
+					} catch (Throwable localThrowable5) {
+						localThrowable6.addSuppressed(localThrowable5);
+					}
+				else
+					httpClient.close();
+		}
+		return result;
+	}
+
+	public TerminalInquiryResponse loadTerminalByUsername(String merchantUsername)
+			throws org.bellatrix.services.ws.pos.Exception_Exception, MalformedURLException {
+		URL url = new URL(contextLoader.getHostWSUrl() + "pos?wsdl");
+		QName qName = new QName(contextLoader.getHostWSPort(), "PosService");
+		PosService service = new PosService(url, qName);
+		Pos client = service.getPosPort();
+
+		org.bellatrix.services.ws.pos.Header headerPos = new org.bellatrix.services.ws.pos.Header();
+		headerPos.setToken(contextLoader.getHeaderToken());
+		Holder<Header> posHeaderAuth = new Holder<Header>();
+		posHeaderAuth.value = headerPos;
+
+		LoadTerminalByUsernameRequest req = new LoadTerminalByUsernameRequest();
+		req.setUsername(merchantUsername);
+		req.setCurrentPage(0);
+		req.setPageSize(1);
+
+		TerminalInquiryResponse res = client.loadTerminalByUsername(posHeaderAuth, req);
+
+		return res;
+	}
+
+	public String sendQRISNotification(Ticket t, String trxNumber, String status) throws IOException {
+		String result = "";
+		HttpPost post = new HttpPost(t.getCallback());
+
+		List<NameValuePair> urlParameters = new ArrayList<>();
+		urlParameters.add(new BasicNameValuePair("ticketID", t.getEventID()));
+		urlParameters.add(new BasicNameValuePair("transactionNumber", trxNumber));
+		urlParameters.add(new BasicNameValuePair("merchantID", t.getMerchantID()));
+		urlParameters.add(new BasicNameValuePair("invoiceID", t.getInvoiceID()));
+		urlParameters.add(new BasicNameValuePair("amount", t.getAmount().toPlainString()));
+		urlParameters.add(new BasicNameValuePair("sessionID", t.getSessionID()));
+		urlParameters.add(new BasicNameValuePair("currency", t.getCurrency()));
+		urlParameters.add(new BasicNameValuePair("name", t.getName()));
+		urlParameters.add(new BasicNameValuePair("email", t.getEmail()));
+		urlParameters.add(new BasicNameValuePair("msisdn", t.getMsisdn()));
+		urlParameters.add(new BasicNameValuePair("description", t.getDescription()));
+		urlParameters.add(new BasicNameValuePair("paymentChannel", String.valueOf(t.getPaymentChannel())));
+		urlParameters.add(new BasicNameValuePair("words", t.getWords()));
+		urlParameters.add(new BasicNameValuePair("status", status));
+
+		post.setEntity(new UrlEncodedFormEntity(urlParameters));
+
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		Throwable localThrowable6 = null;
+		try {
+			CloseableHttpResponse response = httpClient.execute(post);
+			Throwable localThrowable7 = null;
+			try {
+				result = EntityUtils.toString(response.getEntity());
+			} catch (Throwable localThrowable1) {
+				localThrowable7 = localThrowable1;
+				throw localThrowable1;
+			} finally {
+				if (response != null)
+					if (localThrowable7 != null)
+						try {
+							response.close();
+						} catch (Throwable localThrowable2) {
+							localThrowable7.addSuppressed(localThrowable2);
+						}
+					else
+						response.close();
+			}
+		} catch (Throwable localThrowable4) {
+			localThrowable6 = localThrowable4;
+			throw localThrowable4;
+		} finally {
+			if (httpClient != null)
+				if (localThrowable6 != null)
+					try {
+						httpClient.close();
+					} catch (Throwable localThrowable5) {
+						localThrowable6.addSuppressed(localThrowable5);
+					}
+				else
+					httpClient.close();
+		}
+		return result;
 	}
 
 	public JmsTemplate getJmsTemplate() {

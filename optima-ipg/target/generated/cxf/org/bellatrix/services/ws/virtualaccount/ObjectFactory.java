@@ -72,54 +72,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LoadVAStatusByMemberRequest }
-     * 
-     */
-    public LoadVAStatusByMemberRequest createLoadVAStatusByMemberRequest() {
-        return new LoadVAStatusByMemberRequest();
-    }
-
-    /**
-     * Create an instance of {@link Members }
-     * 
-     */
-    public Members createMembers() {
-        return new Members();
-    }
-
-    /**
-     * Create an instance of {@link VaRegisterRequest }
-     * 
-     */
-    public VaRegisterRequest createVaRegisterRequest() {
-        return new VaRegisterRequest();
-    }
-
-    /**
-     * Create an instance of {@link VaPaymentRequest }
-     * 
-     */
-    public VaPaymentRequest createVaPaymentRequest() {
-        return new VaPaymentRequest();
-    }
-
-    /**
-     * Create an instance of {@link CreateEventStatusRequest }
-     * 
-     */
-    public CreateEventStatusRequest createCreateEventStatusRequest() {
-        return new CreateEventStatusRequest();
-    }
-
-    /**
-     * Create an instance of {@link CreateEventStatusResponse }
-     * 
-     */
-    public CreateEventStatusResponse createCreateEventStatusResponse() {
-        return new CreateEventStatusResponse();
-    }
-
-    /**
      * Create an instance of {@link LoadVAByIDRequest }
      * 
      */
@@ -128,75 +80,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link VaEvent }
+     * Create an instance of {@link ReportBillingResponse }
      * 
      */
-    public VaEvent createVaEvent() {
-        return new VaEvent();
+    public ReportBillingResponse createReportBillingResponse() {
+        return new ReportBillingResponse();
     }
 
     /**
-     * Create an instance of {@link VaRegisterBankRequest }
+     * Create an instance of {@link Billers }
      * 
      */
-    public VaRegisterBankRequest createVaRegisterBankRequest() {
-        return new VaRegisterBankRequest();
-    }
-
-    /**
-     * Create an instance of {@link LoadVAByIDResponse }
-     * 
-     */
-    public LoadVAByIDResponse createLoadVAByIDResponse() {
-        return new LoadVAByIDResponse();
-    }
-
-    /**
-     * Create an instance of {@link MemberFields }
-     * 
-     */
-    public MemberFields createMemberFields() {
-        return new MemberFields();
-    }
-
-    /**
-     * Create an instance of {@link DeleteVAEventRequest }
-     * 
-     */
-    public DeleteVAEventRequest createDeleteVAEventRequest() {
-        return new DeleteVAEventRequest();
-    }
-
-    /**
-     * Create an instance of {@link LoadBillingStatusByMemberResponse }
-     * 
-     */
-    public LoadBillingStatusByMemberResponse createLoadBillingStatusByMemberResponse() {
-        return new LoadBillingStatusByMemberResponse();
-    }
-
-    /**
-     * Create an instance of {@link LoadVAByMemberRequest }
-     * 
-     */
-    public LoadVAByMemberRequest createLoadVAByMemberRequest() {
-        return new LoadVAByMemberRequest();
-    }
-
-    /**
-     * Create an instance of {@link Header }
-     * 
-     */
-    public Header createHeader() {
-        return new Header();
-    }
-
-    /**
-     * Create an instance of {@link VaUpdateRequest }
-     * 
-     */
-    public VaUpdateRequest createVaUpdateRequest() {
-        return new VaUpdateRequest();
+    public Billers createBillers() {
+        return new Billers();
     }
 
     /**
@@ -208,35 +104,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link VaBankRequest }
+     * Create an instance of {@link BillerServiceField }
      * 
      */
-    public VaBankRequest createVaBankRequest() {
-        return new VaBankRequest();
+    public BillerServiceField createBillerServiceField() {
+        return new BillerServiceField();
     }
 
     /**
-     * Create an instance of {@link ResponseStatus }
+     * Create an instance of {@link Members }
      * 
      */
-    public ResponseStatus createResponseStatus() {
-        return new ResponseStatus();
-    }
-
-    /**
-     * Create an instance of {@link LoadVAByEventRequest }
-     * 
-     */
-    public LoadVAByEventRequest createLoadVAByEventRequest() {
-        return new LoadVAByEventRequest();
-    }
-
-    /**
-     * Create an instance of {@link BankVA }
-     * 
-     */
-    public BankVA createBankVA() {
-        return new BankVA();
+    public Members createMembers() {
+        return new Members();
     }
 
     /**
@@ -256,27 +136,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link BillerServiceField }
+     * Create an instance of {@link LoadBillingStatusByMemberResponse }
      * 
      */
-    public BillerServiceField createBillerServiceField() {
-        return new BillerServiceField();
+    public LoadBillingStatusByMemberResponse createLoadBillingStatusByMemberResponse() {
+        return new LoadBillingStatusByMemberResponse();
     }
 
     /**
-     * Create an instance of {@link VaRegisterBankResponse }
+     * Create an instance of {@link CreateEventStatusRequest }
      * 
      */
-    public VaRegisterBankResponse createVaRegisterBankResponse() {
-        return new VaRegisterBankResponse();
-    }
-
-    /**
-     * Create an instance of {@link Billers }
-     * 
-     */
-    public Billers createBillers() {
-        return new Billers();
+    public CreateEventStatusRequest createCreateEventStatusRequest() {
+        return new CreateEventStatusRequest();
     }
 
     /**
@@ -288,115 +160,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Exception }
-     * 
-     */
-    public Exception createException() {
-        return new Exception();
-    }
-
-    /**
-     * Create an instance of {@link LoadBillingStatusByMemberRequest }
-     * 
-     */
-    public LoadBillingStatusByMemberRequest createLoadBillingStatusByMemberRequest() {
-        return new LoadBillingStatusByMemberRequest();
-    }
-
-    /**
-     * Create an instance of {@link TransferTypes }
-     * 
-     */
-    public TransferTypes createTransferTypes() {
-        return new TransferTypes();
-    }
-
-    /**
-     * Create an instance of {@link UpdateBillingStatusRequest }
-     * 
-     */
-    public UpdateBillingStatusRequest createUpdateBillingStatusRequest() {
-        return new UpdateBillingStatusRequest();
-    }
-
-    /**
-     * Create an instance of {@link ReportBillingResponse }
-     * 
-     */
-    public ReportBillingResponse createReportBillingResponse() {
-        return new ReportBillingResponse();
-    }
-
-    /**
      * Create an instance of {@link CreateVAEventResponse }
      * 
      */
     public CreateVAEventResponse createCreateVAEventResponse() {
         return new CreateVAEventResponse();
-    }
-
-    /**
-     * Create an instance of {@link CreateVAEventRequest }
-     * 
-     */
-    public CreateVAEventRequest createCreateVAEventRequest() {
-        return new CreateVAEventRequest();
-    }
-
-    /**
-     * Create an instance of {@link VaRecordView }
-     * 
-     */
-    public VaRecordView createVaRecordView() {
-        return new VaRecordView();
-    }
-
-    /**
-     * Create an instance of {@link ReportBillingRequest }
-     * 
-     */
-    public ReportBillingRequest createReportBillingRequest() {
-        return new ReportBillingRequest();
-    }
-
-    /**
-     * Create an instance of {@link VaPaymentResponse }
-     * 
-     */
-    public VaPaymentResponse createVaPaymentResponse() {
-        return new VaPaymentResponse();
-    }
-
-    /**
-     * Create an instance of {@link LoadVAStatusByMemberResponse }
-     * 
-     */
-    public LoadVAStatusByMemberResponse createLoadVAStatusByMemberResponse() {
-        return new LoadVAStatusByMemberResponse();
-    }
-
-    /**
-     * Create an instance of {@link LoadVAEventRequest }
-     * 
-     */
-    public LoadVAEventRequest createLoadVAEventRequest() {
-        return new LoadVAEventRequest();
-    }
-
-    /**
-     * Create an instance of {@link VaRegisterResponse }
-     * 
-     */
-    public VaRegisterResponse createVaRegisterResponse() {
-        return new VaRegisterResponse();
-    }
-
-    /**
-     * Create an instance of {@link LoadVAByEventResponse }
-     * 
-     */
-    public LoadVAByEventResponse createLoadVAByEventResponse() {
-        return new LoadVAByEventResponse();
     }
 
     /**
@@ -408,11 +176,67 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link VaUpdateRequest }
+     * 
+     */
+    public VaUpdateRequest createVaUpdateRequest() {
+        return new VaUpdateRequest();
+    }
+
+    /**
+     * Create an instance of {@link UpdateBillingStatusRequest }
+     * 
+     */
+    public UpdateBillingStatusRequest createUpdateBillingStatusRequest() {
+        return new UpdateBillingStatusRequest();
+    }
+
+    /**
+     * Create an instance of {@link VaRegisterRequest }
+     * 
+     */
+    public VaRegisterRequest createVaRegisterRequest() {
+        return new VaRegisterRequest();
+    }
+
+    /**
+     * Create an instance of {@link LoadVAStatusByMemberResponse }
+     * 
+     */
+    public LoadVAStatusByMemberResponse createLoadVAStatusByMemberResponse() {
+        return new LoadVAStatusByMemberResponse();
+    }
+
+    /**
+     * Create an instance of {@link DeleteVAEventRequest }
+     * 
+     */
+    public DeleteVAEventRequest createDeleteVAEventRequest() {
+        return new DeleteVAEventRequest();
+    }
+
+    /**
+     * Create an instance of {@link BankVA }
+     * 
+     */
+    public BankVA createBankVA() {
+        return new BankVA();
+    }
+
+    /**
      * Create an instance of {@link VaDeleteRequest }
      * 
      */
     public VaDeleteRequest createVaDeleteRequest() {
         return new VaDeleteRequest();
+    }
+
+    /**
+     * Create an instance of {@link VaRegisterBankResponse }
+     * 
+     */
+    public VaRegisterBankResponse createVaRegisterBankResponse() {
+        return new VaRegisterBankResponse();
     }
 
     /**
@@ -424,11 +248,187 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link LoadVAStatusByMemberRequest }
+     * 
+     */
+    public LoadVAStatusByMemberRequest createLoadVAStatusByMemberRequest() {
+        return new LoadVAStatusByMemberRequest();
+    }
+
+    /**
+     * Create an instance of {@link VaPaymentResponse }
+     * 
+     */
+    public VaPaymentResponse createVaPaymentResponse() {
+        return new VaPaymentResponse();
+    }
+
+    /**
+     * Create an instance of {@link LoadBillingStatusByMemberRequest }
+     * 
+     */
+    public LoadBillingStatusByMemberRequest createLoadBillingStatusByMemberRequest() {
+        return new LoadBillingStatusByMemberRequest();
+    }
+
+    /**
+     * Create an instance of {@link VaRegisterResponse }
+     * 
+     */
+    public VaRegisterResponse createVaRegisterResponse() {
+        return new VaRegisterResponse();
+    }
+
+    /**
+     * Create an instance of {@link LoadVAByMemberRequest }
+     * 
+     */
+    public LoadVAByMemberRequest createLoadVAByMemberRequest() {
+        return new LoadVAByMemberRequest();
+    }
+
+    /**
      * Create an instance of {@link VaInquiryResponse }
      * 
      */
     public VaInquiryResponse createVaInquiryResponse() {
         return new VaInquiryResponse();
+    }
+
+    /**
+     * Create an instance of {@link LoadVAEventRequest }
+     * 
+     */
+    public LoadVAEventRequest createLoadVAEventRequest() {
+        return new LoadVAEventRequest();
+    }
+
+    /**
+     * Create an instance of {@link VaRecordView }
+     * 
+     */
+    public VaRecordView createVaRecordView() {
+        return new VaRecordView();
+    }
+
+    /**
+     * Create an instance of {@link TransferTypes }
+     * 
+     */
+    public TransferTypes createTransferTypes() {
+        return new TransferTypes();
+    }
+
+    /**
+     * Create an instance of {@link Exception }
+     * 
+     */
+    public Exception createException() {
+        return new Exception();
+    }
+
+    /**
+     * Create an instance of {@link VaEvent }
+     * 
+     */
+    public VaEvent createVaEvent() {
+        return new VaEvent();
+    }
+
+    /**
+     * Create an instance of {@link LoadVAByIDResponse }
+     * 
+     */
+    public LoadVAByIDResponse createLoadVAByIDResponse() {
+        return new LoadVAByIDResponse();
+    }
+
+    /**
+     * Create an instance of {@link LoadVAByEventRequest }
+     * 
+     */
+    public LoadVAByEventRequest createLoadVAByEventRequest() {
+        return new LoadVAByEventRequest();
+    }
+
+    /**
+     * Create an instance of {@link VaPaymentRequest }
+     * 
+     */
+    public VaPaymentRequest createVaPaymentRequest() {
+        return new VaPaymentRequest();
+    }
+
+    /**
+     * Create an instance of {@link VaRegisterBankRequest }
+     * 
+     */
+    public VaRegisterBankRequest createVaRegisterBankRequest() {
+        return new VaRegisterBankRequest();
+    }
+
+    /**
+     * Create an instance of {@link ReportBillingRequest }
+     * 
+     */
+    public ReportBillingRequest createReportBillingRequest() {
+        return new ReportBillingRequest();
+    }
+
+    /**
+     * Create an instance of {@link VaBankRequest }
+     * 
+     */
+    public VaBankRequest createVaBankRequest() {
+        return new VaBankRequest();
+    }
+
+    /**
+     * Create an instance of {@link LoadVAByEventResponse }
+     * 
+     */
+    public LoadVAByEventResponse createLoadVAByEventResponse() {
+        return new LoadVAByEventResponse();
+    }
+
+    /**
+     * Create an instance of {@link CreateEventStatusResponse }
+     * 
+     */
+    public CreateEventStatusResponse createCreateEventStatusResponse() {
+        return new CreateEventStatusResponse();
+    }
+
+    /**
+     * Create an instance of {@link MemberFields }
+     * 
+     */
+    public MemberFields createMemberFields() {
+        return new MemberFields();
+    }
+
+    /**
+     * Create an instance of {@link Header }
+     * 
+     */
+    public Header createHeader() {
+        return new Header();
+    }
+
+    /**
+     * Create an instance of {@link ResponseStatus }
+     * 
+     */
+    public ResponseStatus createResponseStatus() {
+        return new ResponseStatus();
+    }
+
+    /**
+     * Create an instance of {@link CreateVAEventRequest }
+     * 
+     */
+    public CreateVAEventRequest createCreateVAEventRequest() {
+        return new CreateVAEventRequest();
     }
 
     /**

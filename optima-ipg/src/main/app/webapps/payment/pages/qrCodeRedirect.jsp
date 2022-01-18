@@ -29,6 +29,7 @@
 			<input type="hidden" name="fee" id="fee" value="${fee}" class="form-control validate">
 			<input type="hidden" name="city" id="city" value="${city}" class="form-control validate">
 			<input type="hidden" name="postalCode" id="postalCode" value="${postalCode}" class="form-control validate">
+			<input type="hidden" name="paymentChannel" id="paymentChannel" value="${paymentChannel}" class="form-control validate">
 		</form>
 	</div>		    
 </body>

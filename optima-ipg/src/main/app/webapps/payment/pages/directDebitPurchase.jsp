@@ -49,30 +49,25 @@
       
       <div class="container container-data">
         <div class="alert alert-warning" role="alert">
-            <p>Transaksi berhasil, berikut detail transaksi anda.</p> 
+            <p>Transaksi sedang di proses, berikut detail transaksi anda.</p> 
         </div>
         <h3 class="judul" style="font-size: 16px; font-weight: 600;">${eventName}</h3>
         <div class="row m-0 justify-content-between">
             <h6 class="sub-judul">Organisasi <span>${eventOrganizer}</span></h6>
         </div>
         <hr class="mt-0">
-        <div class="row mt-1 mx-0 justify-content-between">
-          <p class="text-uppercase mt-2">Id Bayar</p>
-          <div>
-              <!-- Target -->
-              <input id="id-tagihan" value="${paymentCode}" readonly><button class="btn btn-salin" data-clipboard-target="#id-tagihan">
-                  <img src="assets/img/ic-salin.png" alt="Copy to clipboard">
-              </button>
-          </div>
-        </div>
-        <hr class="mt-1">
         <div class="row m-0 justify-content-between">
-            <p class="text-uppercase">Transaction Date</p>
+            <p class="text-uppercase">Akun Fello</p>
+            <p style="color: #333;">${msisdn}</p>
+        </div>
+        <hr class="mt-0">
+        <div class="row m-0 justify-content-between">
+            <p class="text-uppercase">Tanggal Transaksi</p>
             <p style="color: #333;">${transactionDate}</p>
         </div>
         <hr class="mt-0">
         <div class="row m-0 justify-content-between">
-            <p class="text-uppercase">Transaction Number</p>
+            <p class="text-uppercase">Nomor Transaksi</p>
             <p style="color: #333;">${transactionNumber}</p>
         </div>
       	<hr class="mt-0">

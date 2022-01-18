@@ -90,6 +90,14 @@
 										<extraarg>org.bellatrix.services.ws.billpayments</extraarg>
 									</extraargs>
 								</wsdlOption>
+								<wsdlOption>
+									<wsdl>http://149.129.215.223:8081/bellatrix/host/services/ws/pos?wsdl
+									</wsdl>
+									<extraargs>
+										<extraarg>-p</extraarg>
+										<extraarg>org.bellatrix.services.ws.pos</extraarg>
+									</extraargs>
+								</wsdlOption>
 							</wsdlOptions>
 						</configuration>
 						<goals>
@@ -274,6 +282,10 @@
 			<groupId>org.apache.activemq</groupId>
 			<artifactId>activemq-all</artifactId>
 			<version>5.15.12</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.transports</groupId>
+			<artifactId>mule-transport-ajax</artifactId>
 		</dependency>
 
 		<!-- for testing -->
